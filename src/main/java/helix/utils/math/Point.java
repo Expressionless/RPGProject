@@ -1,4 +1,4 @@
-package helix.utils;
+package helix.utils.math;
 
 public class Point {
 
@@ -7,6 +7,10 @@ public class Point {
 	public Point(float x, float y) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Point(double x, double y) {
+		this((float)x, (float)y);
 	}
 	
 	public void sub(Point other) {

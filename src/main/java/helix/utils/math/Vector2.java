@@ -1,6 +1,9 @@
-package helix.utils;
+package helix.utils.math;
+
+import java.text.DecimalFormat;
 
 public class Vector2 {
+	private static final DecimalFormat df = new DecimalFormat("0.00");
 
 	private float x, y;
 
@@ -39,12 +42,10 @@ public class Vector2 {
 	}
 
 	public double getAngle() {
+		double angle = 0;
 		double sin = 0,
 			   asin = 0,
-			   cos = 0,
-			   acos = 0,
-			   tan = 0,
-			   atan = 0;
+			   cos = 0;
 		
 		double len = this.length();
 		if (len == 0)
@@ -52,19 +53,29 @@ public class Vector2 {
 
 		sin = y / len;
 		cos = x / len;
-		if(x != 0)
-			tan = y / x;
-
 		asin = Math.asin(sin);
-		acos = Math.acos(cos);
-		atan = Math.atan(tan);
-		return asin;
+		
+		boolean firstQuadrant = (sin >= 0 && cos >= 0);
+		boolean secondQuadrant = (sin >= 0 && cos < 0);
+		boolean thirdQuadrant = (sin < 0 && cos < 0);
+		boolean fourthQuadrant = (sin < 0 && cos >= 0);
+		
+		if(firstQuadrant)
+			angle = asin;
+		else if(secondQuadrant)
+			angle = Math.PI - asin;
+		else if(thirdQuadrant)
+			angle = Math.PI - asin;
+		else if(fourthQuadrant)
+			angle = 2 * Math.PI + asin;
+		
+		return Double.parseDouble(df.format(Math.toDegrees(angle)));
 	}
 
 	public Vector2 copy() {
 		return new Vector2(x, y);
 	}
-
+	
 	// Getters and Setters
 	public float getX() {
 		return x;
@@ -84,6 +95,10 @@ public class Vector2 {
 
 	@Override
 	public String toString() {
-		return "[x=" + x + ",y=" + y + "]";
+		return "Vector2 ["
+				+ "x=" + x
+				+ ",y=" + y
+				+ ",len=" + this.length()
+				+ "]";
 	}
 }

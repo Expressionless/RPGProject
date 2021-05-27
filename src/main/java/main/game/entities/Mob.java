@@ -1,8 +1,8 @@
 package main.game.entities;
 
 import helix.GameData;
-import helix.utils.Point;
-import main.game.Entity;
+import helix.game.Entity;
+import helix.utils.math.Point;
 
 public abstract class Mob extends Entity {
 
@@ -11,6 +11,7 @@ public abstract class Mob extends Entity {
 	public Mob(GameData gameData, Point pos) {
 		super(gameData, pos);
 		this.stats = new MobStats();
+		this.gameData.mobs.add(this);
 	}
 
 	@SuppressWarnings("unused")

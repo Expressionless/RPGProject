@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 public class Animation {
 	private static final float MILLISECONDS = 1000;
 
+	private final TextureRegion baseTex;
 	private final Array<TextureRegion> frames;
 	
 	private String name;
@@ -24,8 +25,8 @@ public class Animation {
 	 * @param animTime
 	 */
 	public Animation(TextureRegion region, String name, int frameCount, float animTime) {
-		
-		frames = new Array<TextureRegion>();
+		this.baseTex = region;
+		this.frames = new Array<TextureRegion>();
 		int frameWidth = region.getRegionWidth() / frameCount;
 		for(int i = 0; i < frameCount; i++) {
 			frames.add(new TextureRegion(region, i * frameWidth, 0, frameWidth, region.getRegionHeight()));
@@ -85,8 +86,12 @@ public class Animation {
 		return frames.get(frame);
 	}
 	
+	public TextureRegion getSubImage(int index) {
+		return frames.get(index);
+	}
+	
 	public float getWidth() {
-		return frames.get(0).getRegionHeight();
+		return frames.get(0).getRegionWidth();
 	}
 	
 	public float getHeight() {
@@ -99,5 +104,17 @@ public class Animation {
 
 	public void setLooping(boolean looping) {
 		this.looping = looping;
+	}
+
+	public TextureRegion getBaseTex() {
+		return baseTex;
+	}
+	
+	@Override
+	public String toString() {
+		return "Animation [name=" + name
+				+ ",w=" + this.getWidth()
+				+ ",h=" + this.getHeight()
+				+ "]";
 	}
 }

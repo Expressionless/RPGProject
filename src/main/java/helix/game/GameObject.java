@@ -1,8 +1,8 @@
 package helix.game;
 
 import helix.GameData;
-import helix.utils.Point;
-import helix.utils.Vector2;
+import helix.utils.math.Point;
+import helix.utils.math.Vector2;
 
 public abstract class GameObject {
 
@@ -40,5 +40,11 @@ public abstract class GameObject {
 
 	public Vector2 getDirection() {
 		return direction;
+	}
+	
+	public String toString() {
+		return ("GameObject [pos=" + pos.toString() + ", "
+				+ "direction=" + direction.toString() + ", "
+				+ "]");
 	}
 }
