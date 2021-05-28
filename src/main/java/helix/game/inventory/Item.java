@@ -1,14 +1,19 @@
-package helix.game;
+package helix.game.inventory;
+
+import java.util.Random;
 
 import com.badlogic.gdx.assets.AssetManager;
 
 import helix.GameData;
+import helix.game.objects.Entity;
 import helix.gfx.Sprite;
 import helix.gfx.SpriteSheet;
 import helix.utils.math.Point;
+import main.Constants;
 import main.game.entities.ItemType;
 
 public class Item extends Entity {
+	private float animOffset;
 	public static SpriteSheet ITEM_SHEET;
 
 	@Override
@@ -24,6 +29,8 @@ public class Item extends Entity {
 		this.attachItemSprite();
 
 		this.gameData.items.add(this);
+		
+		this.animOffset = (float) (new Random().nextFloat() * (Constants.ITEM_BREATHE_LENGTH / 2 * Math.PI));
 	}
 
 	public Item(GameData gameData, Point pos, String itemName) {
@@ -52,7 +59,7 @@ public class Item extends Entity {
 
 	@Override
 	public void step() {
-		float XScale = (float) (Math.sin((double) GameData.TICKS / (double) (1000)) * 0.4 + 1);
+		float XScale = (float) (Math.sin((double) (GameData.TICKS + animOffset) / (double) (Constants.ITEM_BREATHE_LENGTH)) * 0.2 + 1);
 		float YScale = XScale;
 		// OSCILLATE BETWEEN 0.8 - 1.2
 		if (this.getSprite() != null) {

@@ -6,10 +6,10 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 
 import helix.GameData;
+import helix.game.objects.entity.mob.Mob;
 import helix.utils.math.Angle;
 import helix.utils.math.Point;
 import main.Constants;
-import main.game.entities.Mob;
 
 public class Player extends Mob {
 	public static final String PLAYER_RIGHT = "res/sprites/player/right.png";

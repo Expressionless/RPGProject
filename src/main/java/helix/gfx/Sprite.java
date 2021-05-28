@@ -41,7 +41,7 @@ public class Sprite {
 	public Sprite(TextureRegion region) {
 		this(region, Constants.DEF_FRAMES, Constants.NO_ANIM);
 	}
-
+	
 	public void draw(SpriteBatch batch, float x, float y) {
 		this.animation.update();
 		this.setBounds(x, y, this.animation.getWidth(), this.animation.getHeight());

@@ -1,4 +1,4 @@
-package helix.game;
+package helix.game.objects;
 
 import java.util.HashMap;
 
@@ -8,7 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import helix.GameData;
-import helix.game.entity.Collider;
+import helix.game.GameObject;
+import helix.game.objects.entity.Collider;
 import helix.gfx.Sprite;
 import helix.utils.math.Point;
 

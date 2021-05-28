@@ -1,6 +1,6 @@
-package helix.game.entity;
+package helix.game.objects.entity;
 
-import helix.game.Entity;
+import helix.game.objects.Entity;
 import helix.utils.math.Vector2;
 
 public class Collider extends helix.utils.math.Rectangle {

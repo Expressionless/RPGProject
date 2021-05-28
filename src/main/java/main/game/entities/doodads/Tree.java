@@ -3,7 +3,7 @@ package main.game.entities.doodads;
 import com.badlogic.gdx.assets.AssetManager;
 
 import helix.GameData;
-import helix.game.Entity;
+import helix.game.objects.Entity;
 import helix.utils.math.Point;
 
 public class Tree extends Entity {

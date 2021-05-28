@@ -12,16 +12,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import helix.game.Entity;
 import helix.game.GameObject;
-import helix.game.Item;
+import helix.game.inventory.Item;
+import helix.game.objects.Entity;
+import helix.game.objects.entity.mob.Mob;
 import helix.gfx.Animation;
 import helix.gfx.Sprite;
 import helix.gfx.SpriteSheet;
 import helix.utils.math.Point;
 import main.Constants;
 import main.game.entities.ItemType;
-import main.game.entities.Mob;
 import main.game.entities.mobs.Player;
 
 public class GameData {
@@ -88,6 +88,7 @@ public class GameData {
 		});
 		
 		for (GameObject object : objects) {
+			object.updateAlarms();
 			object.update();
 		}
 	}

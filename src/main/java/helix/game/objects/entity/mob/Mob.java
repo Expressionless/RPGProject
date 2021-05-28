@@ -1,17 +1,20 @@
-package main.game.entities;
+package helix.game.objects.entity.mob;
 
 import helix.GameData;
-import helix.game.Entity;
+import helix.game.inventory.Inventory;
+import helix.game.objects.Entity;
 import helix.utils.math.Point;
 
 public abstract class Mob extends Entity {
-
+	private final Inventory inventory;
+	
 	private final MobStats stats;
 	
 	public Mob(GameData gameData, Point pos) {
 		super(gameData, pos);
 		this.stats = new MobStats();
 		this.gameData.mobs.add(this);
+		this.inventory = new Inventory();
 	}
 
 	@SuppressWarnings("unused")
@@ -51,5 +54,9 @@ public abstract class Mob extends Entity {
 
 	public MobStats getMobStats() {
 		return stats;
+	}
+	
+	public Inventory getInventory() {
+		return this.inventory;
 	}
 }

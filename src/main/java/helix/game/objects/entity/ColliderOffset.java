@@ -1,4 +1,4 @@
-package helix.game.entity;
+package helix.game.objects.entity;
 
 public enum ColliderOffset {
 	TOP,
