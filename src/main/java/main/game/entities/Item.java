@@ -1,21 +1,23 @@
-package helix.game.inventory;
+package main.game.entities;
 
 import java.util.Random;
 
 import com.badlogic.gdx.assets.AssetManager;
 
-import helix.GameData;
+import helix.game.GameData;
 import helix.game.objects.Entity;
 import helix.gfx.Sprite;
 import helix.gfx.SpriteSheet;
 import helix.utils.math.Point;
-import main.Constants;
-import main.game.entities.ItemType;
+import main.game.Constants;
+import main.game.item.ItemType;
 
 public class Item extends Entity {
-	private float animOffset;
 	public static SpriteSheet ITEM_SHEET;
 
+	private float animOffset;
+	private int amount;
+	
 	@Override
 	public void loadSprites(AssetManager manager) {
 		// manager.load(Constants.ITEMS_DIRECTORY, Texture.class);
@@ -23,28 +25,29 @@ public class Item extends Entity {
 
 	public final ItemType item;
 
-	public Item(GameData gameData, Point pos, int itemID) {
+	public Item(GameData gameData, Point pos, int itemID, int amount) {
 		super(gameData, pos);
 		this.item = ItemType.get(itemID);
 		this.attachItemSprite();
 
 		this.gameData.items.add(this);
-		
+
 		this.animOffset = (float) (new Random().nextFloat() * (Constants.ITEM_BREATHE_LENGTH / 2 * Math.PI));
+		this.amount = amount;
 	}
 
 	public Item(GameData gameData, Point pos, String itemName) {
-		this(gameData, pos, ItemType.idOf(itemName));
+		this(gameData, pos, ItemType.idOf(itemName), 1);
 	}
 
 	private int[] IDtoImageIndex() {
 		int items_width = ITEM_SHEET.getWidth(); // 16
 		int items_height = ITEM_SHEET.getHeight(); // 16
-		// this.itemID = 2
-		int y = (int) Math.floor(this.item.ID / items_width); // y = 0
-		int x = this.item.ID % items_height; // x = 2
 
-		return new int[] { x, y};
+		int x = this.getID() % items_height; // x = 2
+		int y = (int) Math.floor(this.getID() / items_width); // y = 0
+
+		return new int[] { x, y };
 	}
 
 	private void attachItemSprite() {
@@ -59,16 +62,42 @@ public class Item extends Entity {
 
 	@Override
 	public void step() {
-		float XScale = (float) (Math.sin((double) (GameData.TICKS + animOffset) / (double) (Constants.ITEM_BREATHE_LENGTH)) * 0.2 + 1);
+		float XScale = (float) (Math
+				.sin((double) (GameData.TICKS + animOffset) / (double) (Constants.ITEM_BREATHE_LENGTH)) * 0.2 + 1);
 		float YScale = XScale;
 		// OSCILLATE BETWEEN 0.8 - 1.2
 		if (this.getSprite() != null) {
 			this.getSprite().setScale(XScale, YScale);
 		}
+		if (this.distTo(gameData.getPlayer()) < Constants.ITEM_SUCK_DISTANCE) {
+			if(this.distTo(gameData.getPlayer()) <= Constants.PICKUP_DISTANCE) {
+				gameData.getPlayer().getInventory().add(this.getID(), this.amount);
+				this.dispose();
+			}
+			this.moveTo(gameData.getPlayer(), Constants.ITEM_SPEED);
+		}
+	}
+
+	// Getters and Setters
+	
+	public int getID() {
+		return this.item.ID;
+	}
+
+	public String getName() {
+		return this.item.toString();
 	}
 
 	public String toString() {
 		return "Item [name=" + item.toString() + ",ID=" + item.ID + ",pos=" + this.getPos().toString() + ",tex="
 				+ ((this.getSprite() != null) ? this.getSprite().toString() : "null") + "]";
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 }

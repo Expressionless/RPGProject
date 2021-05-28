@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+import helix.Constants;
 import helix.utils.math.Vector2;
-import main.Constants;
 
 public class Sprite {
 

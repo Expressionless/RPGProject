@@ -13,35 +13,34 @@ public class Point {
 		this((float)x, (float)y);
 	}
 	
-	public void sub(Point other) {
-		this.x -= other.x;
-		this.y -= other.y;
+	public Point sub(Point other) {		
+		return new Point(this.x - other.x, this.y - other.y);
 	}
 	
-	public void add(Point other) {
-		this.x += other.x;
-		this.y += other.y;
+	public Point sub(Vector2 other) {
+		return this.sub(other.toPoint()).copy();
 	}
 	
-	public void add(Vector2 other) {
-		this.add(new Point(other.getX(), other.getY()));
+	public Point add(Point other) {
+		return new Point(this.x + other.x, this.y + other.y);
 	}
 	
-	public void multiply(float scalar) {
+	public Point add(Vector2 other) {
+		return this.add(new Point(other.getX(), other.getY()));
+	}
+	
+	public Point multiply(float scalar) {
 		this.x *= scalar;
 		this.y *= scalar;
+
+		return new Point(this.x * scalar, this.y * scalar);
 	}
 	
-	public Point getUnitVector(Point other) {
-		double xD = other.x - x;
-		double yD = other.y - y;
-		double mag = this.getDistTo(other);
-		
-		xD /= mag;
-		yD /= mag;
-		
-		return new Point((float)xD, (float)yD);
+	public Vector2 toVector2() {
+		return new Vector2(x, y);
 	}
+	
+	// Getters and Setters
 	
 	public float getDistTo(Point other) {
 		double disX = Math.pow(other.x - x, 2);
@@ -75,5 +74,12 @@ public class Point {
 	
 	public void setY(float y) {
 		this.y = y;
+	}
+
+	public float length() {
+		double disX = Math.pow(this.x, 2);
+		double disY = Math.pow(this.y, 2);
+		
+		return (float)Math.pow(disX + disY, 0.5);
 	}
 }

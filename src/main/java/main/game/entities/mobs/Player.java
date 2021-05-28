@@ -4,12 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import helix.GameData;
+import helix.game.GameData;
 import helix.game.objects.entity.mob.Mob;
 import helix.utils.math.Angle;
 import helix.utils.math.Point;
-import main.Constants;
+import main.game.Constants;
 
 public class Player extends Mob {
 	public static final String PLAYER_RIGHT = "res/sprites/player/right.png";
@@ -119,7 +120,12 @@ public class Player extends Mob {
 			}
 			this.getSprite().start();
 		}
-		
-		this.getPos().add(this.getDirection().multiply(this.getStat("speed")));
+
+		this.move(this.getStat("speed"));
+	}
+
+	@Override
+	public void draw(SpriteBatch batch) {
+		font.draw(batch, this.getPos().toString(), this.getPos().getX() - 30, this.getPos().getY());
 	}
 }

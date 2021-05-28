@@ -11,23 +11,26 @@ public class Vector2 {
 		this.x = x;
 		this.y = y;
 	}
-
-	public void sub(Vector2 other) {
-		this.x -= other.x;
-		this.y -= other.y;
+	
+	public Vector2(Number x, Number y) {
+		this.x = x.floatValue();
+		this.y = y.floatValue();
 	}
 
-	public void sub(float x, float y) {
-		this.sub(new Vector2(x, y));
+	public Vector2 sub(Vector2 other) {
+		return new Vector2(this.x - other.x, this.y - other.y);
 	}
 
-	public void add(Vector2 other) {
-		this.x += other.x;
-		this.y += other.y;
+	public Vector2 sub(float x, float y) {
+		return this.sub(new Vector2(x, y));
 	}
 
-	public void add(float x, float y) {
-		this.add(new Vector2(x, y));
+	public Vector2 add(Vector2 other) {
+		return new Vector2(other.x + x, other.y + y);
+	}
+
+	public Vector2 add(float x, float y) {
+		return this.add(new Vector2(x, y));
 	}
 
 	public Vector2 multiply(float scalar) {
@@ -71,9 +74,23 @@ public class Vector2 {
 		
 		return Double.parseDouble(df.format(Math.toDegrees(angle)));
 	}
+	
+	public Vector2 getUnitVector() {
+		Vector2 vector = this.copy();
+		double mag = vector.length();
+		if(mag == 0)
+			return new Vector2(0 ,0);
+		
+		vector = new Vector2(vector.getX() / mag, vector.getY() / mag);
+		return vector;
+	}
 
 	public Vector2 copy() {
 		return new Vector2(x, y);
+	}
+	
+	public Point toPoint() {
+		return new Point(x, y);
 	}
 	
 	// Getters and Setters

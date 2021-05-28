@@ -1,4 +1,4 @@
-package helix;
+package helix.game;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -12,21 +12,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import helix.game.GameObject;
-import helix.game.inventory.Item;
 import helix.game.objects.Entity;
 import helix.game.objects.entity.mob.Mob;
 import helix.gfx.Animation;
 import helix.gfx.Sprite;
 import helix.gfx.SpriteSheet;
 import helix.utils.math.Point;
-import main.Constants;
-import main.game.entities.ItemType;
+import main.game.entities.Item;
 import main.game.entities.mobs.Player;
+import main.game.item.ItemType;
 
 public class GameData {
 
 	public static int TICKS = 0;
+	public static final ArrayList<ItemType> ITEM_TYPES = new ArrayList<>();
+	
 	public final ArrayList<GameObject> objects;
 	public final ArrayList<Entity> entities;
 	public final ArrayList<Mob> mobs;
@@ -53,10 +53,30 @@ public class GameData {
 	 */
 	public void init() {
 		createItemsSheet();
+		parseItems();
 	}
 
 	private void createItemsSheet() {
-		Item.ITEM_SHEET = new SpriteSheet(this, Constants.ITEMS_DIRECTORY, 8, 8);
+		Item.ITEM_SHEET = new SpriteSheet(this, main.game.Constants.ITEMS_DIRECTORY, 8, 8);
+	}
+	
+	private void parseItems() {
+		ItemType.beginReading();
+		
+		int numsToParse = 4;
+		for(int i = 0; i < numsToParse; i++) {
+			ItemType item = ItemType.parseItemType(i);
+			if(item == null)
+				continue;
+			ITEM_TYPES.add(item);
+		}
+		
+		ItemType.stopReading();
+		
+		System.out.println("Loaded: " + ITEM_TYPES.size() + " items");
+		for(int i = 0; i < ITEM_TYPES.size(); i++) {
+			System.out.println(ITEM_TYPES.get(i).name);
+		}
 	}
 
 	public Sprite createSprite(String spriteName, int frameCount, float animTime) {
@@ -69,15 +89,36 @@ public class GameData {
 	}
 
 	public Sprite createSprite(String spriteName, int frameCount) {
-		return this.createSprite(spriteName, frameCount, Constants.NO_ANIM);
+		return this.createSprite(spriteName, frameCount, helix.Constants.NO_ANIM);
 	}
 
 	public Sprite createSprite(String spriteName) {
-		return this.createSprite(spriteName, Constants.DEF_FRAMES);
+		return this.createSprite(spriteName, helix.Constants.DEF_FRAMES);
 	}
 
+	private void disposeObjects() {
+		items.removeIf((Item item) -> {
+			return item.willDispose();
+		});
+		
+		entities.removeIf((Entity entity) -> {
+			return entity.willDispose();
+		});
+
+		mobs.removeIf((Mob mob) -> {
+			return mob.willDispose();
+		});
+		
+		objects.removeIf((GameObject obj) -> {
+			return obj.willDispose();
+		});
+	}
+	
 	public void update() {
 		TICKS++;
+		
+		this.disposeObjects();
+		
 		entities.sort(new Comparator<Entity>() {
 
 			@Override
@@ -99,20 +140,41 @@ public class GameData {
 		}
 	}
 
+	public void spawnItem(Point pos, int id, int amount) {
+		new Item(this, pos, id, amount);
+	}
+	
+	/**
+	 * Spawn a single item of itemID: itemID with position: pos
+	 * @param pos - {@link helix.utils.math.Point}
+	 * @param itemID
+	 */
 	public void spawnItem(Point pos, int itemID) {
-		new Item(this, pos, itemID);
+		this.spawnItem(pos, itemID, 1);
 	}
 
 	public void spawnItem(double x, double y, int itemID) {
 		this.spawnItem(new Point(x, y), itemID);
 	}
+	
+	public void spawnItem(double x, double y, int itemID, int amount) {
+		this.spawnItem(new Point(x, y), itemID, amount);
+	}
+	
+	public void spawnItem(Point pos, String name, int amount) {
+		this.spawnItem(pos, ItemType.idOf(name), amount);
+	}
 
 	public void spawnItem(Point pos, String name) {
-		this.spawnItem(pos, ItemType.idOf(name));
+		this.spawnItem(pos, name, 1);
 	}
 
 	public void spawnItem(double x, double y, String name) {
-		this.spawnItem(new Point(x, y), name);
+		this.spawnItem(new Point(x, y), ItemType.idOf(name), 1);
+	}
+	
+	public void spawnItem(double x, double y, String name, int amount) {
+		this.spawnItem(new Point(x, y), ItemType.idOf(name), amount);
 	}
 
 	public <T extends GameObject> T createObject(Class<T> objectClass, Object... args) {
@@ -135,6 +197,10 @@ public class GameData {
 
 	public Player getPlayer() {
 		return player;
+	}
+	
+	public Entity getPlayerAsEntity() {
+		return (Entity)player;
 	}
 
 	public void setPlayer(Player player) {
@@ -160,6 +226,4 @@ public class GameData {
 	public void setCamera(Camera camera) {
 		this.camera = camera;
 	}
-	
-	
 }

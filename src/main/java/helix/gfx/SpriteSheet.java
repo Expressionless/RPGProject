@@ -3,7 +3,7 @@ package helix.gfx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import helix.GameData;
+import helix.game.GameData;
 
 public class SpriteSheet {
 
@@ -15,7 +15,7 @@ public class SpriteSheet {
 	
 	/**
 	 * Create a SpriteSheet composed of tiles of Sprites
-	 * @param data - {@link helix.GameData} object
+	 * @param data - {@link helix.game.GameData} object
 	 * @param textureRef - String reference to the texture (must be loaded in AssetManager}
 	 * @param tiles_x - width of each sprite in pixels
 	 * @param tiles_y - height of each sprite in pixels

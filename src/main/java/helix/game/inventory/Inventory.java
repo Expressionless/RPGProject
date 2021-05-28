@@ -1,6 +1,7 @@
 package helix.game.inventory;
 
-import main.game.entities.ItemType;
+import helix.game.GameData;
+import main.game.item.ItemType;
 
 public class Inventory {
 	
@@ -14,7 +15,7 @@ public class Inventory {
 	public final int MAX_STACK = 50;
 
 	public Inventory() {
-		items = new int[ItemType.values().length];
+		items = new int[GameData.ITEM_TYPES.size()];
 	}
 
 	public boolean set(int itemID, int amount) {
@@ -28,6 +29,8 @@ public class Inventory {
 
 	public boolean add(int itemID, int amount) {
 		this.items[itemID] += amount;
+		System.out.println(this.items[itemID] + " " + amount);
+		System.out.println("Picked up " + amount + " " + ItemType.nameOf(itemID) + ". Total=" + this.get(itemID));
 		return true;
 	}
 

@@ -1,4 +1,4 @@
-package main;
+package main.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import helix.game.BaseGame;
 import helix.utils.math.Point;
-import main.game.entities.ItemType;
 import main.game.entities.doodads.Tree;
 import main.game.entities.mobs.Player;
 
@@ -49,8 +48,14 @@ public class RpgGame extends BaseGame {
 		this.getGameData().setViewport(viewport);
 
 		new Player(this.getGameData(), new Point(30, 30));
-		this.getGameData().spawnItem(new Point(30, 30), ItemType.WOOD.ID);
-		this.getGameData().spawnItem(new Point(60, 90), "grASS");
+		this.getGameData().spawnItem(new Point(30, 30), "grass");
+		this.getGameData().spawnItem(new Point(60, 90), "grASS", 3);
+		this.getGameData().spawnItem(new Point(60, 130), "grASS", 2);
+		this.getGameData().spawnItem(new Point(60, 150), "grASS", 5);
+		this.getGameData().spawnItem(new Point(60, 180), "grASS", 4);
+		this.getGameData().spawnItem(new Point(60, 210), "grASS", 6);
+		this.getGameData().spawnItem(new Point(60, 240), "grASS", 3);
+		this.getGameData().spawnItem(new Point(60, 270), "grASS", 8);
 		this.getGameData().spawnItem(new Point(140, 90), "Bow");
 		this.getGameData().spawnItem(new Point(0, 20), "SWORD");
 		new Tree(this.getGameData(), new Point(50, 50));

@@ -1,19 +1,16 @@
-package main;
+package main.game;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
 
-	// Width of the Frame
+	// Frame Dimensions
 	public static int FRAME_WIDTH = 1280;
-	// Width of the camera viewport
-	public static int CAMERA_WIDTH = 320;
-	
-	// Height of the Frame
 	public static int FRAME_HEIGHT = 720;
-	// Height of the camera viewport
+	
+	// Viewport dimensions
+	public static int CAMERA_WIDTH = 320;
 	public static int CAMERA_HEIGHT = 180;
 	
 	// FPS Constants
@@ -28,19 +25,22 @@ public class Constants {
 
 	// Items resource path
 	public static final String ITEMS_DIRECTORY = "res/sprites/items.png";
-	public static final String DEFAULT_SPRITE = "DEFAULT";
 		
 	// Animation Constants
-	public static final int DEF_FRAMES = 1;
-	public static final int NO_ANIM = -1;
 	public static final double ITEM_BREATHE_LENGTH = 50;
-	
 	
 	// Movement
 	public static final char KEY_RIGHT = Keys.D;
 	public static final char KEY_LEFT = Keys.A;
 	public static final char KEY_DOWN = Keys.S;
 	public static final char KEY_UP = Keys.W;
-	
+
 	public static final float PLAYER_SPEED = 0.5f;
+	public static final float ITEM_SPEED = 0.25f;
+	public static final float DEFAULT_SPEED = 0.5f;
+	
+	// Basic Collision
+	public static final float PICKUP_DISTANCE = 4;
+	public static final float ITEM_SUCK_DISTANCE = 24;
+	
 }
