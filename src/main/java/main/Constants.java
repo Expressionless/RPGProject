@@ -29,11 +29,7 @@ public class Constants {
 	// Items resource path
 	public static final String ITEMS_DIRECTORY = "res/sprites/items.png";
 	public static final String DEFAULT_SPRITE = "DEFAULT";
-	
-	// Box2D Constants
-	public static final Vector2 GRAVITY = new Vector2(0, 0);
-	public static final float BOX2D_STEP_TIME = 1/0.45f;
-	
+		
 	// Animation Constants
 	public static final int DEF_FRAMES = 1;
 	public static final int NO_ANIM = -1;

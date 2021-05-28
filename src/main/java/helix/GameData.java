@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import helix.game.Entity;
@@ -37,10 +35,6 @@ public class GameData {
 	private AssetManager manager;
 	private Viewport viewport;
 	private Camera camera;
-	
-	// Box2D World
-	private World world;
-	private Box2DDebugRenderer renderer;
 
 	// "Unique" Entities
 	private Player player;
@@ -51,8 +45,6 @@ public class GameData {
 		objects = new ArrayList<>();
 		mobs = new ArrayList<>();
 		items = new ArrayList<>();
-		world = new World(Constants.GRAVITY, true);
-		renderer = new Box2DDebugRenderer();
 		
 	}
 
@@ -104,9 +96,6 @@ public class GameData {
 		for (Entity entity : entities) {
 			entity.render(batch);
 		}
-		
-		world.step(Constants.BOX2D_STEP_TIME, 6, 2);
-		renderer.render(world, camera.combined);
 	}
 
 	public void spawnItem(Point pos, int itemID) {
@@ -135,7 +124,7 @@ public class GameData {
 		}
 
 		try {
-			return constructor.newInstance(this, (Object[]) args);
+			return constructor.newInstance(this, (Object[]) args);	
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			e.printStackTrace();
