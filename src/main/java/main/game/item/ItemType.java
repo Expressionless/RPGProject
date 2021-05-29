@@ -1,8 +1,8 @@
 package main.game.item;
 
-import helix.game.GameData;
 import helix.gfx.Sprite;
 import main.Constants;
+import main.GameData;
 
 public class ItemType {
 	public final String name;

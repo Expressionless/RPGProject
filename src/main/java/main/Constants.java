@@ -43,7 +43,7 @@ public class Constants {
 	
 	// Basic Collision
 	public static final float PICKUP_DISTANCE = 4;
-	public static final float ITEM_SUCK_DISTANCE = 24;
+	public static final float ITEM_SUCK_DISTANCE = 12;
 	
 	// Inventory Constants
 	public static final int DEF_INV_WIDTH = 5;

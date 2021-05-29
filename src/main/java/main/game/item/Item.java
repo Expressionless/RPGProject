@@ -4,15 +4,16 @@ import java.util.Random;
 
 import com.badlogic.gdx.assets.AssetManager;
 
-import helix.game.GameData;
-import helix.game.objects.Entity;
+import helix.game.Data;
 import helix.gfx.Sprite;
 import helix.gfx.SpriteSheet;
 import helix.utils.math.Point;
 import main.Constants;
+import main.game.RpgGame;
+import main.game.entities.Doodad;
 import main.game.inventory.Inventory;
 
-public class Item extends Entity {
+public class Item extends Doodad {
 	public static SpriteSheet ITEM_SHEET;
 
 	private float animOffset;
@@ -25,19 +26,19 @@ public class Item extends Entity {
 
 	public final ItemType item;
 
-	public Item(GameData gameData, Point pos, int itemID, int amount) {
-		super(gameData, pos);
+	public Item(RpgGame game, Point pos, int itemID, int amount) {
+		super(game, pos);
 		this.item = ItemType.get(itemID);
 		this.attachItemSprite();
 
-		this.gameData.items.add(this);
+		game.getGameData().items.add(this);
 
 		this.animOffset = (float) (new Random().nextFloat() * (Constants.ITEM_BREATHE_LENGTH / 2 * Math.PI));
 		this.amount = amount;
 	}
 
-	public Item(GameData gameData, Point pos, String itemName) {
-		this(gameData, pos, ItemType.idOf(itemName), 1);
+	public Item(RpgGame game, Point pos, String itemName) {
+		this(game, pos, ItemType.idOf(itemName), 1);
 	}
 
 	public static int[] IDtoImageIndex(int ID) {
@@ -63,22 +64,21 @@ public class Item extends Entity {
 	@Override
 	public void step() {
 		float XScale = (float) (Math
-				.sin((double) (GameData.TICKS + animOffset) / (double) (Constants.ITEM_BREATHE_LENGTH)) * 0.2 + 1);
+				.sin((double) (Data.TICKS + animOffset) / (double) (Constants.ITEM_BREATHE_LENGTH)) * 0.2 + 1);
 		float YScale = XScale;
 		// OSCILLATE BETWEEN 0.8 - 1.2
 		if (this.getSprite() != null) {
 			this.getSprite().setScale(XScale, YScale);
 		}
-		Inventory pInv = gameData.getPlayer().getInventory();
+		Inventory pInv = this.getGame().getGameData().getPlayer().getInventory();
 
-		if (this.distTo(gameData.getPlayer()) < Constants.ITEM_SUCK_DISTANCE) {
+		if (this.distTo(this.getGame().getGameData().getPlayer()) < Constants.ITEM_SUCK_DISTANCE) {
 			if (pInv.add(item, amount, true)) {
-				if (this.distTo(gameData.getPlayer()) <= Constants.PICKUP_DISTANCE) {
-					if (gameData.getPlayer().getInventory().add(this.item, this.amount))
-						;
+				if (this.distTo(this.getGame().getGameData().getPlayer()) <= Constants.PICKUP_DISTANCE) {
+					if (this.getGame().getGameData().getPlayer().getInventory().add(this.item, this.amount))
 					this.dispose();
 				}
-				this.moveTo(gameData.getPlayer(), Constants.ITEM_SPEED);
+				this.moveTo(this.getGame().getGameData().getPlayer(), Constants.ITEM_SPEED);
 			}
 		}
 	}

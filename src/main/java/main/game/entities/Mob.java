@@ -1,21 +1,25 @@
 package main.game.entities;
 
-import helix.game.GameData;
 import helix.game.GameObject;
-import helix.game.objects.Entity;
 import helix.utils.math.Point;
+import main.game.Entity;
+import main.game.RpgGame;
 import main.game.inventory.Inventory;
+import main.game.item.Item;
+import main.game.item.ItemType;
 
 public abstract class Mob extends Entity {
 	private Inventory inventory;
 	
 	private final MobStats stats;
 	
-	public Mob(GameData gameData, Point pos) {
-		super(gameData, pos);
+	public Mob(RpgGame game, Point pos) {
+		super(game, pos);
+		
 		this.stats = new MobStats();
-		this.gameData.mobs.add(this);
 		this.inventory = new Inventory();
+
+		game.getGameData().mobs.add(this);
 	}
 	
 	@Override
@@ -25,7 +29,7 @@ public abstract class Mob extends Entity {
 
 	@SuppressWarnings("unchecked")
 	public <T extends Mob> T findMob(Class<T> searchClass) {
-		for(GameObject object : gameData.mobs) {
+		for(GameObject object : this.getGame().getGameData().mobs) {
 			if(searchClass.isInstance(object))
 				return (T)object;
 		}
@@ -35,7 +39,7 @@ public abstract class Mob extends Entity {
 	@SuppressWarnings("unchecked")
 	public <T extends Mob> T findNearestMob(Class<T> searchClass) {
 		GameObject current = null;
-		for(GameObject object : gameData.mobs) {
+		for(GameObject object : this.getGame().getGameData().mobs) {
 			if(!searchClass.isInstance(object))
 				continue;
 			if(current == null) {
@@ -50,6 +54,65 @@ public abstract class Mob extends Entity {
 		}
 		if(current != null)
 			return (T)current;
+		else return null;
+	}
+
+	public Item findItem(String name) {
+		return this.findItem(ItemType.idOf(name));
+	}
+	
+	public Item findItem(int ID) {
+		for(Item object : this.getGame().getGameData().items) {
+			if(Item.class.isInstance(object) && object.getID() == ID)
+				return object;
+		}
+		return null;
+	}
+	
+	public Item findNearestItem() {
+		Item current = null;
+		
+		for(Item object : this.getGame().getGameData().items) {
+			if(current == null) {
+				current = object;
+				continue;
+			}
+			
+			float dis1 = this.getPos().getDistTo(object.getPos());
+			float dis2 = this.getPos().getDistTo(current.getPos());
+			if(dis1 < dis2)
+				current = object;
+		}
+		
+		if(current != null)
+			return current;
+		else return null;
+	}
+	
+	public Item findNearestItem(String name) {
+		return this.findNearestItem(ItemType.idOf(name));
+	}
+	
+	public Item findNearestItem(int ID) {
+		Item current = null;
+		
+		for(Item object : this.getGame().getGameData().items) {
+			if(object.getID() != ID)
+				continue;
+				
+			if(current == null) {
+				current = object;
+				continue;
+			}
+			
+			float dis1 = this.getPos().getDistTo(object.getPos());
+			float dis2 = this.getPos().getDistTo(current.getPos());
+			if(dis1 < dis2)
+				current = object;
+		}
+		
+		if(current != null)
+			return current;
 		else return null;
 	}
 	

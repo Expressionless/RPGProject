@@ -7,13 +7,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-import helix.game.GameData;
+import helix.game.Data;
 import helix.game.GameObject;
 import helix.game.objects.entity.Collider;
 import helix.gfx.Sprite;
 import helix.utils.math.Point;
-import main.game.item.Item;
-import main.game.item.ItemType;
 
 public abstract class Entity extends GameObject {
 	public static final BitmapFont font = new BitmapFont();
@@ -28,11 +26,11 @@ public abstract class Entity extends GameObject {
 
 	public abstract void loadSprites(AssetManager manager);
 
-	public Entity(GameData gameData, Point pos) {
-		super(gameData, pos);
+	public Entity(Data data, Point pos) {
+		super(data, pos);
 
 		this.sprites = new HashMap<String, Sprite>();
-		this.gameData.entities.add(this);
+		this.getData().entities.add(this);
 		this.currentSprite = null;
 	}
 
@@ -66,7 +64,7 @@ public abstract class Entity extends GameObject {
 		if (sprites.containsKey(spriteName))
 			return false;
 
-		sprites.put(spriteName, gameData.createSprite(spriteName, numFrames, duration));
+		sprites.put(spriteName, this.getData().createSprite(spriteName, numFrames, duration));
 		if (this.currentSprite == null)
 			this.setSprite(spriteName);
 		return true;
@@ -74,7 +72,7 @@ public abstract class Entity extends GameObject {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Entity> T findEntity(Class<T> searchClass) {
-		for(GameObject object : gameData.entities) {
+		for(GameObject object : this.getData().entities) {
 			if(searchClass.isInstance(object))
 				return (T)object;
 		}
@@ -84,7 +82,7 @@ public abstract class Entity extends GameObject {
 	@SuppressWarnings("unchecked")
 	public <T extends Entity> T findNearestEntity(Class<T> searchClass) {
 		GameObject current = null;
-		for(GameObject object : gameData.entities) {
+		for(GameObject object : this.getData().entities) {
 			if(!searchClass.isInstance(object))
 				continue;
 			if(current == null) {
@@ -100,67 +98,7 @@ public abstract class Entity extends GameObject {
 		if(current != null)
 			return (T)current;
 		else return null;
-	}
-	
-	public Item findItem(String name) {
-		return this.findItem(ItemType.idOf(name));
-	}
-	
-	public Item findItem(int ID) {
-		for(Item object : gameData.items) {
-			if(Item.class.isInstance(object) && object.getID() == ID)
-				return object;
-		}
-		return null;
-	}
-	
-	public Item findNearestItem() {
-		Item current = null;
-		
-		for(Item object : gameData.items) {
-			if(current == null) {
-				current = object;
-				continue;
-			}
-			
-			float dis1 = this.getPos().getDistTo(object.getPos());
-			float dis2 = this.getPos().getDistTo(current.getPos());
-			if(dis1 < dis2)
-				current = object;
-		}
-		
-		if(current != null)
-			return current;
-		else return null;
-	}
-	
-	public Item findNearestItem(String name) {
-		return this.findNearestItem(ItemType.idOf(name));
-	}
-	
-	public Item findNearestItem(int ID) {
-		Item current = null;
-		
-		for(Item object : gameData.items) {
-			if(object.getID() != ID)
-				continue;
-				
-			if(current == null) {
-				current = object;
-				continue;
-			}
-			
-			float dis1 = this.getPos().getDistTo(object.getPos());
-			float dis2 = this.getPos().getDistTo(current.getPos());
-			if(dis1 < dis2)
-				current = object;
-		}
-		
-		if(current != null)
-			return current;
-		else return null;
-	}
-	
+	}	
 
 	// Getters and Setters
 	

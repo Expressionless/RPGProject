@@ -6,7 +6,7 @@ import helix.utils.math.Vector2;
 import main.Constants;
 
 public abstract class GameObject {
-	public final GameData gameData;
+	private final Data data;
 	
 	private Alarm[] alarm;
 	private boolean shouldDispose;
@@ -18,13 +18,13 @@ public abstract class GameObject {
 	protected abstract void step();
 	protected void postStep() {}
 	
-	public GameObject(GameData gameData, Point pos) {
+	public GameObject(Data data, Point pos) {
 		this.pos = pos;
-		this.gameData = gameData;
+		this.data = data;
 		this.direction = new Vector2(0, 0);
 		this.initAlarms();
 		
-		gameData.objects.add(this);
+		data.objects.add(this);
 	}
 	
 	private void initAlarms() {
@@ -49,7 +49,7 @@ public abstract class GameObject {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends GameObject> T find(Class<T> searchClass) {
-		for(GameObject object : gameData.objects) {
+		for(GameObject object : data.objects) {
 			if(searchClass.isInstance(object))
 				return (T)object;
 		}
@@ -59,7 +59,7 @@ public abstract class GameObject {
 	@SuppressWarnings("unchecked")
 	public <T extends GameObject> T findNearest(Class<T> searchClass) {
 		GameObject current = null;
-		for(GameObject object : gameData.objects) {
+		for(GameObject object : data.objects) {
 			if(!searchClass.isInstance(object))
 				continue;
 			if(current == null) {
@@ -141,5 +141,9 @@ public abstract class GameObject {
 	
 	public void dispose() {
 		shouldDispose = true;
+	}
+	
+	public Data getData() {
+		return data;
 	}
 }

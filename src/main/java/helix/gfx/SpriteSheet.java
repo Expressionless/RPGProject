@@ -3,7 +3,7 @@ package helix.gfx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import helix.game.GameData;
+import helix.game.Data;
 
 public class SpriteSheet {
 
@@ -20,7 +20,7 @@ public class SpriteSheet {
 	 * @param tiles_x - width of each sprite in pixels
 	 * @param tiles_y - height of each sprite in pixels
 	 */
-	public SpriteSheet(GameData data, String textureRef, int tiles_x, int tiles_y) {
+	public SpriteSheet(Data data, String textureRef, int tiles_x, int tiles_y) {
 		this.ref = textureRef;
 		
 		Texture texture = data.getManager().get(textureRef, Texture.class);

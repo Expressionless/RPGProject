@@ -4,13 +4,14 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
+
 public abstract class BaseGame extends Game {
 
 	public final Lwjgl3ApplicationConfiguration config;
 	public final int frameWidth, frameHeight;
 	public final String title;
 	
-	private final GameData gameData;
+	private Data data;
 	
 	private OrthographicCamera camera;
 	private float progress, lastProgress;
@@ -22,24 +23,29 @@ public abstract class BaseGame extends Game {
 		config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle(title);
 		config.setWindowedMode(frameWidth, frameHeight);
+
+		config.setIdleFPS(0);
+		config.setForegroundFPS(0);
+		config.useVsync(true);
+		config.setResizable(false);
 		
 		this.title = title;
 		this.frameWidth = frameWidth;
 		this.frameHeight = frameHeight;
 		
 		camera = new OrthographicCamera();
-		this.gameData = new GameData();
-		this.gameData.setCamera(this.camera);
+		
 	}
 	
 	@Override
 	public void create() {
 
 		// Load loading screen stuff
-		this.getGameData().getManager().finishLoading();
+		this.getData().setCamera(camera);
+		this.getData().getManager().finishLoading();
 		this.load();
 		
-		this.gameData.init();
+		this.data.init();
 		this.start();
 	}
 	
@@ -47,12 +53,12 @@ public abstract class BaseGame extends Game {
 		this.queueLoadAssets();
 		
 		// Load Resources
-		while (!this.getGameData().getManager().update()) {
+		while (!this.getData().getManager().update()) {
 			
 			// Check if progress got updated
-			progress = this.getGameData().getManager().getProgress();
+			progress = this.getData().getManager().getProgress();
 			if(progress != lastProgress) {
-				System.out.println("loading: " + this.getGameData().getManager().getProgress());
+				System.out.println("loading: " + this.getData().getManager().getProgress());
 				this.lastProgress = progress;
 			}
 		}
@@ -62,7 +68,11 @@ public abstract class BaseGame extends Game {
 		return camera;
 	}
 	
-	public GameData getGameData() {
-		return gameData;
+	public Data getData() {
+		return data;
+	}
+	
+	public void setData(Data data) {
+		this.data = data;
 	}
 }

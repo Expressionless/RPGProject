@@ -6,10 +6,10 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import helix.game.GameData;
 import helix.utils.math.Angle;
 import helix.utils.math.Point;
 import main.Constants;
+import main.game.RpgGame;
 import main.game.entities.Mob;
 
 public class Player extends Mob {
@@ -29,9 +29,9 @@ public class Player extends Mob {
 
 	private int up = 0, down = 0, left = 0, right = 0;
 
-	public Player(GameData data, Point pos) {
-		super(data, pos);
-		data.setPlayer(this);
+	public Player(RpgGame game, Point pos) {
+		super(game, pos);
+		game.getGameData().setPlayer(this);
 
 		this.addSprite(PLAYER_RIGHT, 4, anim_duration);
 		this.addSprite(PLAYER_DOWN, 4, anim_duration);
@@ -151,8 +151,8 @@ public class Player extends Mob {
 	
 	@Override
 	public void draw(SpriteBatch batch) {
-		float TOP_LEFT = gameData.getCamera().position.x - Constants.CAMERA_WIDTH /2 ;
-		float TOP_LEFT_2 = gameData.getCamera().position.y - Constants.CAMERA_HEIGHT /4;
+		float TOP_LEFT = this.getGameData().getCamera().position.x - Constants.CAMERA_WIDTH /2 ;
+		float TOP_LEFT_2 = this.getGameData().getCamera().position.y - Constants.CAMERA_HEIGHT /4;
 
 		this.getInventory().render(batch, TOP_LEFT + 30, TOP_LEFT_2 + 30);
 		// wdfont.draw(batch, this.getPos().toString(), this.getPos().getX() - 30,

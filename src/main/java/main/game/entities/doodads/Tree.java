@@ -2,15 +2,15 @@ package main.game.entities.doodads;
 
 import com.badlogic.gdx.assets.AssetManager;
 
-import helix.game.GameData;
-import helix.game.objects.Entity;
 import helix.utils.math.Point;
+import main.game.RpgGame;
+import main.game.entities.Doodad;
 
-public class Tree extends Entity {
+public class Tree extends Doodad {
 	public static final String TREE_REF = "res/sprites/doodads/tree.png";
 
-	public Tree(GameData gameData, Point pos) {
-		super(gameData, pos);
+	public Tree(RpgGame game, Point pos) {
+		super(game, pos);
 		this.addSprite(TREE_REF);
 		this.setSprite(TREE_REF);
 	}
