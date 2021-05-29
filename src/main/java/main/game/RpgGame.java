@@ -19,7 +19,7 @@ public class RpgGame extends BaseGame {
 
 	private SpriteBatch batch;
 	private Viewport viewport;
-	
+
 	private FPSLogger fps;
 
 	public RpgGame() {
@@ -60,20 +60,20 @@ public class RpgGame extends BaseGame {
 		this.getGameData().setViewport(viewport);
 
 		new Player(this, new Point(-30, 30));
-		/*
-		 * this.getGameData().spawnItem(new Point(30, 30), 0);
-		 * this.getGameData().spawnItem(new Point(60, 90), 1, 3);
-		 * this.getGameData().spawnItem(new Point(60, 130), 1, 2);
-		 * this.getGameData().spawnItem(new Point(60, 150), 0, 5);
-		 * this.getGameData().spawnItem(new Point(60, 180), 0, 4);
-		 * this.getGameData().spawnItem(new Point(60, 210), "grASS", 6);
-		 * this.getGameData().spawnItem(new Point(60, 240), "grASS", 3);
-		 * this.getGameData().spawnItem(new Point(60, 270), "grASS", 8);
-		 * this.getGameData().spawnItem(new Point(140, 90), 3);
-		 * this.getGameData().spawnItem(new Point(140, 90), 3);
-		 * this.getGameData().spawnItem(new Point(140, 90), "Bow");
-		 * this.getGameData().spawnItem(new Point(140, 90), "Bow");
-		 */ this.getGameData().spawnItem(new Point(140, 90), "Bow");
+
+		this.getGameData().spawnItem(new Point(30, 30), 0);
+		this.getGameData().spawnItem(new Point(60, 90), 1, 3);
+		this.getGameData().spawnItem(new Point(60, 130), 1, 2);
+		this.getGameData().spawnItem(new Point(60, 150), 0, 5);
+		this.getGameData().spawnItem(new Point(60, 180), 0, 4);
+		this.getGameData().spawnItem(new Point(60, 210), "grASS", 6);
+		this.getGameData().spawnItem(new Point(60, 240), "grASS", 3);
+		this.getGameData().spawnItem(new Point(60, 270), "grASS", 8);
+		this.getGameData().spawnItem(new Point(140, 90), 3);
+		this.getGameData().spawnItem(new Point(140, 90), 3);
+		this.getGameData().spawnItem(new Point(140, 90), "Bow");
+		this.getGameData().spawnItem(new Point(140, 90), "Bow");
+		this.getGameData().spawnItem(new Point(140, 90), "Bow");
 		this.getGameData().spawnItem(new Point(0, 20), 2);
 		new Tree(this, new Point(50, 50));
 

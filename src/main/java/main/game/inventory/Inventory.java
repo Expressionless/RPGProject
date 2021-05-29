@@ -80,7 +80,6 @@ public class Inventory {
 	}
 	
 	private void addToSlot(Slot s, ItemType item, int amount) {
-		System.out.println("adding to: " + s.ID);
 		s.addItem(item, amount);
 	}
 
@@ -106,7 +105,6 @@ public class Inventory {
 				if(firstFree == null && currentSlot.isEmpty()) {
 					if(!item.getFlag("stackable")) {
 						if(!dryRun) {
-							System.out.println("ad");
 							this.addToSlot(currentSlot, item, amount);
 						}
 						return true;
