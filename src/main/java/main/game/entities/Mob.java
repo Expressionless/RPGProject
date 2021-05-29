@@ -1,10 +1,10 @@
-package helix.game.objects.entity.mob;
+package main.game.entities;
 
 import helix.game.GameData;
 import helix.game.GameObject;
-import helix.game.inventory.Inventory;
 import helix.game.objects.Entity;
 import helix.utils.math.Point;
+import main.game.inventory.Inventory;
 
 public abstract class Mob extends Entity {
 	private final Inventory inventory;

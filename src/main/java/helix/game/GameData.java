@@ -13,12 +13,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import helix.game.objects.Entity;
-import helix.game.objects.entity.mob.Mob;
 import helix.gfx.Animation;
 import helix.gfx.Sprite;
 import helix.gfx.SpriteSheet;
 import helix.utils.math.Point;
 import main.game.entities.Item;
+import main.game.entities.Mob;
 import main.game.entities.mobs.Player;
 import main.game.item.ItemType;
 
@@ -197,10 +197,6 @@ public class GameData {
 
 	public Player getPlayer() {
 		return player;
-	}
-	
-	public Entity getPlayerAsEntity() {
-		return (Entity)player;
 	}
 
 	public void setPlayer(Player player) {

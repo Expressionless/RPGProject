@@ -1,4 +1,4 @@
-package helix.game.inventory;
+package main.game.inventory;
 
 import helix.game.GameData;
 import main.game.item.ItemType;

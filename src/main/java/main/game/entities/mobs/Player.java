@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import helix.game.GameData;
-import helix.game.objects.entity.mob.Mob;
 import helix.utils.math.Angle;
 import helix.utils.math.Point;
 import main.game.Constants;
+import main.game.entities.Mob;
 
 public class Player extends Mob {
 	public static final String PLAYER_RIGHT = "res/sprites/player/right.png";
@@ -126,6 +126,6 @@ public class Player extends Mob {
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		font.draw(batch, this.getPos().toString(), this.getPos().getX() - 30, this.getPos().getY());
+		//wdfont.draw(batch, this.getPos().toString(), this.getPos().getX() - 30, this.getPos().getY());
 	}
 }
