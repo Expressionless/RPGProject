@@ -78,6 +78,11 @@ public class Inventory {
 			}
 		}
 	}
+	
+	private void addToSlot(Slot s, ItemType item, int amount) {
+		System.out.println("adding to: " + s.ID);
+		s.addItem(item, amount);
+	}
 
 	public boolean add(ItemType item, int amount) {
 		return this.add(item, amount, false);
@@ -94,18 +99,19 @@ public class Inventory {
 		Slot firstFree = null;
 		
 		for(row = 0; row < slots.length; row++) {
-			for(column = 0; column < slots[0].length; column++) {
+			for(column = 0; column < slots[row].length; column++) {
 				Slot currentSlot = slots[row][column];
 				
 				// If found the first free slot, make note of it and move on
 				if(firstFree == null && currentSlot.isEmpty()) {
 					if(!item.getFlag("stackable")) {
-						if(!dryRun)
-							currentSlot.addItem(item, amount);
+						if(!dryRun) {
+							System.out.println("ad");
+							this.addToSlot(currentSlot, item, amount);
+						}
 						return true;
 					}
 					firstFree = currentSlot;
-					continue;
 				}
 				// Skip the slot if it contains an item that is not the same as what we're adding
 				// or if the item we're adding is not stackable
@@ -114,16 +120,18 @@ public class Inventory {
 						continue;
 				
 				// Add the item to the inv
-				if(!dryRun)
-					currentSlot.addItem(item, amount);
+				if(!dryRun) {
+					this.addToSlot(currentSlot, item, amount);
+				}
 				
 				return true;				
 			}
 		}
 		
 		if(firstFree != null) {
-			if(!dryRun)
+			if(!dryRun) {
 				firstFree.addItem(item, amount);
+			}
 			return true;
 		}
 		
