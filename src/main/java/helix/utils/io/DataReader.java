@@ -68,6 +68,15 @@ public class DataReader {
 		return ((block & convertedBitPosition) != 0);
 	}
 	
+	public byte[] getBytes(int position, int len) {
+		byte[] bytes = new byte[len];
+		for(int i = 0; i < bytes.length; i++) {
+			bytes[i] = this.bytes.get(position + i);
+		}
+		
+		return bytes;
+	}
+	
 	public int getInt(int position) {
 		return (int)bytes.get(position);
 	}

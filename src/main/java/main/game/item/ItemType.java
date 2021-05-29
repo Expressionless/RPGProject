@@ -1,80 +1,36 @@
 package main.game.item;
 
 import helix.game.GameData;
-import helix.utils.io.DataReader;
-import helix.utils.io.DataWriter;
+import helix.gfx.Sprite;
+import main.Constants;
 
 public class ItemType {
-
 	public final String name;
-	public final int ID;
 	public final Flags itemFlags;
 	
-	private static DataReader reader;
-	private static DataWriter writer;
+	public final int maxStack;
+	public final int ID;
+	
+	public final Sprite sprite;	
 
-	private ItemType(int id, String name, int... flags) {
+	public ItemType(int id, String name, int maxStack, int flags) {
 		this.name = name;
 		this.ID = id;
+		this.maxStack = maxStack;
 		this.itemFlags = new Flags(flags);
+		
+		int index[] = Item.IDtoImageIndex(id);
+		this.sprite = Item.ITEM_SHEET.getSubSprite(index[0], index[1]);
 	}
 
+	@SuppressWarnings("unused")
+	private ItemType(int id, String name, int flags) {
+		this(id, name, Constants.MAX_STACK, flags);
+	}
+	
+	@SuppressWarnings("unused")
 	private ItemType(int id, String name) {
-		this(id, name, new int[] {});
-	}
-
-	public static void beginReading() {
-		if(writer != null)
-			return;
-		if(reader != null)
-			return;
-		
-		reader = new DataReader("/data/item");
-	}
-	
-	public static void stopReading() {
-		if(reader == null)
-			return;
-		reader = null;
-	}
-	
-	
-	public static void beginWriting() {
-		if(writer != null)
-			return;
-		if(reader != null)
-			return;
-		
-		writer = new DataWriter("/data/item");
-	}
-	
-	public static void stopWriting() {
-		if(writer == null)
-			return;
-		
-		writer.close();
-		writer = null;
-	}
-	
-	public static void addItem(int id, String name, boolean[] flags) {
-		if(writer == null)
-			return;
-		writer.write(id);
-		writer.write(name, helix.Constants.MAX_ITEM_NAME_LEN);
-		writer.writeBools(flags);
-	}
-
-	public static ItemType parseItemType(int position) {
-		if(reader == null)
-			return null;
-		position *= helix.Constants.ITEM_SIZE;
-
-		// Read in the ID
-		int id = reader.getInt(position);
-		String name = reader.getString(position + 1, helix.Constants.MAX_ITEM_NAME_LEN);
-		int flags = reader.getInt(position + helix.Constants.MAX_ITEM_NAME_LEN + 1);
-
-		return new ItemType(id, name, flags);
+		this(id, name, 0);
 	}
 
 	/**
@@ -93,7 +49,7 @@ public class ItemType {
 
 	public static String nameOf(final int id) {
 		try {
-			return ItemType.get(id).toString();
+			return ItemType.get(id).name;
 		} catch (NullPointerException e) {
 			return "UNDEFINED";
 		}
@@ -102,13 +58,17 @@ public class ItemType {
 	public static ItemType get(final int ID) {
 		return GameData.ITEM_TYPES.get(ID);
 	}
-
-	public static boolean reading() {
-		return (reader != null);
+	
+	public Sprite getSprite() {
+		return this.sprite;
 	}
 	
-	public static boolean writing() {
-		return (writer != null);
+	public boolean getFlag(String flag) {
+		return this.itemFlags.getFlag(flag);
+	}
+	
+	public void setFlag(String flag, boolean val) {
+		this.itemFlags.setFlag(flag, val);
 	}
 	
 	@Override
@@ -118,7 +78,7 @@ public class ItemType {
 
 	// Helper class
 	@SuppressWarnings("unused")
-	protected class Flags {
+	private class Flags {
 
 		private boolean stackable = true;
 		private int maxStack = 50;
@@ -131,22 +91,22 @@ public class ItemType {
 			stackable = (flags[0] & 0x01) != 0;
 		}
 
-		public void setStat(String stat, float val) {
+		public void setFlag(String flag, boolean val) {
 			try {
-				Flags.class.getDeclaredField(stat).set(this, val);
+				Flags.class.getDeclaredField(flag).set(this, val);
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
 			}
 		}
 
-		public float getStat(String stat) {
+		public boolean getFlag(String flag) {
 			try {
-				return Flags.class.getDeclaredField(stat).getFloat(this);
+				return Flags.class.getDeclaredField(flag).getBoolean(this);
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();
 			}
 
-			return 0;
+			return false;
 		}
 		
 		@Override

@@ -1,5 +1,6 @@
 package helix.gfx;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -18,7 +19,7 @@ public class Sprite {
 
 	// Bounds relative to top left of sprite
 	private final Rectangle bounds;
-
+	
 	public Sprite(Animation animation) {
 		this.animation = animation;
 		if(this.animation.getName().isBlank())
@@ -43,13 +44,21 @@ public class Sprite {
 	}
 	
 	public void draw(SpriteBatch batch, float x, float y) {
+		this.draw(batch, x, y, Color.WHITE);
+	}
+	
+	public void draw(SpriteBatch batch, float x, float y, Color color) {
 		this.animation.update();
 		this.setBounds(x, y, this.animation.getWidth(), this.animation.getHeight());
+		
+		Color last = batch.getColor();
+		batch.setColor(color);
 		if (flipped) {
 			batch.draw(animation.getFrame(), x + animation.getWidth(), y, -animation.getWidth() * scale.getX(),
 					animation.getHeight() * scale.getY());
 		} else
 			batch.draw(animation.getFrame(), x, y, animation.getWidth() * scale.getX(), animation.getHeight() * scale.getY());
+		batch.setColor(last);
 	}
 
 	public void restart() {
@@ -119,6 +128,12 @@ public class Sprite {
 	
 	public void setScale(float x, float y) {
 		this.setScale(new Vector2(x, y));
+	}
+	
+	public Sprite copy() {
+		Sprite cpy = new Sprite(animation);
+		cpy.setName(name);
+		return cpy;
 	}
 	
 	@Override

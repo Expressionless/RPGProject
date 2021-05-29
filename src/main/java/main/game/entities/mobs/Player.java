@@ -9,20 +9,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import helix.game.GameData;
 import helix.utils.math.Angle;
 import helix.utils.math.Point;
-import main.game.Constants;
+import main.Constants;
 import main.game.entities.Mob;
 
 public class Player extends Mob {
 	public static final String PLAYER_RIGHT = "res/sprites/player/right.png";
 	public static final String PLAYER_DOWN = "res/sprites/player/down.png";
 	public static final String PLAYER_UP = "res/sprites/player/up.png";
-	
+
 	@Override
 	public void loadSprites(AssetManager manager) {
 		manager.load(PLAYER_RIGHT, Texture.class);
 		manager.load(PLAYER_DOWN, Texture.class);
 		manager.load(PLAYER_UP, Texture.class);
-		
+
 	}
 
 	private int anim_duration = 750;
@@ -32,27 +32,48 @@ public class Player extends Mob {
 	public Player(GameData data, Point pos) {
 		super(data, pos);
 		data.setPlayer(this);
-		
+
 		this.addSprite(PLAYER_RIGHT, 4, anim_duration);
 		this.addSprite(PLAYER_DOWN, 4, anim_duration);
 		this.addSprite(PLAYER_UP, 4, anim_duration);
 
 		this.setStat("speed", Constants.PLAYER_SPEED);
-		
 	}
 
 	@Override
+	protected void preStep() {
+		super.preStep();
+	}
+	
+	@Override
 	public void step() {
+		// Update collider
+		this.updateCollider();
+		// Manage input
+		this.handleInput();
+		
+		this.handleMovement();
+	}
+
+	private void updateCollider() {
 		this.getCollider().setWidth(6);
 		this.getCollider().setHeight(13);
 		this.getCollider().setXOffset(5);
 		this.getCollider().setYOffset(2);
-		// Manage input
+	}
+
+	private void handleInput() {
+		
 		Gdx.input.setInputProcessor(new InputAdapter() {
 
 			@Override
 			public boolean keyDown(int keycode) {
 				switch (keycode) {
+				case Constants.KEY_INV:
+					if(getInventory().isVisible()) 
+						getInventory().setVisible(false);
+					else getInventory().setVisible(true);
+					break;
 				case Constants.KEY_DOWN:
 					down = 1;
 					break;
@@ -88,7 +109,10 @@ public class Player extends Mob {
 				return true;
 			}
 		});
+	}
 
+	private void handleMovement() {
+		
 		// Update Direction
 		this.getDirection().setX(right - left);
 		this.getDirection().setY(up - down);
@@ -99,22 +123,23 @@ public class Player extends Mob {
 			this.getSprite().stop();
 		} else {
 			double angle = this.getDirection().getAngle();
-			
-			boolean up    = angle < Angle.TOP_LEFT.angle     && angle > Angle.TOP_RIGHT.angle;
-			boolean left  = angle <= Angle.BOTTOM_LEFT.angle && angle >= Angle.TOP_LEFT.angle;
-			boolean right = (angle >= 0 && angle <= Angle.TOP_RIGHT.angle) || (angle < 0  && angle >= Angle.BOTTOM_RIGHT.angle);
-			boolean down  = angle < Angle.BOTTOM_RIGHT.angle && angle > Angle.BOTTOM_LEFT.angle;
-			
-			if(up) {
+
+			boolean up = angle < Angle.TOP_LEFT.angle && angle > Angle.TOP_RIGHT.angle;
+			boolean left = angle <= Angle.BOTTOM_LEFT.angle && angle >= Angle.TOP_LEFT.angle;
+			boolean right = (angle >= 0 && angle <= Angle.TOP_RIGHT.angle)
+					|| (angle < 0 && angle >= Angle.BOTTOM_RIGHT.angle);
+			boolean down = angle < Angle.BOTTOM_RIGHT.angle && angle > Angle.BOTTOM_LEFT.angle;
+
+			if (up) {
 				setSprite(PLAYER_UP);
 				getSprite().flip(false);
-			} else if(right) {
+			} else if (right) {
 				setSprite(PLAYER_RIGHT);
 				getSprite().flip(false);
-			} else if(down) {
+			} else if (down) {
 				setSprite(PLAYER_DOWN);
 				getSprite().flip(false);
-			} else if(left) {
+			} else if (left) {
 				setSprite(PLAYER_RIGHT);
 				getSprite().flip(true);
 			}
@@ -123,9 +148,14 @@ public class Player extends Mob {
 
 		this.move(this.getStat("speed"));
 	}
-
+	
 	@Override
 	public void draw(SpriteBatch batch) {
-		//wdfont.draw(batch, this.getPos().toString(), this.getPos().getX() - 30, this.getPos().getY());
+		float TOP_LEFT = gameData.getCamera().position.x - Constants.CAMERA_WIDTH /2 ;
+		float TOP_LEFT_2 = gameData.getCamera().position.y - Constants.CAMERA_HEIGHT /4;
+
+		this.getInventory().render(batch, TOP_LEFT + 30, TOP_LEFT_2 + 30);
+		// wdfont.draw(batch, this.getPos().toString(), this.getPos().getX() - 30,
+		// this.getPos().getY());
 	}
 }

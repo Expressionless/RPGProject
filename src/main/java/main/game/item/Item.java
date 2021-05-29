@@ -1,4 +1,4 @@
-package main.game.entities;
+package main.game.item;
 
 import java.util.Random;
 
@@ -9,15 +9,15 @@ import helix.game.objects.Entity;
 import helix.gfx.Sprite;
 import helix.gfx.SpriteSheet;
 import helix.utils.math.Point;
-import main.game.Constants;
-import main.game.item.ItemType;
+import main.Constants;
+import main.game.inventory.Inventory;
 
 public class Item extends Entity {
 	public static SpriteSheet ITEM_SHEET;
 
 	private float animOffset;
 	private int amount;
-	
+
 	@Override
 	public void loadSprites(AssetManager manager) {
 		// manager.load(Constants.ITEMS_DIRECTORY, Texture.class);
@@ -40,20 +40,20 @@ public class Item extends Entity {
 		this(gameData, pos, ItemType.idOf(itemName), 1);
 	}
 
-	private int[] IDtoImageIndex() {
+	public static int[] IDtoImageIndex(int ID) {
 		int items_width = ITEM_SHEET.getWidth(); // 16
 		int items_height = ITEM_SHEET.getHeight(); // 16
 
-		int x = this.getID() % items_height; // x = 2
-		int y = (int) Math.floor(this.getID() / items_width); // y = 0
+		int x = ID % items_height; // x = 2
+		int y = (int) Math.floor(ID / items_width); // y = 0
 
 		return new int[] { x, y };
 	}
 
 	private void attachItemSprite() {
 		if (this.getSprite() == null) {
-			int[] index = this.IDtoImageIndex();
-			Sprite s = ITEM_SHEET.getSubSprite(index[0], index[1]);
+			int[] index = IDtoImageIndex(this.getID());
+			Sprite s = ITEM_SHEET.getSubSprite(index[0], index[1]).copy();
 			s.setName(ItemType.nameOf(this.item.ID));
 			this.setSprite(ITEM_SHEET.getSubSprite(index[0], index[1]));
 		}
@@ -69,17 +69,22 @@ public class Item extends Entity {
 		if (this.getSprite() != null) {
 			this.getSprite().setScale(XScale, YScale);
 		}
+		Inventory pInv = gameData.getPlayer().getInventory();
+
 		if (this.distTo(gameData.getPlayer()) < Constants.ITEM_SUCK_DISTANCE) {
-			if(this.distTo(gameData.getPlayer()) <= Constants.PICKUP_DISTANCE) {
-				gameData.getPlayer().getInventory().add(this.getID(), this.amount);
-				this.dispose();
+			if (pInv.add(item, amount, true)) {
+				if (this.distTo(gameData.getPlayer()) <= Constants.PICKUP_DISTANCE) {
+					if (gameData.getPlayer().getInventory().add(this.item, this.amount))
+						;
+					this.dispose();
+				}
+				this.moveTo(gameData.getPlayer(), Constants.ITEM_SPEED);
 			}
-			this.moveTo(gameData.getPlayer(), Constants.ITEM_SPEED);
 		}
 	}
 
 	// Getters and Setters
-	
+
 	public int getID() {
 		return this.item.ID;
 	}

@@ -8,8 +8,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import helix.game.BaseGame;
 import helix.utils.math.Point;
+import main.Constants;
 import main.game.entities.doodads.Tree;
 import main.game.entities.mobs.Player;
+import main.game.inventory.Inventory;
 
 public class RpgGame extends BaseGame {
 
@@ -35,10 +37,14 @@ public class RpgGame extends BaseGame {
 
 		this.getGameData().getManager().load("res/sprites/doodads/tree.png", Texture.class);
 		this.getGameData().getManager().load("res/sprites/doodads/shrub.png", Texture.class);
+
+		this.getGameData().getManager().load("res/sprites/UI/inventory/slot.png", Texture.class);
 	}
 
 	@Override
 	public void start() {
+		Inventory.slotSprite = this.getGameData().createSprite("res/sprites/UI/inventory/slot.png");
+		Inventory.inventoryFont.getData().setScale(0.25f);
 
 		this.getCamera().setToOrtho(false, frameWidth, frameHeight);
 		this.batch = new SpriteBatch();
@@ -47,17 +53,21 @@ public class RpgGame extends BaseGame {
 		
 		this.getGameData().setViewport(viewport);
 
-		new Player(this.getGameData(), new Point(30, 30));
-		this.getGameData().spawnItem(new Point(30, 30), "grass");
-		this.getGameData().spawnItem(new Point(60, 90), "grASS", 3);
-		this.getGameData().spawnItem(new Point(60, 130), "grASS", 2);
-		this.getGameData().spawnItem(new Point(60, 150), "grASS", 5);
-		this.getGameData().spawnItem(new Point(60, 180), "grASS", 4);
+		new Player(this.getGameData(), new Point(-30, 30));
+		this.getGameData().spawnItem(new Point(30, 30), 0);
+		this.getGameData().spawnItem(new Point(60, 90), 1, 3);
+		this.getGameData().spawnItem(new Point(60, 130), 1, 2);
+		this.getGameData().spawnItem(new Point(60, 150), 0, 5);
+		this.getGameData().spawnItem(new Point(60, 180), 0, 4);
 		this.getGameData().spawnItem(new Point(60, 210), "grASS", 6);
 		this.getGameData().spawnItem(new Point(60, 240), "grASS", 3);
 		this.getGameData().spawnItem(new Point(60, 270), "grASS", 8);
+		this.getGameData().spawnItem(new Point(140, 90), 3);
+		this.getGameData().spawnItem(new Point(140, 90), 3);
 		this.getGameData().spawnItem(new Point(140, 90), "Bow");
-		this.getGameData().spawnItem(new Point(0, 20), "SWORD");
+		this.getGameData().spawnItem(new Point(140, 90), "Bow");
+		this.getGameData().spawnItem(new Point(140, 90), "Bow");
+		this.getGameData().spawnItem(new Point(0, 20), 2);
 		new Tree(this.getGameData(), new Point(50, 50));
 		// this.getGameData().createObject(Player.class, new Point(30, 30));
 

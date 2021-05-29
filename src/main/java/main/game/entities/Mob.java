@@ -7,7 +7,7 @@ import helix.utils.math.Point;
 import main.game.inventory.Inventory;
 
 public abstract class Mob extends Entity {
-	private final Inventory inventory;
+	private Inventory inventory;
 	
 	private final MobStats stats;
 	
@@ -16,6 +16,11 @@ public abstract class Mob extends Entity {
 		this.stats = new MobStats();
 		this.gameData.mobs.add(this);
 		this.inventory = new Inventory();
+	}
+	
+	@Override
+	protected void preStep() {
+		this.inventory.update();
 	}
 
 	@SuppressWarnings("unchecked")

@@ -1,4 +1,4 @@
-package main.game;
+package main;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -29,11 +29,13 @@ public class Constants {
 	// Animation Constants
 	public static final double ITEM_BREATHE_LENGTH = 50;
 	
-	// Movement
+	// Movement and Input
 	public static final char KEY_RIGHT = Keys.D;
 	public static final char KEY_LEFT = Keys.A;
 	public static final char KEY_DOWN = Keys.S;
 	public static final char KEY_UP = Keys.W;
+	
+	public static final char KEY_INV = Keys.P;
 
 	public static final float PLAYER_SPEED = 0.5f;
 	public static final float ITEM_SPEED = 0.25f;
@@ -42,5 +44,33 @@ public class Constants {
 	// Basic Collision
 	public static final float PICKUP_DISTANCE = 4;
 	public static final float ITEM_SUCK_DISTANCE = 24;
+	
+	// Inventory Constants
+	public static final int DEF_INV_WIDTH = 5;
+	public static final int DEF_INV_HEIGHT = 10;
+	// Inventory slot margin (in px)
+	public static final float INVENTORY_MARGIN = 1;
+
+	// Item offsets (in px)
+	public static final int INV_ITEM_OFFSET_X = 1;
+	public static final int INV_ITEM_OFFSET_Y = 1;
+	
+	public static final int HOTBAR_WIDTH = 1;
+	public static final int HOTBAR_HEIGHT = 10;
+	
+	public static final int MAX_STACK = 40;
+
+	// ITEM INFO CONSTANTS
+	// Size in bits (1 byte)
+	public static final int INT_SIZE = 4;
+	public static final int NO_ITEM = -1;
+	public static final int MAX_ITEM_NAME_LEN = 10;
+	
+	// Item Data positions
+	public static final int ID_POS = 0;
+	public static final int NAME_POS = ID_POS + 1;
+	public static final int STACK_POS = NAME_POS + MAX_ITEM_NAME_LEN;
+	public static final int FLAG_POS = STACK_POS + 1;
+	public static final int ITEM_SIZE = FLAG_POS + 1;
 	
 }

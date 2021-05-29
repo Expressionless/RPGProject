@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.logging.Logger;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Camera;
@@ -16,13 +17,18 @@ import helix.game.objects.Entity;
 import helix.gfx.Animation;
 import helix.gfx.Sprite;
 import helix.gfx.SpriteSheet;
+import helix.utils.io.DataReader;
+import helix.utils.io.DataWriter;
 import helix.utils.math.Point;
-import main.game.entities.Item;
+import main.Constants;
 import main.game.entities.Mob;
 import main.game.entities.mobs.Player;
+import main.game.item.Item;
+import main.game.item.ItemInfo;
 import main.game.item.ItemType;
 
 public class GameData {
+	private static Logger log = Logger.getLogger(GameData.class.getCanonicalName());
 
 	public static int TICKS = 0;
 	public static final ArrayList<ItemType> ITEM_TYPES = new ArrayList<>();
@@ -31,6 +37,9 @@ public class GameData {
 	public final ArrayList<Entity> entities;
 	public final ArrayList<Mob> mobs;
 	public final ArrayList<Item> items;
+		
+	private DataReader reader;
+	private static DataWriter writer;
 
 	private AssetManager manager;
 	private Viewport viewport;
@@ -57,26 +66,23 @@ public class GameData {
 	}
 
 	private void createItemsSheet() {
-		Item.ITEM_SHEET = new SpriteSheet(this, main.game.Constants.ITEMS_DIRECTORY, 8, 8);
+		Item.ITEM_SHEET = new SpriteSheet(this, main.Constants.ITEMS_DIRECTORY, 8, 8);
 	}
 	
 	private void parseItems() {
-		ItemType.beginReading();
+		this.beginReading();
 		
 		int numsToParse = 4;
 		for(int i = 0; i < numsToParse; i++) {
-			ItemType item = ItemType.parseItemType(i);
+			ItemType item = this.parseItemType(i);
 			if(item == null)
 				continue;
 			ITEM_TYPES.add(item);
 		}
 		
-		ItemType.stopReading();
+		this.stopReading();
 		
 		System.out.println("Loaded: " + ITEM_TYPES.size() + " items");
-		for(int i = 0; i < ITEM_TYPES.size(); i++) {
-			System.out.println(ITEM_TYPES.get(i).name);
-		}
 	}
 
 	public Sprite createSprite(String spriteName, int frameCount, float animTime) {
@@ -139,6 +145,75 @@ public class GameData {
 			entity.render(batch);
 		}
 	}
+	
+
+
+	public void beginReading() {
+		if(writer != null)
+			return;
+		if(reader != null)
+			return;
+		
+		reader = new DataReader("/data/item");
+	}
+	
+	public void stopReading() {
+		if(reader == null)
+			return;
+		reader = null;
+	}
+	
+	
+	public void beginWriting() {
+		if(writer != null)
+			return;
+		if(reader != null)
+			return;
+		
+		writer = new DataWriter("/data/item");
+	}
+	
+	public void stopWriting() {
+		if(writer == null)
+			return;
+		
+		writer.close();
+		writer = null;
+	}
+	
+	public void addItem(ItemInfo info) {
+		addItem(info.id, info.name, info.maxStack, info.flags);
+	}
+	
+	public void addItem(int id, String name, int maxStack, boolean[] flags) {
+		if(writer == null)
+			return;
+		writer.write(id);
+		writer.write(name, Constants.MAX_ITEM_NAME_LEN);
+		writer.write(maxStack);
+		writer.writeBools(flags);
+	}
+
+	public ItemType parseItemType(int position) {
+		if(reader == null)
+			return null;
+		position *= Constants.ITEM_SIZE;
+
+		log.fine("Parsing new item at: " + position);
+		// Read in the ID
+		int id = reader.getInt(position + Constants.ID_POS);
+		log.fine("ID: "  + id);
+		// Read in the name
+		String name = reader.getString(position + Constants.NAME_POS, Constants.MAX_ITEM_NAME_LEN);
+		log.fine("Name: " + name);
+		// Read in maxStack
+		int maxStack = reader.getInt(position + Constants.STACK_POS);
+		log.fine("Stack: " + maxStack);
+		// Read in the flags
+		int flags = reader.getInt(position + Constants.FLAG_POS);
+		log.fine("Flags: " + flags);
+		return new ItemType(id, name, maxStack, flags);
+	}
 
 	public void spawnItem(Point pos, int id, int amount) {
 		new Item(this, pos, id, amount);
@@ -193,6 +268,14 @@ public class GameData {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public boolean reading() {
+		return (reader != null);
+	}
+	
+	public boolean writing() {
+		return (writer != null);
 	}
 
 	public Player getPlayer() {

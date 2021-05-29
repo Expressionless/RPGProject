@@ -15,6 +15,8 @@ public class Animation {
 	private float maxFrameTime, currentFrameTime;
 	private int frame, frameCount;
 	
+	private float animTime;
+	
 	private boolean looping = true;
 	private boolean playing = true;
 	
@@ -35,6 +37,7 @@ public class Animation {
 		this.frameCount = frameCount;
 		this.maxFrameTime = (animTime / MILLISECONDS) / frameCount;
 		
+		this.animTime = animTime;
 		this.frame = 0;
 		this.name = name;
 	}
@@ -108,6 +111,10 @@ public class Animation {
 
 	public TextureRegion getBaseTex() {
 		return baseTex;
+	}
+	
+	public Animation copy() {
+		return new Animation(new TextureRegion(baseTex.getTexture()), this.name, this.frameCount, this.animTime);
 	}
 	
 	@Override

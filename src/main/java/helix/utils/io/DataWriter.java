@@ -42,6 +42,7 @@ public class DataWriter {
 
 	public void write(byte... bytes) {
 		try {
+			System.out.println("wrote: " + bytes.length + " bytes");
 			out.write(bytes);
 		} catch (IOException e) {
 			log.severe("Failed to write data to file: " + outputPath);
@@ -83,8 +84,9 @@ public class DataWriter {
 	}
 
 	public void writeBools(boolean[] flags) {
-		int numBlocks = (int) Math.ceil(flags.length / Constants.INT_SIZE);
-		this.writeBools(flags, numBlocks);
+		if(flags.length != 4)
+			return;
+		this.writeBools(flags, 1);
 	}
 
 	public void close() {

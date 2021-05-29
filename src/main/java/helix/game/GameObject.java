@@ -3,20 +3,20 @@ package helix.game;
 import helix.game.objects.alarm.Alarm;
 import helix.utils.math.Point;
 import helix.utils.math.Vector2;
-import main.game.Constants;
+import main.Constants;
 
 public abstract class GameObject {
-
-	private Point pos;
-	
-	private Vector2 direction;
 	public final GameData gameData;
 	
 	private Alarm[] alarm;
-
 	private boolean shouldDispose;
+
+	private Point pos;
+	private Vector2 direction;
 	
-	public abstract void step();
+	protected void preStep() {}
+	protected abstract void step();
+	protected void postStep() {}
 	
 	public GameObject(GameData gameData, Point pos) {
 		this.pos = pos;
@@ -33,9 +33,12 @@ public abstract class GameObject {
 			alarm[i] = new Alarm();
 		}
 	}
-	
+
 	public void update() {
+		
+		preStep();
 		step();
+		postStep();
 	}
 	
 	public void updateAlarms() {

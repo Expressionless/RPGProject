@@ -12,7 +12,7 @@ import helix.game.GameObject;
 import helix.game.objects.entity.Collider;
 import helix.gfx.Sprite;
 import helix.utils.math.Point;
-import main.game.entities.Item;
+import main.game.item.Item;
 import main.game.item.ItemType;
 
 public abstract class Entity extends GameObject {
