@@ -21,7 +21,7 @@ public class Tree extends Doodad {
 	}
 
 	@Override
-	public void step() {
+	public void step(float delta) {
 
 	}
 

@@ -62,7 +62,7 @@ public class Item extends Doodad {
 	}
 
 	@Override
-	public void step() {
+	public void step(float delta) {
 		float XScale = (float) (Math
 				.sin((double) (Data.TICKS + animOffset) / (double) (Constants.ITEM_BREATHE_LENGTH)) * 0.2 + 1);
 		float YScale = XScale;
@@ -78,7 +78,7 @@ public class Item extends Doodad {
 					if (this.getGame().getGameData().getPlayer().getInventory().add(this.item, this.amount))
 					this.dispose();
 				}
-				this.moveTo(this.getGame().getGameData().getPlayer(), Constants.ITEM_SPEED);
+				this.moveTo(this.getGame().getGameData().getPlayer(), Constants.ITEM_SPEED * delta);
 			}
 		}
 	}

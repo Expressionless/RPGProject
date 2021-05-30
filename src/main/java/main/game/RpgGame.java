@@ -1,5 +1,7 @@
 package main.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,12 +10,9 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import helix.game.BaseGame;
-import helix.utils.math.Point;
 import main.Constants;
 import main.GameData;
-import main.game.entities.doodads.Tree;
-import main.game.entities.mobs.Player;
-import main.game.inventory.Inventory;
+import main.game.screens.GameScreen;
 
 public class RpgGame extends BaseGame {
 
@@ -34,7 +33,13 @@ public class RpgGame extends BaseGame {
 	}
 
 	@Override
-	public void queueLoadAssets() {
+	protected void initScreens() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void queueLoadAssets() {
 		// Queue sprites to load
 		this.getGameData().getManager().load(Constants.ITEMS_DIRECTORY, Texture.class);
 		this.getGameData().getManager().load("res/sprites/player/right.png", Texture.class);
@@ -48,37 +53,16 @@ public class RpgGame extends BaseGame {
 	}
 
 	@Override
-	public void start() {
-		Inventory.slotSprite = this.getGameData().createSprite("res/sprites/UI/inventory/slot.png");
-		Inventory.inventoryFont.getData().setScale(0.25f);
+	protected void start() {
 
 		this.getCamera().setToOrtho(false, frameWidth, frameHeight);
-		this.batch = new SpriteBatch();
 		viewport = new ExtendViewport(Constants.CAMERA_WIDTH, Constants.CAMERA_HEIGHT, this.getCamera());
 		viewport.apply();
 
+		this.batch = new SpriteBatch();
 		this.getGameData().setViewport(viewport);
-
-		new Player(this, new Point(-30, 30));
-
-		this.getGameData().spawnItem(new Point(30, 30), 0);
-		this.getGameData().spawnItem(new Point(60, 90), 1, 3);
-		this.getGameData().spawnItem(new Point(60, 130), 1, 2);
-		this.getGameData().spawnItem(new Point(60, 150), 0, 5);
-		this.getGameData().spawnItem(new Point(60, 180), 0, 4);
-		this.getGameData().spawnItem(new Point(60, 210), "grASS", 6);
-		this.getGameData().spawnItem(new Point(60, 240), "grASS", 3);
-		this.getGameData().spawnItem(new Point(60, 270), "grASS", 8);
-		this.getGameData().spawnItem(new Point(140, 90), 3);
-		this.getGameData().spawnItem(new Point(140, 90), 3);
-		this.getGameData().spawnItem(new Point(140, 90), "Bow");
-		this.getGameData().spawnItem(new Point(140, 90), "Bow");
-		this.getGameData().spawnItem(new Point(140, 90), "Bow");
-		this.getGameData().spawnItem(new Point(0, 20), 2);
-		new Tree(this, new Point(50, 50));
-
-		// this.getGameData().createObject(Player.class, new Point(30, 30));
-
+		
+		this.setScreen(new GameScreen(this));
 	}
 
 	@Override
@@ -88,18 +72,18 @@ public class RpgGame extends BaseGame {
 
 	@Override
 	public void render() {
+
+		ScreenUtils.clear(new Color(0, 0.25f, 0, 1));
+		// Load anything there is to load
+		// if nothing to load -> update the screen
+		if(this.getGameData().getManager().update()) {	
+			this.getScreen().render(Gdx.graphics.getDeltaTime());
+		}
+		
 		fps.log();
 		ScreenUtils.clear(Constants.CLEAR_COLOR);
 
-		// Follow the player
-		if (this.getGameData() != null) {
-			Player player = this.getGameData().getPlayer();
-			Point playerPos = player.getPos();
-			this.getCamera().position.set(playerPos.getX() + player.getWidth() / 2,
-					playerPos.getY() + player.getHeight() / 2, 0);
-		}
-		this.getGameData().update();
-
+		this.getGameData().update(Gdx.graphics.getDeltaTime());
 		this.getCamera().update();
 
 		this.batch.begin();
@@ -108,8 +92,14 @@ public class RpgGame extends BaseGame {
 		this.batch.end();
 	}
 
+	// Getters and Setters
+	
 	public GameData getGameData() {
 		return (GameData) this.getData();
+	}
+	
+	public RpgGame getGame() {
+		return this;
 	}
 
 }

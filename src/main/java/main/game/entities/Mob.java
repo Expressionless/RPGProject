@@ -23,7 +23,7 @@ public abstract class Mob extends Entity {
 	}
 	
 	@Override
-	protected void preStep() {
+	protected void preStep(float delta) {
 		this.inventory.update();
 	}
 

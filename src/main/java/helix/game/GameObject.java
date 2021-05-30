@@ -14,9 +14,9 @@ public abstract class GameObject {
 	private Point pos;
 	private Vector2 direction;
 	
-	protected void preStep() {}
-	protected abstract void step();
-	protected void postStep() {}
+	protected void preStep(float delta) {}
+	protected abstract void step(float delta);
+	protected void postStep(float delta) {}
 	
 	public GameObject(Data data, Point pos) {
 		this.pos = pos;
@@ -34,11 +34,10 @@ public abstract class GameObject {
 		}
 	}
 
-	public void update() {
-		
-		preStep();
-		step();
-		postStep();
+	public void update(float delta) {
+		preStep(delta);
+		step(delta);
+		postStep(delta);
 	}
 	
 	public void updateAlarms() {
@@ -95,6 +94,9 @@ public abstract class GameObject {
 	
 	public void move(Vector2 direction, float speed) {
 		direction = direction.getUnitVector();
+		// TODO: Fix flickering movement glitch
+		//System.out.println(direction.multiply(speed).toString());
+		//direction.setX(Math.round(direction.getX(), );
 		this.setPos(getPos().add(direction.multiply(speed)));
 	}
 	

@@ -31,15 +31,16 @@ public class Inventory {
 		this.width = w;
 		this.height = h;
 		this.visible = false;
-		this.slots = new Slot[w][h];
+		this.slots = new Slot[h][w];
 		
 		int row, column;
-		for(row = 0; row < w; row++) {
-			for(column = 0; column < h; column++) {
-				slots[row][column] = new Slot(row * h + column);
+		for(column = 0; column < h; column++) {
+			for(row = 0; row < w; row++) {
+				slots[column][row] = new Slot(row * h + column);
 			}
 		}
 		
+		System.out.println("Created new inventory: " + this.width + " " + this.height);		
 	}
 	
 	public Inventory() {
@@ -61,6 +62,7 @@ public class Inventory {
 		if(this.isVisible()) {
 			Color col = Color.WHITE.cpy();
 			col.a = 0.6f;
+			
 			for(int i = 0; i < this.slots.length; i++) {
 				for(int j = 0; j < this.slots[i].length; j++) {
 					Inventory.slotSprite.draw(b, x, y, col);

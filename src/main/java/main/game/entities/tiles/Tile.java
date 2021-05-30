@@ -18,7 +18,7 @@ public class Tile extends Entity {
 	}
 
 	@Override
-	protected void step() {
+	protected void step(float delta) {
 		
 	}
 

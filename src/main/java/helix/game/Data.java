@@ -25,24 +25,26 @@ public abstract class Data {
 	protected static Logger log = Logger.getLogger(Data.class.getCanonicalName());
 
 	public static int TICKS = 0;
-	
+
 	public final ArrayList<GameObject> objects;
 	public final ArrayList<Entity> entities;
-	private final ArrayList<Screen> screens;
-		
+	public final ArrayList<Screen> screens;
+
 	protected DataReader reader;
 	protected DataWriter writer;
 
 	private AssetManager manager;
 	private Viewport viewport;
 	private Camera camera;
+	private BaseGame game;
 
-
-	public Data() {
+	public Data(BaseGame game) {
 		manager = new AssetManager();
 		entities = new ArrayList<>();
 		objects = new ArrayList<>();
-		screens = new ArrayList<>();		
+		screens = new ArrayList<>();
+
+		this.game = game;
 	}
 
 	/**
@@ -68,36 +70,36 @@ public abstract class Data {
 	}
 
 	protected abstract void dispose();
+
 	private void disposeCore() {
 		entities.removeIf((Entity entity) -> {
 			return entity.willDispose();
 		});
 
-		
 		objects.removeIf((GameObject obj) -> {
 			return obj.willDispose();
 		});
-		
+
 		this.dispose();
 	}
-	
-	public void update() {
+
+	public void update(float delta) {
 		TICKS++;
-		
+
 		this.disposeCore();
-		
+
 		entities.sort(new Comparator<Entity>() {
 
 			@Override
 			public int compare(Entity e1, Entity e2) {
-				return (int)Math.signum(e2.getDepth() - e1.getDepth());
+				return (int) Math.signum(e2.getDepth() - e1.getDepth());
 			}
-			
+
 		});
-		
+
 		for (GameObject object : objects) {
 			object.updateAlarms();
-			object.update();
+			object.update(delta);
 		}
 	}
 
@@ -106,40 +108,39 @@ public abstract class Data {
 			entity.render(batch);
 		}
 	}
-	
+
 	public void beginReading(String path) {
-		if(writer != null)
+		if (writer != null)
 			return;
-		if(reader != null)
+		if (reader != null)
 			return;
-		
+
 		reader = new DataReader(path);
 	}
-	
+
 	public void stopReading() {
-		if(reader == null)
+		if (reader == null)
 			return;
 		reader = null;
 	}
-	
-	
+
 	public void beginWriting(String path) {
-		if(writer != null)
+		if (writer != null)
 			return;
-		if(reader != null)
+		if (reader != null)
 			return;
-		
+
 		writer = new DataWriter(path);
 	}
-	
+
 	public void stopWriting() {
-		if(writer == null)
+		if (writer == null)
 			return;
-		
+
 		writer.close();
 		writer = null;
 	}
-	
+
 	public <T extends GameObject> T createObject(Class<T> objectClass, Object... args) {
 		Constructor<T> constructor;
 		try {
@@ -150,7 +151,7 @@ public abstract class Data {
 		}
 
 		try {
-			return constructor.newInstance(this, (Object[]) args);	
+			return constructor.newInstance(this, (Object[]) args);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			e.printStackTrace();
@@ -161,7 +162,7 @@ public abstract class Data {
 	public boolean reading() {
 		return (reader != null);
 	}
-	
+
 	public boolean writing() {
 		return (writer != null);
 	}
@@ -184,5 +185,9 @@ public abstract class Data {
 
 	public void setCamera(Camera camera) {
 		this.camera = camera;
+	}
+
+	public BaseGame getBaseGame() {
+		return (BaseGame) game;
 	}
 }

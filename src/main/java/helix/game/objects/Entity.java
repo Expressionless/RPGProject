@@ -32,13 +32,14 @@ public abstract class Entity extends GameObject {
 		this.sprites = new HashMap<String, Sprite>();
 		this.getData().entities.add(this);
 		this.currentSprite = null;
+		this.collider = new Collider(this);
 	}
 
 	@Override
-	public void update() {
+	public void update(float delta) {
+		super.update(delta);
 		this.depth = this.getPos().getY();
-		this.collider = new Collider(this);
-		this.step();
+		this.step(delta);
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -49,7 +50,7 @@ public abstract class Entity extends GameObject {
 		draw(batch);
 	}
 
-	public void draw(SpriteBatch batch) {
+	protected void draw(SpriteBatch batch) {
 	}
 
 	public boolean addSprite(String spriteName, int numFrames) {
@@ -136,11 +137,15 @@ public abstract class Entity extends GameObject {
 	}
 
 	public float getWidth() {
-		return currentSprite.getWidth();
+		if(this.currentSprite != null)
+			return currentSprite.getWidth();
+		else return 0;
 	}
 
 	public float getHeight() {
-		return currentSprite.getHeight();
+		if(this.currentSprite != null)
+			return currentSprite.getHeight();
+		else return 0;
 	}
 	
 	public float getDepth() {

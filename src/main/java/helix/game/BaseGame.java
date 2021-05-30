@@ -16,8 +16,9 @@ public abstract class BaseGame extends Game {
 	private OrthographicCamera camera;
 	private float progress, lastProgress;
 	
-	public abstract void start();
-	public abstract void queueLoadAssets();
+	protected abstract void start();
+	protected abstract void queueLoadAssets();
+	protected abstract void initScreens();
 	
 	public BaseGame(String title, int frameWidth, int frameHeight) {
 		config = new Lwjgl3ApplicationConfiguration();
@@ -41,8 +42,8 @@ public abstract class BaseGame extends Game {
 	public void create() {
 
 		// Load loading screen stuff
-		this.getData().setCamera(camera);
 		this.getData().getManager().finishLoading();
+		this.getData().setCamera(camera);
 		this.load();
 		
 		this.data.init();
@@ -74,5 +75,9 @@ public abstract class BaseGame extends Game {
 	
 	public void setData(Data data) {
 		this.data = data;
+	}
+	
+	public BaseGame getBaseGame() {
+		return this;
 	}
 }

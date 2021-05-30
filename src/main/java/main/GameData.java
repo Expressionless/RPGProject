@@ -8,6 +8,7 @@ import helix.utils.math.Point;
 import main.game.RpgGame;
 import main.game.entities.Mob;
 import main.game.entities.mobs.Player;
+import main.game.inventory.Inventory;
 import main.game.item.Item;
 import main.game.item.ItemInfo;
 import main.game.item.ItemType;
@@ -20,20 +21,19 @@ public class GameData extends Data {
 	
 	// "Unique" Entities
 	private Player player;
-	private RpgGame game;
 
 	@Override
 	public void init() {
+		Inventory.slotSprite = this.createSprite("res/sprites/UI/inventory/slot.png");
+		Inventory.inventoryFont.getData().setScale(0.25f);
 		Item.ITEM_SHEET = new SpriteSheet(this, main.Constants.ITEMS_DIRECTORY, 8, 8);
 		parseItems();
 	}
 	
 	public GameData(RpgGame game) {
-		super();
+		super(game);
 		mobs = new ArrayList<>();
 		items = new ArrayList<>();
-		
-		this.game = game;
 	}
 	
 	public ItemType parseItemType(int position) {
@@ -72,7 +72,7 @@ public class GameData extends Data {
 
 	
 	public void spawnItem(Point pos, int id, int amount) {
-		new Item(game, pos, id, amount);
+		new Item(this.getGame(), pos, id, amount);
 	}
 	/**
 	 * Spawn a single item of itemID: itemID with position: pos
@@ -141,6 +141,10 @@ public class GameData extends Data {
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+	
+	public RpgGame getGame() {
+		return (RpgGame)this.getBaseGame();
 	}
 
 }

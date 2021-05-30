@@ -37,17 +37,17 @@ public class Constants {
 	
 	public static final char KEY_INV = Keys.P;
 
-	public static final float PLAYER_SPEED = 0.5f;
-	public static final float ITEM_SPEED = 0.25f;
-	public static final float DEFAULT_SPEED = 0.5f;
+	public static final float PLAYER_SPEED = 30f;
+	public static final float ITEM_SPEED = 15f;
+	public static final float DEFAULT_SPEED = 15f;
 	
 	// Basic Collision
 	public static final float PICKUP_DISTANCE = 4;
 	public static final float ITEM_SUCK_DISTANCE = 12;
 	
 	// Inventory Constants
-	public static final int DEF_INV_WIDTH = 5;
-	public static final int DEF_INV_HEIGHT = 10;
+	public static final int DEF_INV_WIDTH = 8;
+	public static final int DEF_INV_HEIGHT = 6;
 	// Inventory slot margin (in px)
 	public static final float INVENTORY_MARGIN = 1;
 
