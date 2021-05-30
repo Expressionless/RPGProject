@@ -52,7 +52,7 @@ public abstract class Data {
 	 */
 	public abstract void init();
 
-	public Sprite createSprite(String spriteName, int frameCount, float animTime) {
+	public final Sprite createSprite(String spriteName, int frameCount, float animTime) {
 		Texture texture = manager.get(spriteName);
 		TextureRegion region = new TextureRegion(texture);
 		Animation anim = new Animation(region, spriteName, frameCount, animTime);
@@ -61,11 +61,11 @@ public abstract class Data {
 
 	}
 
-	public Sprite createSprite(String spriteName, int frameCount) {
+	public final Sprite createSprite(String spriteName, int frameCount) {
 		return this.createSprite(spriteName, frameCount, helix.Constants.NO_ANIM);
 	}
 
-	public Sprite createSprite(String spriteName) {
+	public final Sprite createSprite(String spriteName) {
 		return this.createSprite(spriteName, helix.Constants.DEF_FRAMES);
 	}
 
@@ -83,7 +83,8 @@ public abstract class Data {
 		this.dispose();
 	}
 
-	public void update(float delta) {
+	protected void step(float delta) {};
+	public final void update(float delta) {
 		TICKS++;
 
 		this.disposeCore();
@@ -101,15 +102,19 @@ public abstract class Data {
 			object.updateAlarms();
 			object.update(delta);
 		}
+		
+		this.step(delta);
 	}
 
-	public void render(SpriteBatch batch) {
+	protected void draw(SpriteBatch batch) {};
+	public final void render(SpriteBatch batch) {
 		for (Entity entity : entities) {
 			entity.render(batch);
 		}
+		this.draw(batch);
 	}
 
-	public void beginReading(String path) {
+	public final void beginReading(String path) {
 		if (writer != null)
 			return;
 		if (reader != null)
@@ -118,13 +123,13 @@ public abstract class Data {
 		reader = new DataReader(path);
 	}
 
-	public void stopReading() {
+	public final void stopReading() {
 		if (reader == null)
 			return;
 		reader = null;
 	}
 
-	public void beginWriting(String path) {
+	public final void beginWriting(String path) {
 		if (writer != null)
 			return;
 		if (reader != null)
@@ -133,7 +138,7 @@ public abstract class Data {
 		writer = new DataWriter(path);
 	}
 
-	public void stopWriting() {
+	public final void stopWriting() {
 		if (writer == null)
 			return;
 
@@ -141,7 +146,7 @@ public abstract class Data {
 		writer = null;
 	}
 
-	public <T extends GameObject> T createObject(Class<T> objectClass, Object... args) {
+	public final <T extends GameObject> T createObject(Class<T> objectClass, Object... args) {
 		Constructor<T> constructor;
 		try {
 			constructor = objectClass.getDeclaredConstructor(new Class[] { Data.class, Point.class });
@@ -159,35 +164,37 @@ public abstract class Data {
 		}
 	}
 
-	public boolean reading() {
+	// Getters and Setters
+	
+	public final boolean reading() {
 		return (reader != null);
 	}
 
-	public boolean writing() {
+	public final boolean writing() {
 		return (writer != null);
 	}
 
-	public AssetManager getManager() {
+	public final AssetManager getManager() {
 		return manager;
 	}
 
-	public Viewport getViewport() {
+	public final Viewport getViewport() {
 		return viewport;
 	}
 
-	public void setViewport(Viewport viewport) {
+	public final void setViewport(Viewport viewport) {
 		this.viewport = viewport;
 	}
 
-	public Camera getCamera() {
+	public final Camera getCamera() {
 		return camera;
 	}
 
-	public void setCamera(Camera camera) {
+	public final void setCamera(Camera camera) {
 		this.camera = camera;
 	}
 
-	public BaseGame getBaseGame() {
-		return (BaseGame) game;
+	public final BaseGame getBaseGame() {
+		return game;
 	}
 }

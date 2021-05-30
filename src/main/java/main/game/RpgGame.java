@@ -98,7 +98,7 @@ public class RpgGame extends BaseGame {
 		return (GameData) this.getData();
 	}
 	
-	public RpgGame getGame() {
+	public RpgGame getRpgGame() {
 		return this;
 	}
 

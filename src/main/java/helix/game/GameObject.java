@@ -34,20 +34,20 @@ public abstract class GameObject {
 		}
 	}
 
-	public void update(float delta) {
+	public final void update(float delta) {
 		preStep(delta);
 		step(delta);
 		postStep(delta);
 	}
 	
-	public void updateAlarms() {
+	public final void updateAlarms() {
 		for(Alarm alarm : alarm) {
 			alarm.update();
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends GameObject> T find(Class<T> searchClass) {
+	public final <T extends GameObject> T find(Class<T> searchClass) {
 		for(GameObject object : data.objects) {
 			if(searchClass.isInstance(object))
 				return (T)object;
@@ -56,7 +56,7 @@ public abstract class GameObject {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends GameObject> T findNearest(Class<T> searchClass) {
+	public final <T extends GameObject> T findNearest(Class<T> searchClass) {
 		GameObject current = null;
 		for(GameObject object : data.objects) {
 			if(!searchClass.isInstance(object))
@@ -76,23 +76,23 @@ public abstract class GameObject {
 		else return null;
 	}
 	
-	public float distTo(GameObject other) {
+	public final float distTo(GameObject other) {
 		return this.getPos().sub(other.getPos()).length();
 	}
 	
-	public void move() {
+	public final void move() {
 		this.move(this.getDirection(), 1);
 	}
 	
-	public void move(float speed) {
+	public final void move(float speed) {
 		this.move(this.getDirection(), speed);
 	}
 	
-	public void move(Vector2 direction) {
+	public final void move(Vector2 direction) {
 		this.move(direction, 1);
 	}
 	
-	public void move(Vector2 direction, float speed) {
+	public final void move(Vector2 direction, float speed) {
 		direction = direction.getUnitVector();
 		// TODO: Fix flickering movement glitch
 		//System.out.println(direction.multiply(speed).toString());
@@ -100,34 +100,34 @@ public abstract class GameObject {
 		this.setPos(getPos().add(direction.multiply(speed)));
 	}
 	
-	public void moveTo(GameObject target) {
+	public final void moveTo(GameObject target) {
 		this.moveTo(target, Constants.DEFAULT_SPEED);
 	}
 	
-	public void moveTo(GameObject target, float speed) {
+	public final void moveTo(GameObject target, float speed) {
 		Vector2 dir = this.getPos().sub(target.getPos()).toVector2();
 		this.move(dir, -speed);
 	}
 	
 	// Getters and Setters
-	public Point getPos() {
+	public final Point getPos() {
 		return pos;
 	}
 	
-	public void setPos(Point other) {
+	public final void setPos(Point other) {
 		this.pos = other.copy();
 	}
 
-	public void setPos(float x, float y) {
+	public final void setPos(float x, float y) {
 		this.pos.setX(x);
 		this.pos.setY(y);
 	}
 	
-	public void addPos(float x, float y) {
+	public final void addPos(float x, float y) {
 		this.setPos(this.getPos().getX() + x, this.getPos().getY() + y);
 	}
 
-	public Vector2 getDirection() {
+	public final Vector2 getDirection() {
 		return direction;
 	}
 	
@@ -137,15 +137,15 @@ public abstract class GameObject {
 				+ "]");
 	}
 	
-	public boolean willDispose() {
+	public final boolean willDispose() {
 		return shouldDispose;
 	}
 	
-	public void dispose() {
+	public final void dispose() {
 		shouldDispose = true;
 	}
 	
-	public Data getData() {
+	public final Data getData() {
 		return data;
 	}
 }

@@ -24,7 +24,6 @@ public abstract class Entity extends GameObject {
 	
 	private Collider collider;
 
-	public abstract void loadSprites(AssetManager manager);
 
 	public Entity(Data data, Point pos) {
 		super(data, pos);
@@ -34,12 +33,12 @@ public abstract class Entity extends GameObject {
 		this.currentSprite = null;
 		this.collider = new Collider(this);
 	}
+	
+	public void loadSprites(AssetManager manager) {};
 
 	@Override
-	public void update(float delta) {
-		super.update(delta);
+	protected void preStep(float delta) {
 		this.depth = this.getPos().getY();
-		this.step(delta);
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -53,15 +52,15 @@ public abstract class Entity extends GameObject {
 	protected void draw(SpriteBatch batch) {
 	}
 
-	public boolean addSprite(String spriteName, int numFrames) {
+	public final boolean addSprite(String spriteName, int numFrames) {
 		return this.addSprite(spriteName, numFrames, -1);
 	}
 
-	public boolean addSprite(String spriteName) {
+	public final boolean addSprite(String spriteName) {
 		return this.addSprite(spriteName, 1);
 	}
 
-	public boolean addSprite(String spriteName, int numFrames, int duration) {
+	public final boolean addSprite(String spriteName, int numFrames, int duration) {
 		if (sprites.containsKey(spriteName))
 			return false;
 
@@ -72,7 +71,7 @@ public abstract class Entity extends GameObject {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends Entity> T findEntity(Class<T> searchClass) {
+	public final <T extends Entity> T findEntity(Class<T> searchClass) {
 		for(GameObject object : this.getData().entities) {
 			if(searchClass.isInstance(object))
 				return (T)object;
@@ -81,7 +80,7 @@ public abstract class Entity extends GameObject {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends Entity> T findNearestEntity(Class<T> searchClass) {
+	public final <T extends Entity> T findNearestEntity(Class<T> searchClass) {
 		GameObject current = null;
 		for(GameObject object : this.getData().entities) {
 			if(!searchClass.isInstance(object))
@@ -108,7 +107,7 @@ public abstract class Entity extends GameObject {
 	 * 
 	 * @param time (time in millis)
 	 */
-	public void setCurrentAnimSpeed(float time) {
+	public final void setCurrentAnimSpeed(float time) {
 		this.currentSprite.getAnimation().setAnimTime(time);
 	}
 
@@ -117,12 +116,12 @@ public abstract class Entity extends GameObject {
 	 * 
 	 * @param spriteName
 	 */
-	public void setSprite(String spriteName) {
+	public final void setSprite(String spriteName) {
 		if (this.currentSprite == null || !this.currentSprite.equals(sprites.get(spriteName)))
 			this.currentSprite = sprites.get(spriteName);
 	}
 
-	public void setSprite(Sprite s) {
+	public final void setSprite(Sprite s) {
 		sprites.put(s.getName(), s);
 		this.currentSprite = s;
 	}
@@ -132,27 +131,27 @@ public abstract class Entity extends GameObject {
 	 * 
 	 * @return currentSprite
 	 */
-	public Sprite getSprite() {
+	public final Sprite getSprite() {
 		return currentSprite;
 	}
 
-	public float getWidth() {
+	public final float getWidth() {
 		if(this.currentSprite != null)
 			return currentSprite.getWidth();
 		else return 0;
 	}
 
-	public float getHeight() {
+	public final float getHeight() {
 		if(this.currentSprite != null)
 			return currentSprite.getHeight();
 		else return 0;
 	}
 	
-	public float getDepth() {
+	public final float getDepth() {
 		return depth;
 	}
 	
-	public Collider getCollider() {
+	public final Collider getCollider() {
 		return collider;
 	}
 }

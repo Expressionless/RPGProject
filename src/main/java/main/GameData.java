@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import helix.game.Data;
 import helix.gfx.SpriteSheet;
+import helix.utils.io.DataWriter;
 import helix.utils.math.Point;
 import main.game.RpgGame;
 import main.game.entities.Mob;
@@ -69,7 +70,15 @@ public class GameData extends Data {
 		writer.write(maxStack);
 		writer.writeBools(flags);
 	}
-
+	
+	public static void addItem(DataWriter writer, int id, String name, int maxStack, boolean[] flags) {
+		if(writer == null)
+			return;
+		writer.write(id);
+		writer.write(name, Constants.MAX_ITEM_NAME_LEN);
+		writer.write(maxStack);
+		writer.writeBools(flags);
+	}
 	
 	public void spawnItem(Point pos, int id, int amount) {
 		new Item(this.getGame(), pos, id, amount);
@@ -110,7 +119,7 @@ public class GameData extends Data {
 	private void parseItems() {
 		this.beginReading("/data/item");
 		
-		int numsToParse = 4;
+		int numsToParse = 5;
 		for(int i = 0; i < numsToParse; i++) {
 			ItemType item = this.parseItemType(i);
 			if(item == null)

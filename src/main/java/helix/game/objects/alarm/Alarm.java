@@ -1,6 +1,6 @@
 package helix.game.objects.alarm;
 
-public class Alarm {
+public final class Alarm {
 	public static final int ALARM_COUNT = 10;
 	public static final int ALARM_INACTIVE = -1;
 

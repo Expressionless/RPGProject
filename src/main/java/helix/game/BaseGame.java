@@ -39,7 +39,7 @@ public abstract class BaseGame extends Game {
 	}
 	
 	@Override
-	public void create() {
+	public final void create() {
 
 		// Load loading screen stuff
 		this.getData().getManager().finishLoading();
@@ -65,19 +65,15 @@ public abstract class BaseGame extends Game {
 		}
 	}
 	
-	public OrthographicCamera getCamera() {
+	public final OrthographicCamera getCamera() {
 		return camera;
 	}
 	
-	public Data getData() {
+	public final Data getData() {
 		return data;
 	}
 	
-	public void setData(Data data) {
+	public final void setData(Data data) {
 		this.data = data;
-	}
-	
-	public BaseGame getBaseGame() {
-		return this;
 	}
 }

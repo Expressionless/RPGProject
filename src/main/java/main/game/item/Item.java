@@ -55,7 +55,7 @@ public class Item extends Doodad {
 		if (this.getSprite() == null) {
 			int[] index = IDtoImageIndex(this.getID());
 			Sprite s = ITEM_SHEET.getSubSprite(index[0], index[1]).copy();
-			s.setName(ItemType.nameOf(this.item.ID));
+			s.setName(this.item.name);
 			this.setSprite(ITEM_SHEET.getSubSprite(index[0], index[1]));
 		}
 

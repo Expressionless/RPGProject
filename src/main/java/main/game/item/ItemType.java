@@ -4,7 +4,7 @@ import helix.gfx.Sprite;
 import main.Constants;
 import main.GameData;
 
-public class ItemType {
+public final class ItemType {
 	public final String name;
 	public final Flags itemFlags;
 	

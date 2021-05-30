@@ -28,20 +28,26 @@ public class Constants {
 		
 	// Animation Constants
 	public static final double ITEM_BREATHE_LENGTH = 50;
-	
+
+	// Player Constants
+	public static final int DOWN  = 0x01;
+	public static final int LEFT  = 0x02;
+	public static final int RIGHT = 0x04;
+	public static final int UP    = 0x08;
 	// Movement and Input
 	public static final char KEY_RIGHT = Keys.D;
 	public static final char KEY_LEFT = Keys.A;
 	public static final char KEY_DOWN = Keys.S;
 	public static final char KEY_UP = Keys.W;
 	
+	
 	public static final char KEY_INV = Keys.P;
 
-	public static final float PLAYER_SPEED = 30f;
+	public static final float PLAYER_SPEED = 60f;
 	public static final float ITEM_SPEED = 15f;
 	public static final float DEFAULT_SPEED = 15f;
 	
-	// Basic Collision
+	// Basic Collision (px)
 	public static final float PICKUP_DISTANCE = 4;
 	public static final float ITEM_SUCK_DISTANCE = 12;
 	
