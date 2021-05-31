@@ -7,7 +7,7 @@ public final class Alarm {
 	private Event action;
 	private int timer = NO_ALARM, startTime;
 	
-	private float second = 0;
+	private float ms = 0;
 	
 	public Alarm() {
 		this.action = null;
@@ -19,15 +19,15 @@ public final class Alarm {
 	}
 	
 	public void update(float delta) {
-		if(second >= 1f) {
+		if(ms >= 1000f) {
 			if(timer > 0) {
 				timer--;
 			} else if (timer == 0) {
 				action.event();
 				timer = NO_ALARM;
 			}
-			second = 0;
-		} else second += delta;
+			ms = 0;
+		} else ms += 1000f * delta;
 	}
 	
 	public float percent() {

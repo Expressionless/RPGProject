@@ -13,6 +13,11 @@ public class Constants {
 	public static int CAMERA_WIDTH = 320;
 	public static int CAMERA_HEIGHT = 180;
 	
+	// > 1
+	public static float RATIO_X = FRAME_WIDTH / CAMERA_WIDTH;
+	public static float RATIO_Y = FRAME_HEIGHT / CAMERA_HEIGHT;
+	
+	public static boolean SAFE_RES = (RATIO_X == RATIO_Y);
 	// FPS Constants
 	public static final int IDLE_FPS = 45;
 	public static final int TARGET_FPS = 120;
@@ -63,6 +68,9 @@ public class Constants {
 	public static final int CHUNK_WIDTH  = 10;
 	public static final int CHUNK_HEIGHT = 10;
 	
+	public static final float CHUNK_WIDTH_PX = CHUNK_WIDTH * TILE_WIDTH;
+	public static final float CHUNK_HEIGHT_PX = CHUNK_HEIGHT * TILE_HEIGHT;
+	
 	// Entity limits
 	public static final int MAX_ENTITIES_PER_TILE = 4;
 	public static final int MAX_ENTITIES_PER_CHUNK = MAX_ENTITIES_PER_TILE * CHUNK_WIDTH * CHUNK_HEIGHT;
@@ -81,10 +89,12 @@ public class Constants {
 	public static final int INT_SIZE = 4;
 	public static final int NO_ITEM = -1;
 	public static final int MAX_ITEM_NAME_LEN = 10;
+	public static final int MAX_ITEM_TYPE_LEN = 10;
 	
 	// Item Data positions
 	public static final int ID_POS = 0;
-	public static final int NAME_POS = ID_POS + 1;
+	public static final int TYPE_POS = ID_POS + 1;
+	public static final int NAME_POS = TYPE_POS + MAX_ITEM_TYPE_LEN;
 	public static final int STACK_POS = NAME_POS + MAX_ITEM_NAME_LEN;
 	public static final int FLAG_POS = STACK_POS + 1;
 	public static final int ITEM_SIZE = FLAG_POS + 1;

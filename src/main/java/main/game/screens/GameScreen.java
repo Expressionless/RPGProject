@@ -21,7 +21,6 @@ public final class GameScreen extends Screen {
 
 	private World world;
 
-	private InventoryCursor cursor;
 	private Player player;
 	private SpriteBatch batch;
 
@@ -31,16 +30,24 @@ public final class GameScreen extends Screen {
 
 	@Override
 	public void create() {
+		this.world = new World(32, 32);
+		world.setGame(this.getRpgGame());
+
 		player = new Player(getRpgGame(), new Point(30, 30));
-		cursor = new InventoryCursor(this.getRpgGame(), new Point(0, 0));
 		this.batch = new SpriteBatch();
 		ItemSpawner is = new ItemSpawner(this.getRpgGame());
 		is.spawnItem(50, 20, "grass", 5);
 		is.spawnItem(50, 110, "wood", 5);
+		is.spawnItem(50, 150, "wood", 5);
+		is.spawnItem(50, 110, "wood", 5);
+		is.spawnItem(50, 110, "wood", 5);
 		is.spawnItem(50, 130, "bow");
 		is.spawnItem(50, 160, "bow");
 		is.spawnItem(50, 190, "bow");
-		is.spawnItem(50, 220, "bow");
+		is.spawnItem(50, 220, "shaft");
+		is.spawnItem(50, 250, "boOmerang");
+		is.spawnItem(50, 250, "axe");
+		is.spawnItem(50, 300, "pickaxe");
 		new Tree(getRpgGame(), new Point(100, 80));
 	}
 
@@ -119,21 +126,30 @@ public final class GameScreen extends Screen {
 
 			@Override
 			public boolean mouseMoved(int screenX, int screenY) {
-				cursor.getPos().setX(screenX);
-				cursor.getPos().setY(screenY);
+				Point p = getGameData().toGameCoords(screenX, screenY);
+				getGameData().getCursor().getPos().setX(p.getX());// + screenX / Constants.RATIO_X);
+				getGameData().getCursor().getPos().setY(p.getY());// - screenY / Constants.RATIO_Y);
 				return true;
 			}
 
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+				InventoryCursor cursor = getGameData().getCursor();
+				
 				for (Slot[] slots : player.getInventory().getSlots()) {
 					for (Slot slot : slots) {
-						if (slot.getBounds().contains(cursor.getPos())) {
-							cursor.take(slot);
+						if (slot.isCursorOver()) {
+							if(cursor.hasNothing() && !slot.isEmpty()) {
+								cursor.take(slot);
+							} else if(!cursor.hasNothing()) {
+								if(slot.isEmpty())
+									cursor.place(slot);
+								else
+									cursor.swap(slot);
+							}
 						}
 					}
 				}
-				System.out.println("Coords: " + cursor.getPos().toString());
 				return true;
 			}
 		});

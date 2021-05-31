@@ -12,7 +12,7 @@ import main.GameData;
 public final class ItemType implements Serializable {
 	private static final Logger log = Logger.getLogger(ItemType.class.getCanonicalName());
 	
-	public String name;
+	public String type, name;
 	public final Flags itemFlags;
 
 	public int maxStack;
@@ -27,8 +27,9 @@ public final class ItemType implements Serializable {
 	 * @param maxStack
 	 * @param flags
 	 */
-	public ItemType(int id, String name, int maxStack, boolean... flags) {
+	public ItemType(int id, String type, String name, int maxStack, boolean... flags) {
 		this.ID = id;
+		this.type = type;
 		this.name = name;
 		this.maxStack = maxStack;
 		this.itemFlags = new Flags(flags);
@@ -63,6 +64,7 @@ public final class ItemType implements Serializable {
 	private void attachSprite() {
 		int index[] = Item.IDtoImageIndex(ID);
 		this.sprite = Item.ITEM_SHEET.getSubSprite(index[0], index[1]);
+		this.sprite.setName(name);
 	}
 
 	/**
@@ -106,7 +108,11 @@ public final class ItemType implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ItemType [ID=" + ID + ", name=" + name + ", flags=[" + itemFlags.toString() + "]]";
+		return "ItemType [ID=" + ID 
+							+ ", name=" + name
+							+ ", flags=[" + itemFlags.toString() + "]" 
+							+ ", spr=" + ((sprite != null) ? sprite.getName() : name)
+							+ "]";
 	}
 
 	// Helper class
@@ -160,6 +166,8 @@ public final class ItemType implements Serializable {
 		}
 	}
 
+	// Serialization
+	
 	public boolean write(DataWriter writer) {
 		return this.write(writer, ID);
 	}
@@ -168,7 +176,10 @@ public final class ItemType implements Serializable {
 	public boolean write(DataWriter writer, int position) {
 		if(writer == null)
 			return false;
+		if(name.length() > Constants.MAX_ITEM_NAME_LEN)
+			return false;
 		writer.write(ID);
+		writer.write(type, Constants.MAX_ITEM_TYPE_LEN);
 		writer.write(name, Constants.MAX_ITEM_NAME_LEN);
 		writer.write(maxStack);
 		writer.writeBools(itemFlags.getFlags());
@@ -185,6 +196,10 @@ public final class ItemType implements Serializable {
 		// Read in the ID
 		this.ID = reader.getInt(position + Constants.ID_POS);
 		log.fine("ID: "  + this.ID);
+		
+		// Read in the type
+		this.type = reader.getString(position + Constants.TYPE_POS, Constants.MAX_ITEM_TYPE_LEN);
+		log.fine("TYPE: "  + this.type);
 		// Read in the name
 		this.name = reader.getString(position + Constants.NAME_POS, Constants.MAX_ITEM_NAME_LEN);
 		log.fine("Name: " + this.name);

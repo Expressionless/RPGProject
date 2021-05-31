@@ -13,7 +13,7 @@ import main.Constants;
 import main.game.Entity;
 import main.game.RpgGame;
 
-public class Chunk implements Serializable {
+public final class Chunk implements Serializable {
 
 	private Rectangle bounds;
 	private ArrayList<Entity> entities;
@@ -29,14 +29,25 @@ public class Chunk implements Serializable {
 	}
 
 	public void step(float delta) {
-
+		while(entities.size() > Constants.MAX_ENTITIES_PER_CHUNK)
+			entities.remove(entities.get(entities.size() - 1));
 	}
 
 	public void draw(SpriteBatch batch) {
 
 	}
+	
 	// Getters and Setters
-
+	public Rectangle getBounds() {
+		return bounds;
+	}
+	
+	public void addEntity(Entity entity) {
+		if(entities.size() >= Constants.MAX_ENTITIES_PER_CHUNK)
+			return;
+		entities.add(entity);
+	}
+	
 	// Serialization
 	@Override
 	public boolean write(DataWriter writer, int pos) {

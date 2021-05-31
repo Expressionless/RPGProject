@@ -56,6 +56,7 @@ public class LoadScreen extends Screen {
 		for(int i = 0; i < itemsToParse; i++) {
 			ItemType item = new ItemType();
 			item.parse(gameData.getReader(), i);
+			System.out.println(item.toString());
 			GameData.ITEM_TYPES.add(item);
 		}
 		

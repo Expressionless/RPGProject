@@ -7,13 +7,13 @@ import main.game.Entity;
 import main.game.RpgGame;
 import main.game.item.ItemType;
 
-public class InventoryCursor extends Entity {
+public final class InventoryCursor extends Entity {
 
 	private ItemType item;
 	private int amount;
 	
-	public InventoryCursor(RpgGame game, Point pos) {
-		super(game, pos);
+	public InventoryCursor(RpgGame game) {
+		super(game, new Point(0, 0));
 		this.item = null;
 		this.amount = 0;
 	}
@@ -34,10 +34,9 @@ public class InventoryCursor extends Entity {
 		if(this.amount == 0)
 			this.item = null;
 	}
-	
+		
 	@Override
 	protected void step(float delta) {
-		
 	}
 	
 	public void take(Slot s) {
@@ -49,17 +48,47 @@ public class InventoryCursor extends Entity {
 		}
 	}
 	
-	// Getters and Setters
-	public void setItem(int id) {
-		this.item = ItemType.get(id);
+	public void swap(Slot s) {
+		ItemType item = s.getItem();
+		int amount = s.getAmount();
+		if(item.ID == this.item.ID) {
+			s.setItem(this.item, this.amount + amount);
+			this.setItem(null);
+		} else {
+			s.setItem(this.item, this.amount);
+			this.setItem(item, amount);
+		}
 	}
 	
-	public void setItem(String name) {
-		this.setItem(ItemType.idOf(name));
+	public void place(Slot s) {
+		s.setItem(this.item, this.amount);
+		this.setItem(null);
+	}
+	
+	// Getters and Setters
+	public boolean hasNothing() {
+		return (this.item == null && this.amount == 0);
+	}
+	
+	public void setItem(ItemType item, int amount) {
+		this.item = item;
+		this.amount = amount;
+	}
+	
+	public void setItem(int id, int amount) {
+		this.setItem(ItemType.get(id));
+	}
+	
+	public void setItem(int id) {
+		this.setItem(id, 1);
+	}
+	
+	public void setItem(String name, int amount) {
+		this.setItem(ItemType.idOf(name), amount);
 	}
 	
 	public void setItem(ItemType item) {
-		this.item = item;
+		this.setItem(item, 1);
 	}
 	
 	public ItemType getItem() {

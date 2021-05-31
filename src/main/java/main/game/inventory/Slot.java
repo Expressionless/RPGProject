@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 import helix.gfx.Sprite;
 import helix.utils.math.Point;
@@ -30,12 +31,14 @@ public class Slot {
 	
 	private Rectangle bounds;
 	
+	private final Point screenPos;
+	
 	public Slot(Inventory inventory, Point pos, int id, ItemType item, int amount) {
 		this.inventory = inventory;
 		this.ID = id;
 		this.item = item;
 		this.amount = amount;
-		
+		this.screenPos = pos;
 		this.itemSprite = (item != null) ? item.getSprite() : null;
 		
 		this.bounds = new Rectangle(pos.getX(), pos.getY(), SPRITE.getWidth(), SPRITE.getHeight());
@@ -50,31 +53,33 @@ public class Slot {
 			this.item = null;
 		if(this.item == null)
 			this.amount = 0;
+		
+		// Track the screen
+		Vector3 camera = inventory.getGameData().getCamera().position;
+		this.getBounds().setX(screenPos.getX() + camera.x);
+		this.getBounds().setY(screenPos.getY() + camera.y);
 	}
 	
 	public void render(SpriteBatch b, Color col) {
-		float x = inventory.getGameData().getCamera().position.x + bounds.getX();
-		float y = inventory.getGameData().getCamera().position.y + bounds.getY() + Constants.INV_ITEM_OFFSET_Y;
+		float x = bounds.getX();
+		float y = bounds.getY();
 		
 		SPRITE.draw(b, x, y, col);
 
 		if(!isEmpty() && itemSprite != null) {
-			
 			itemSprite.draw(b, x + Constants.INV_ITEM_OFFSET_X, y + Constants.INV_ITEM_OFFSET_Y, col);
 			
 			if(this.getItem().getFlag("stackable")) {
 				String string = Integer.toString(this.getAmount());
 				inventoryFont.draw(b, string, x + SPRITE.getWidth() - 3, y + 3);
 			}
+			
+			InventoryCursor inv = inventory.getGameData().getCursor();
+			
+			if(inv != null && this.isCursorOver()) {
+				inventoryFont.draw(b, item.name, inv.getPos().getX(), inv.getPos().getY());
+			}
 		}
-	}
-	
-	public boolean isEmpty() {
-		return (this.amount == 0 && this.item == null);
-	}
-	
-	public boolean addItem(ItemType item) {
-		return this.addItem(item, 1);
 	}
 	
 	public boolean addItem(ItemType item, int amount) {
@@ -98,8 +103,19 @@ public class Slot {
 			return true;
 		}
 	}
+	
+	public boolean addItem(ItemType item) {
+		return this.addItem(item, 1);
+	}
 
 	// Getters and Setters
+	public boolean isCursorOver() {
+		return (this.getBounds().contains(inventory.getGameData().getCursor().getPos()));
+	}
+	
+	public boolean isEmpty() {
+		return (this.amount == 0 && this.item == null);
+	}
 	
 	public boolean contains(ItemType item) {
 		return (this.isEmpty()) ? false :(this.item.ID == item.ID);
@@ -129,5 +145,15 @@ public class Slot {
 	
 	public Inventory getInventory() {
 		return inventory;
+	}
+	
+	public String toString() {
+		return "Slot [" + 
+				"id=" + ID + "," +
+				"itemSprite=" + ((itemSprite != null) ? itemSprite.getName() : "null") + "," +
+				"amount=" + this.amount + "," + 
+				"bounds=[x="+this.getBounds().getX() + ",y="+this.getBounds().getY() + ",w=" + this.getBounds().getWidth() +",h=" + this.getBounds().getHeight() +"]"
+				+ "]";
+		
 	}
 }

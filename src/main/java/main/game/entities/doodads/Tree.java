@@ -31,7 +31,6 @@ public class Tree extends Doodad {
 
 	@Override
 	public void step(float delta) {
-		//System.out.print(" " + this.getDepth() + " ");
 		this.getSprite().setScale(1, 1.0f - (float)(this.getAlarm(0).getTimer()) / growtimer * 0.5f);
 	}
 

@@ -1,8 +1,12 @@
 package main.game.world;
 
+import helix.game.Serializable;
+import helix.utils.io.DataReader;
+import helix.utils.io.DataWriter;
+import main.Constants;
 import main.game.RpgGame;
 
-public class World {
+public final class World implements Serializable {
 
 	private Chunk[][] chunks;
 	
@@ -10,16 +14,17 @@ public class World {
 	
 	public World(int width, int height) {
 		chunks = new Chunk[height][width];
+		
+		initChunks();
 	}
 	
 	private void initChunks() {
 		int x, y;
-		int xPos, yPos;
+		int xPos = Constants.CHUNK_WIDTH, yPos = Constants.CHUNK_HEIGHT;
 		
 		for(y = 0; y < chunks.length; y++) {
 			for(x = 0; x < chunks[y].length; x++) {
-				
-				chunks[y][x] = new Chunk(game, x, y);
+				chunks[y][x] = new Chunk(game, xPos, yPos);
 			}
 		}
 	}
@@ -35,5 +40,15 @@ public class World {
 	
 	public void setGame(RpgGame game) {
 		this.game = game;
+	}
+
+	@Override
+	public boolean write(DataWriter writer, int pos) {
+		return false;
+	}
+
+	@Override
+	public boolean parse(DataReader reader, int pos) {
+		return false;
 	}
 }
