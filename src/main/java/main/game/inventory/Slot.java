@@ -77,7 +77,7 @@ public class Slot {
 			InventoryCursor inv = inventory.getGameData().getCursor();
 			
 			if(inv != null && this.isCursorOver()) {
-				inventoryFont.draw(b, item.name, inv.getPos().getX(), inv.getPos().getY());
+				inventoryFont.draw(b, item.name + "\n" + this.getItem().type, inv.getPos().getX(), inv.getPos().getY());
 			}
 		}
 	}
