@@ -2,6 +2,7 @@ package main.game.inventory;
 
 import java.util.logging.Logger;
 
+import helix.utils.math.Rectangle;
 import main.game.item.ItemType;
 
 public class Slot {
@@ -10,17 +11,24 @@ public class Slot {
 	
 	public final int ID;
 	
+	private Inventory inventory;
+	
 	private ItemType item;
 	private int amount;
 	
-	public Slot(int id, ItemType item, int amount) {
+	private Rectangle bounds;
+	
+	public Slot(Inventory inventory, int id, ItemType item, int amount) {
+		this.inventory = inventory;
 		this.ID = id;
 		this.item = item;
 		this.amount = amount;
+		
+		this.bounds = new Rectangle();
 	}
 	
-	public Slot(int id) {
-		this(id, null, 0);
+	public Slot(Inventory inventory, int id) {
+		this(inventory, id, null, 0);
 	}
 	
 	public void update() {
@@ -83,5 +91,13 @@ public class Slot {
 
 	public int getAmount() {
 		return amount;
+	}
+	
+	public Rectangle getBounds() {
+		return bounds;
+	}
+	
+	public Inventory getInventory() {
+		return inventory;
 	}
 }

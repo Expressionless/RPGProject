@@ -15,7 +15,6 @@ public class WriteItems {
 		GameData.addItem(writer, 1, "wood", Constants.MAX_STACK, STACKABLE);
 		GameData.addItem(writer, 2, "sword", Constants.MAX_STACK, NONSTACKABLE);
 		GameData.addItem(writer, 3, "bow", Constants.MAX_STACK, NONSTACKABLE);
-		GameData.addItem(writer, 4, "dildo", Constants.MAX_STACK, STACKABLE);
 	}
 
 }

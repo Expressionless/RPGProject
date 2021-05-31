@@ -4,15 +4,13 @@ import java.util.ArrayList;
 
 import helix.game.Data;
 import helix.gfx.SpriteSheet;
-import helix.utils.io.DataWriter;
-import helix.utils.math.Point;
 import main.game.RpgGame;
 import main.game.entities.Mob;
 import main.game.entities.mobs.Player;
 import main.game.inventory.Inventory;
 import main.game.item.Item;
-import main.game.item.ItemInfo;
 import main.game.item.ItemType;
+import main.game.screens.GameScreen;
 
 public class GameData extends Data {
 	
@@ -25,111 +23,19 @@ public class GameData extends Data {
 
 	@Override
 	public void init() {
+		// Init inventory data
 		Inventory.slotSprite = this.createSprite("res/sprites/UI/inventory/slot.png");
 		Inventory.inventoryFont.getData().setScale(0.25f);
+		
+		// Init Item Data
 		Item.ITEM_SHEET = new SpriteSheet(this, main.Constants.ITEMS_DIRECTORY, 8, 8);
-		parseItems();
+		GameScreen.parseItems(this);
 	}
 	
 	public GameData(RpgGame game) {
 		super(game);
 		mobs = new ArrayList<>();
 		items = new ArrayList<>();
-	}
-	
-	public ItemType parseItemType(int position) {
-		if(reader == null)
-			return null;
-		position *= Constants.ITEM_SIZE;
-
-		log.fine("Parsing new item at: " + position);
-		// Read in the ID
-		int id = reader.getInt(position + Constants.ID_POS);
-		log.fine("ID: "  + id);
-		// Read in the name
-		String name = reader.getString(position + Constants.NAME_POS, Constants.MAX_ITEM_NAME_LEN);
-		log.fine("Name: " + name);
-		// Read in maxStack
-		int maxStack = reader.getInt(position + Constants.STACK_POS);
-		log.fine("Stack: " + maxStack);
-		// Read in the flags
-		int flags = reader.getInt(position + Constants.FLAG_POS);
-		log.fine("Flags: " + flags);
-		return new ItemType(id, name, maxStack, flags);
-	}
-	
-	public void addItem(ItemInfo info) {
-		addItem(info.id, info.name, info.maxStack, info.flags);
-	}
-	
-	public void addItem(int id, String name, int maxStack, boolean[] flags) {
-		if(writer == null)
-			return;
-		writer.write(id);
-		writer.write(name, Constants.MAX_ITEM_NAME_LEN);
-		writer.write(maxStack);
-		writer.writeBools(flags);
-	}
-	
-	public static void addItem(DataWriter writer, int id, String name, int maxStack, boolean[] flags) {
-		if(writer == null)
-			return;
-		writer.write(id);
-		writer.write(name, Constants.MAX_ITEM_NAME_LEN);
-		writer.write(maxStack);
-		writer.writeBools(flags);
-	}
-	
-	public void spawnItem(Point pos, int id, int amount) {
-		new Item(this.getGame(), pos, id, amount);
-	}
-	/**
-	 * Spawn a single item of itemID: itemID with position: pos
-	 * @param pos - {@link helix.utils.math.Point}
-	 * @param itemID
-	 */
-	public void spawnItem(Point pos, int itemID) {
-		this.spawnItem(pos, itemID, 1);
-	}
-
-	public void spawnItem(double x, double y, int itemID) {
-		this.spawnItem(new Point(x, y), itemID);
-	}
-	
-	public void spawnItem(double x, double y, int itemID, int amount) {
-		this.spawnItem(new Point(x, y), itemID, amount);
-	}
-	
-	public void spawnItem(Point pos, String name, int amount) {
-		this.spawnItem(pos, ItemType.idOf(name), amount);
-	}
-
-	public void spawnItem(Point pos, String name) {
-		this.spawnItem(pos, name, 1);
-	}
-
-	public void spawnItem(double x, double y, String name) {
-		this.spawnItem(new Point(x, y), ItemType.idOf(name), 1);
-	}
-	
-	public void spawnItem(double x, double y, String name, int amount) {
-		this.spawnItem(new Point(x, y), ItemType.idOf(name), amount);
-	}
-
-	private void parseItems() {
-		this.beginReading("/data/item");
-		
-		int numsToParse = 5;
-		for(int i = 0; i < numsToParse; i++) {
-			ItemType item = this.parseItemType(i);
-			if(item == null)
-				continue;
-			ITEM_TYPES.add(item);
-		}
-		
-		this.stopReading();
-		
-		System.out.println("Loaded: " + ITEM_TYPES.size() + " items");
 	}
 
 	@Override

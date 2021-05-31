@@ -9,9 +9,17 @@ import helix.utils.math.Point;
 import main.Constants;
 import main.GameData;
 import main.game.RpgGame;
+import main.game.entities.doodads.Tree;
 import main.game.entities.mobs.Player;
+import main.game.inventory.InventoryCursor;
+import main.game.inventory.Slot;
+import main.game.item.ItemSpawner;
+import main.game.item.ItemType;
 
 public final class GameScreen extends Screen {
+	
+	private InventoryCursor cursor;
+	private Player player;
 	
 	public GameScreen(RpgGame game) {
 		super(game);
@@ -24,14 +32,31 @@ public final class GameScreen extends Screen {
 
 	@Override
 	public void create() {
-		new Player(getRpgGame(), new Point(30, 30));
-		getRpgGame().getGameData().spawnItem(50, 80, "dildo", 5);
-		getRpgGame().getGameData().spawnItem(50, 20, "grass", 5);
-		getRpgGame().getGameData().spawnItem(50, 110, "wood", 5);
-		getRpgGame().getGameData().spawnItem(50, 130, "bow");
-		getRpgGame().getGameData().spawnItem(50, 160, "bow");
-		getRpgGame().getGameData().spawnItem(50, 190, "bow");
-		getRpgGame().getGameData().spawnItem(50, 220, "bow");
+		player = new Player(getRpgGame(), new Point(30, 30));
+		cursor = new InventoryCursor(this.getRpgGame(), new Point(0, 0));
+		ItemSpawner is = new ItemSpawner(this.getRpgGame());
+		is.spawnItem(50, 20, "grass", 5);
+		is.spawnItem(50, 110, "wood", 5);
+		is.spawnItem(50, 130, "bow");
+		is.spawnItem(50, 160, "bow");
+		is.spawnItem(50, 190, "bow");
+		is.spawnItem(50, 220, "bow");
+		
+		new Tree(getRpgGame(), new Point (100, 80));
+	}
+
+	public static void parseItems(GameData gameData) {
+		gameData.beginReading("/data/item");
+		
+		int numsToParse = gameData.getReader().getBytes().size() / Constants.ITEM_SIZE;
+		for(int i = 0; i < numsToParse; i++) {
+			ItemType item = new ItemType();
+			item.parse(gameData.getReader(), i);
+			GameData.ITEM_TYPES.add(item);
+		}
+		
+		gameData.stopReading();
+		System.out.println("Loaded: " + GameData.ITEM_TYPES.size() + " items");
 	}
 
 	@Override
@@ -92,15 +117,21 @@ public final class GameScreen extends Screen {
 
 			@Override
 			public boolean mouseMoved(int screenX, int screenY) {
-				// getPos().setX(screenX);
-				// getPos().setY(screenY);
+				cursor.getPos().setX(screenX);
+				cursor.getPos().setY(screenY);
 				return true;
 			}
 
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
-				System.out.println("Coords: " + screenX + " " + screenY);
+				for(Slot[] slots : player.getInventory().getSlots()) {
+					for(Slot slot : slots) {
+						if(slot.getBounds().contains(cursor.getPos())) {
+							cursor.take(slot);
+						}
+					}
+				}
+				System.out.println("Coords: " + cursor.getPos().toString());
 				return true;
 			}
 		});

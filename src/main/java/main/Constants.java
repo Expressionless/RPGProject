@@ -45,10 +45,9 @@ public class Constants {
 
 	public static final float PLAYER_SPEED = 60f;
 	public static final float ITEM_SPEED = 15f;
-	public static final float DEFAULT_SPEED = 15f;
 	
 	// Basic Collision (px)
-	public static final float PICKUP_DISTANCE = 4;
+	public static final float PICKUP_DISTANCE = 8;
 	public static final float ITEM_SUCK_DISTANCE = 12;
 	
 	// Inventory Constants
@@ -78,5 +77,8 @@ public class Constants {
 	public static final int STACK_POS = NAME_POS + MAX_ITEM_NAME_LEN;
 	public static final int FLAG_POS = STACK_POS + 1;
 	public static final int ITEM_SIZE = FLAG_POS + 1;
+	
+	// Tree Growth Cycle (in seconds)
+	public static final int TREE_GROWTH_CYCLE = 15;
 	
 }

@@ -12,6 +12,7 @@ import helix.game.GameObject;
 import helix.game.objects.entity.Collider;
 import helix.gfx.Sprite;
 import helix.utils.math.Point;
+import main.game.entities.mobs.Player;
 
 public abstract class Entity extends GameObject {
 	public static final BitmapFont font = new BitmapFont();
@@ -29,9 +30,11 @@ public abstract class Entity extends GameObject {
 		super(data, pos);
 
 		this.sprites = new HashMap<String, Sprite>();
-		this.getData().entities.add(this);
 		this.currentSprite = null;
 		this.collider = new Collider(this);
+		
+		
+		this.getData().entities.add(this);
 	}
 	
 	public void loadSprites(AssetManager manager) {};
@@ -148,7 +151,7 @@ public abstract class Entity extends GameObject {
 	}
 	
 	public final float getDepth() {
-		return depth;
+		return this.depth;
 	}
 	
 	public final Collider getCollider() {

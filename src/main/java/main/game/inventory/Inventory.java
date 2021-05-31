@@ -36,11 +36,9 @@ public class Inventory {
 		int row, column;
 		for(column = 0; column < h; column++) {
 			for(row = 0; row < w; row++) {
-				slots[column][row] = new Slot(row * h + column);
+				slots[column][row] = new Slot(this, row * h + column);
 			}
 		}
-		
-		System.out.println("Created new inventory: " + this.width + " " + this.height);		
 	}
 	
 	public Inventory() {
@@ -150,6 +148,10 @@ public class Inventory {
 	
 	public Slot getSlot(int x, int y) {
 		return slots[x][y];
+	}
+	
+	public Slot[][] getSlots() {
+		return slots;
 	}
 
 	public boolean isVisible() {

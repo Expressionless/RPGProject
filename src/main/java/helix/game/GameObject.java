@@ -1,9 +1,9 @@
 package helix.game;
 
+import helix.Constants;
 import helix.game.objects.alarm.Alarm;
 import helix.utils.math.Point;
 import helix.utils.math.Vector2;
-import main.Constants;
 
 public abstract class GameObject {
 	private final Data data;
@@ -40,9 +40,9 @@ public abstract class GameObject {
 		postStep(delta);
 	}
 	
-	public final void updateAlarms() {
+	public final void updateAlarms(float delta) {
 		for(Alarm alarm : alarm) {
-			alarm.update();
+			alarm.update(delta);
 		}
 	}
 	
@@ -147,5 +147,9 @@ public abstract class GameObject {
 	
 	public final Data getData() {
 		return data;
+	}
+	
+	public final Alarm getAlarm(int index) {
+		return alarm[index];
 	}
 }

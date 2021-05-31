@@ -20,7 +20,9 @@ public class InventoryCursor extends Entity {
 
 	@Override
 	public void render(SpriteBatch b) {
-		if(this.item != null) {}
+		if(this.item != null) {
+			this.item.getSprite().draw(b, getPos().getX(), getPos().getY());
+		}
 	}
 
 	@Override
@@ -35,9 +37,19 @@ public class InventoryCursor extends Entity {
 	
 	@Override
 	protected void step(float delta) {
+		
 	}
-	// Getters and Setters
 	
+	public void take(Slot s) {
+		if(s.getItem() != null) {
+			this.setItem(s.getItem());
+			this.setAmount(s.getAmount());
+			
+			s.setItem(null);
+		}
+	}
+	
+	// Getters and Setters
 	public void setItem(int id) {
 		this.item = ItemType.get(id);
 	}
@@ -46,7 +58,19 @@ public class InventoryCursor extends Entity {
 		this.setItem(ItemType.idOf(name));
 	}
 	
+	public void setItem(ItemType item) {
+		this.item = item;
+	}
+	
 	public ItemType getItem() {
 		return this.item;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
 	}
 }

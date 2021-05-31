@@ -2,10 +2,12 @@ package helix.game.objects.alarm;
 
 public final class Alarm {
 	public static final int ALARM_COUNT = 10;
-	public static final int ALARM_INACTIVE = -1;
+	public static final int NO_ALARM = -1;
 
 	private Event action;
-	private int timer = ALARM_INACTIVE, startTime;
+	private int timer = NO_ALARM, startTime;
+	
+	private float second = 0;
 	
 	public Alarm() {
 		this.action = null;
@@ -16,13 +18,16 @@ public final class Alarm {
 		this.timer = timer;
 	}
 	
-	public void update() {
-		if(timer > 0) {
-			timer--;
-		} else if (timer == 0) {
-			action.event();
-			timer = ALARM_INACTIVE;
-		}
+	public void update(float delta) {
+		if(second >= 1f) {
+			if(timer > 0) {
+				timer--;
+			} else if (timer == 0) {
+				action.event();
+				timer = NO_ALARM;
+			}
+			second = 0;
+		} else second += delta;
 	}
 	
 	public float percent() {
@@ -31,7 +36,7 @@ public final class Alarm {
 		else return 0f;
 	}
 	
-	public void setAction(Event action, int timer) {
+	public void setAlarm(Event action, int timer) {
 		this.action = action;
 		this.setTimer(timer);
 	}
@@ -46,7 +51,7 @@ public final class Alarm {
 	}
 	
 	public boolean isActive() {
-		return (timer != ALARM_INACTIVE);
+		return (timer != NO_ALARM);
 	}
 	
 }

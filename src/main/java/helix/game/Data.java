@@ -99,7 +99,7 @@ public abstract class Data {
 		});
 
 		for (GameObject object : objects) {
-			object.updateAlarms();
+			object.updateAlarms(delta);
 			object.update(delta);
 		}
 		
@@ -196,5 +196,13 @@ public abstract class Data {
 
 	public final BaseGame getBaseGame() {
 		return game;
+	}
+	
+	public final DataReader getReader() {
+		return this.reader;
+	}
+	
+	public final DataWriter getWriter() { 
+		return this.writer;
 	}
 }
