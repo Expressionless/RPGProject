@@ -19,7 +19,7 @@ public class InventoryCursor extends Entity {
 	}
 
 	@Override
-	public void render(SpriteBatch b) {
+	public void draw(SpriteBatch b) {
 		if(this.item != null) {
 			this.item.getSprite().draw(b, getPos().getX(), getPos().getY());
 		}

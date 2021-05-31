@@ -8,13 +8,13 @@ import helix.game.Data;
 
 public abstract class Screen extends ScreenAdapter {
 
-	protected abstract void loadResources(AssetManager manager);
+	public abstract void queueAssets(AssetManager manager);
 	protected abstract void create();
 	protected abstract void step();
 	protected abstract void draw(float delta);
 	
-	protected Data data;
-	protected BaseGame game;
+	private Data data;
+	private BaseGame game;
 	
 	public Screen(BaseGame game) {
 		this.game = game;
@@ -32,5 +32,13 @@ public abstract class Screen extends ScreenAdapter {
 		this.draw(delta);
 	}
 	
+	// Getters and Setters
+	public BaseGame getGame()  {
+		return game;
+	}
+	
+	public Data getData() {
+		return data;
+	}
 	
 }

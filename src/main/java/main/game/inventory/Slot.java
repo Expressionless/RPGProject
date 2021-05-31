@@ -2,10 +2,21 @@ package main.game.inventory;
 
 import java.util.logging.Logger;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import helix.gfx.Sprite;
+import helix.utils.math.Point;
 import helix.utils.math.Rectangle;
+import main.Constants;
 import main.game.item.ItemType;
 
 public class Slot {
+	// Slot sprite
+	public static Sprite SPRITE;
+	
+	public static final BitmapFont inventoryFont = new BitmapFont();
 	// Logger
 	private static final Logger log = Logger.getLogger(Inventory.class.getName());
 	
@@ -13,22 +24,25 @@ public class Slot {
 	
 	private Inventory inventory;
 	
+	private Sprite itemSprite;
 	private ItemType item;
 	private int amount;
 	
 	private Rectangle bounds;
 	
-	public Slot(Inventory inventory, int id, ItemType item, int amount) {
+	public Slot(Inventory inventory, Point pos, int id, ItemType item, int amount) {
 		this.inventory = inventory;
 		this.ID = id;
 		this.item = item;
 		this.amount = amount;
 		
-		this.bounds = new Rectangle();
+		this.itemSprite = (item != null) ? item.getSprite() : null;
+		
+		this.bounds = new Rectangle(pos.getX(), pos.getY(), SPRITE.getWidth(), SPRITE.getHeight());
 	}
 	
-	public Slot(Inventory inventory, int id) {
-		this(inventory, id, null, 0);
+	public Slot(Inventory inventory, Point pos, int id) {
+		this(inventory, pos, id, null, 0);
 	}
 	
 	public void update() {
@@ -36,6 +50,23 @@ public class Slot {
 			this.item = null;
 		if(this.item == null)
 			this.amount = 0;
+	}
+	
+	public void render(SpriteBatch b, Color col) {
+		float x = inventory.getGameData().getCamera().position.x + bounds.getX();
+		float y = inventory.getGameData().getCamera().position.y + bounds.getY() + Constants.INV_ITEM_OFFSET_Y;
+		
+		SPRITE.draw(b, x, y, col);
+
+		if(!isEmpty() && itemSprite != null) {
+			
+			itemSprite.draw(b, x + Constants.INV_ITEM_OFFSET_X, y + Constants.INV_ITEM_OFFSET_Y, col);
+			
+			if(this.getItem().getFlag("stackable")) {
+				String string = Integer.toString(this.getAmount());
+				inventoryFont.draw(b, string, x + SPRITE.getWidth() - 3, y + 3);
+			}
+		}
 	}
 	
 	public boolean isEmpty() {
@@ -71,9 +102,7 @@ public class Slot {
 	// Getters and Setters
 	
 	public boolean contains(ItemType item) {
-		if(this.isEmpty())
-			return false;
-		return (this.item.ID == item.ID);
+		return (this.isEmpty()) ? false :(this.item.ID == item.ID);
 	}
 	
 	public ItemType getItem() {
@@ -87,6 +116,7 @@ public class Slot {
 	public void setItem(ItemType item, int amount) {
 		this.item = item;
 		this.amount = amount;
+		this.itemSprite = (item != null) ? item.getSprite() : null;
 	}
 
 	public int getAmount() {

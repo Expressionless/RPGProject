@@ -16,7 +16,7 @@ import main.game.inventory.Inventory;
 public class Item extends Doodad {
 	public static SpriteSheet ITEM_SHEET;
 
-	private float animOffset;
+	private float animOffset, animPeriodOffset;
 	private int amount;
 
 	@Override
@@ -33,7 +33,10 @@ public class Item extends Doodad {
 
 		game.getGameData().items.add(this);
 
-		this.animOffset = (float) (new Random().nextFloat() * (Constants.ITEM_BREATHE_LENGTH / 2 * Math.PI));
+		Random r = new Random();
+		
+		this.animOffset = (float) (r.nextFloat() * (Constants.ITEM_BREATHE_LENGTH / 2 * Math.PI));
+		this.animPeriodOffset = (float) (r.nextFloat() * (Constants.ITEM_BREATHE_LENGTH / 2) + Constants.ITEM_BREATHE_LENGTH / 2);
 		this.amount = amount;
 	}
 
@@ -56,15 +59,14 @@ public class Item extends Doodad {
 			int[] index = IDtoImageIndex(this.getID());
 			Sprite s = ITEM_SHEET.getSubSprite(index[0], index[1]).copy();
 			s.setName(this.item.name);
-			this.setSprite(ITEM_SHEET.getSubSprite(index[0], index[1]));
+			this.setSprite(s);
 		}
-
 	}
 
 	@Override
 	public void step(float delta) {
 		float XScale = (float) (Math
-				.sin((double) (Data.TICKS + animOffset) / (double) (Constants.ITEM_BREATHE_LENGTH)) * 0.2 + 1);
+				.sin((double) (Data.TICKS + animOffset) / (double) (this.animPeriodOffset)) * 0.2 + 1);
 		float YScale = XScale;
 		// OSCILLATE BETWEEN 0.8 - 1.2
 		if (this.getSprite() != null) {

@@ -50,7 +50,7 @@ public abstract class Data {
 	/**
 	 * To be called in {@link helix.game.BaseGame#create()}
 	 */
-	public abstract void init();
+	protected abstract void init();
 
 	public final Sprite createSprite(String spriteName, int frameCount, float animTime) {
 		Texture texture = manager.get(spriteName);

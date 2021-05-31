@@ -11,7 +11,7 @@ import main.game.entities.Doodad;
 public class Tree extends Doodad {
 	public static final String TREE_REF = "res/sprites/doodads/tree.png";
 	
-	private int growtimer;
+	private float growtimer;
 	
 	public Tree(RpgGame game, Point pos) {
 		super(game, pos);
@@ -20,18 +20,19 @@ public class Tree extends Doodad {
 		this.growtimer = Constants.TREE_GROWTH_CYCLE;
 		this.getSprite().setScale(1, 0.5f);
 		this.getAlarm(0).setAlarm(() -> {
-			getSprite().setScale(1, 1);
-		}, growtimer);
+			
+		}, (int)growtimer);
 	}
 
 	@Override
 	public void loadSprites(AssetManager manager) {
-
+		
 	}
 
 	@Override
 	public void step(float delta) {
 		//System.out.print(" " + this.getDepth() + " ");
+		this.getSprite().setScale(1, 1.0f - (float)(this.getAlarm(0).getTimer()) / growtimer * 0.5f);
 	}
 
 }

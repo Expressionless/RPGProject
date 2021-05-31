@@ -20,9 +20,25 @@ public final class ItemType implements Serializable {
 
 	public Sprite sprite;
 
-	public ItemType(int id, String name, int maxStack, int flags) {
-		this.name = name;
+	/**
+	 * For Serialization purposes
+	 * @param id
+	 * @param name
+	 * @param maxStack
+	 * @param flags
+	 */
+	public ItemType(int id, String name, int maxStack, boolean... flags) {
 		this.ID = id;
+		this.name = name;
+		this.maxStack = maxStack;
+		this.itemFlags = new Flags(flags);
+		
+		//attachSprite();
+	}
+	
+	public ItemType(int id, String name, int maxStack, int flags) {
+		this.ID = id;
+		this.name = name;
 		this.maxStack = maxStack;
 		this.itemFlags = new Flags(flags);
 		
@@ -104,6 +120,10 @@ public final class ItemType implements Serializable {
 
 		}
 
+		public Flags(boolean... flag) {
+			stackable = flag[0];
+		}
+		
 		public Flags(int... flags) {
 			stackable = (flags[0] & 0x01) != 0;
 		}
@@ -140,6 +160,10 @@ public final class ItemType implements Serializable {
 		}
 	}
 
+	public boolean write(DataWriter writer) {
+		return this.write(writer, ID);
+	}
+	
 	@Override
 	public boolean write(DataWriter writer, int position) {
 		if(writer == null)
@@ -171,8 +195,8 @@ public final class ItemType implements Serializable {
 		int flags = reader.getInt(position + Constants.FLAG_POS);
 		itemFlags.setFlags(flags);
 		log.fine("Flags: " + flags);
-
-		this.attachSprite();
+		if(com.badlogic.gdx.Gdx.files != null)
+			this.attachSprite();
 		return true;
 	}
 

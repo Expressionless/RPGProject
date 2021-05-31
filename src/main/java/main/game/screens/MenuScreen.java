@@ -12,7 +12,7 @@ public class MenuScreen extends Screen {
 	}
 
 	@Override
-	public void loadResources(AssetManager manager) {
+	public void queueAssets(AssetManager manager) {
 		
 	}
 

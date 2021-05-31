@@ -3,6 +3,7 @@ package main.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import helix.gfx.Screen;
 import helix.utils.math.Point;
@@ -14,26 +15,25 @@ import main.game.entities.mobs.Player;
 import main.game.inventory.InventoryCursor;
 import main.game.inventory.Slot;
 import main.game.item.ItemSpawner;
-import main.game.item.ItemType;
+import main.game.world.World;
 
 public final class GameScreen extends Screen {
-	
+
+	private World world;
+
 	private InventoryCursor cursor;
 	private Player player;
-	
+	private SpriteBatch batch;
+
 	public GameScreen(RpgGame game) {
 		super(game);
-	}
-
-	@Override
-	public void loadResources(AssetManager manager) {
-
 	}
 
 	@Override
 	public void create() {
 		player = new Player(getRpgGame(), new Point(30, 30));
 		cursor = new InventoryCursor(this.getRpgGame(), new Point(0, 0));
+		this.batch = new SpriteBatch();
 		ItemSpawner is = new ItemSpawner(this.getRpgGame());
 		is.spawnItem(50, 20, "grass", 5);
 		is.spawnItem(50, 110, "wood", 5);
@@ -41,31 +41,33 @@ public final class GameScreen extends Screen {
 		is.spawnItem(50, 160, "bow");
 		is.spawnItem(50, 190, "bow");
 		is.spawnItem(50, 220, "bow");
-		
-		new Tree(getRpgGame(), new Point (100, 80));
-	}
-
-	public static void parseItems(GameData gameData) {
-		gameData.beginReading("/data/item");
-		
-		int numsToParse = gameData.getReader().getBytes().size() / Constants.ITEM_SIZE;
-		for(int i = 0; i < numsToParse; i++) {
-			ItemType item = new ItemType();
-			item.parse(gameData.getReader(), i);
-			GameData.ITEM_TYPES.add(item);
-		}
-		
-		gameData.stopReading();
-		System.out.println("Loaded: " + GameData.ITEM_TYPES.size() + " items");
+		new Tree(getRpgGame(), new Point(100, 80));
 	}
 
 	@Override
 	protected void step() {
-		// Update Camera
-		data.getCamera().position.x = getRpgGame().getGameData().getPlayer().getPos().getX();
-		data.getCamera().position.y = getRpgGame().getGameData().getPlayer().getPos().getY();
+		this.handleInput();
+		this.updateCamera();
+	}
 
-		Player player = this.getRpgGame().getGameData().getPlayer();
+	@Override
+	protected void draw(float delta) {
+		this.getGameData().update(Gdx.graphics.getDeltaTime());
+		this.getGameData().getCamera().update();
+
+		this.batch.begin();
+		this.batch.setProjectionMatrix(this.getGameData().getCamera().combined);
+		this.getGameData().render(batch);
+		this.batch.end();
+	}
+
+	private void updateCamera() {
+		// Update Camera
+		getData().getCamera().position.x = player.getPos().getX();
+		getData().getCamera().position.y = player.getPos().getY();
+	}
+
+	private void handleInput() {
 		Gdx.input.setInputProcessor(new InputAdapter() {
 
 			@Override
@@ -124,9 +126,9 @@ public final class GameScreen extends Screen {
 
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-				for(Slot[] slots : player.getInventory().getSlots()) {
-					for(Slot slot : slots) {
-						if(slot.getBounds().contains(cursor.getPos())) {
+				for (Slot[] slots : player.getInventory().getSlots()) {
+					for (Slot slot : slots) {
+						if (slot.getBounds().contains(cursor.getPos())) {
 							cursor.take(slot);
 						}
 					}
@@ -137,17 +139,18 @@ public final class GameScreen extends Screen {
 		});
 	}
 
-	@Override
-	protected void draw(float delta) {
-
-	}
-
 	// Getters and Setters
 	public RpgGame getRpgGame() {
-		return (RpgGame) game;
+		return (RpgGame) getGame();
 	}
 
 	public GameData getGameData() {
-		return (GameData) data;
+		return (GameData) getGame().getData();
+	}
+
+	// Unimplemented Overrides
+	@Override
+	public void queueAssets(AssetManager manager) {
+
 	}
 }

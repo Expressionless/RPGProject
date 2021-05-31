@@ -17,7 +17,7 @@ public abstract class Mob extends Entity {
 		super(game, pos);
 		
 		this.stats = new MobStats();
-		this.inventory = new Inventory();
+		this.inventory = new Inventory(game);
 
 		game.getGameData().mobs.add(this);
 	}

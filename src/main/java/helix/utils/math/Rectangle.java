@@ -2,7 +2,13 @@ package helix.utils.math;
 
 
 public class Rectangle extends com.badlogic.gdx.math.Rectangle {
-
+	
+	public Rectangle (float x, float y, float width, float height) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
 	/**
 	 * 
 	 */

@@ -1,7 +1,5 @@
 package main.game.entities.mobs;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import helix.utils.math.Angle;
@@ -27,21 +25,16 @@ public class Player extends Mob {
 
 	public Player(RpgGame game, Point pos) {
 		super(game, pos);
-		game.getGameData().setPlayer(this);
 
 		this.addSprite(PLAYER_RIGHT, 4, anim_duration);
 		this.addSprite(PLAYER_DOWN, 4, anim_duration);
 		this.addSprite(PLAYER_UP, 4, anim_duration);
 
-		this.hotbar = new Inventory(8, 1);
+		this.hotbar = new Inventory(game, new Point(40 - Constants.CAMERA_WIDTH / 4, 30 - Constants.CAMERA_HEIGHT * .6f), 8, 1);
 		this.setStat("speed", Constants.PLAYER_SPEED);
-	}
 
-	@Override
-	public void loadSprites(AssetManager manager) {
-		manager.load(PLAYER_RIGHT, Texture.class);
-		manager.load(PLAYER_DOWN, Texture.class);
-		manager.load(PLAYER_UP, Texture.class);
+		this.updateCollider();
+		game.getGameData().setPlayer(this);
 	}
 
 	@Override
@@ -55,18 +48,13 @@ public class Player extends Mob {
 		// Update collider
 		// Manage input
 		this.handleMovement(delta);
-		this.updateCollider();
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
-		float LEFT = this.getGameData().getCamera().position.x;
-		float TOP = this.getGameData().getCamera().position.y;
-		float BOTTOM = this.getGameData().getCamera().position.y - Constants.CAMERA_HEIGHT * .6f;
 
-		this.getInventory().render(batch, LEFT - Constants.CAMERA_WIDTH / 4 + 40,
-				TOP - Constants.CAMERA_HEIGHT / 8 + 15);
-		this.hotbar.render(batch, LEFT - Constants.CAMERA_WIDTH / 4 + 40, BOTTOM + 30);
+		this.getInventory().render(batch);
+		this.hotbar.render(batch);
 	}
 
 	private void handleMovement(float delta) {
@@ -126,17 +114,12 @@ public class Player extends Mob {
 	public Inventory getHotbar() {
 		return this.hotbar;
 	}
-	
+
 	public int getMovement(int bit) {
 
 		return ((movement & bit) > 0) ? 1 : 0;
 	}
 
-	/*
-	 * setMovement(DOWN = 0, true) bit = (int) Math.pow(2, 0) -> 1
-	 * 
-	 * if(val=true) movement |= 1
-	 */
 	public void setMovement(int bit, boolean val) {
 		if (val)
 			movement |= bit;

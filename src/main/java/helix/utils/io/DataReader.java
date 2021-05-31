@@ -82,6 +82,7 @@ public class DataReader {
 	}
 	
 	private void readBytes() {
+		bytes.removeAll(bytes);
 		try {
 			is = new FileInputStream(filePath);
 		} catch (FileNotFoundException e) {

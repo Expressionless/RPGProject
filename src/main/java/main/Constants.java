@@ -34,12 +34,12 @@ public class Constants {
 	public static final int LEFT  = 0x02;
 	public static final int RIGHT = 0x04;
 	public static final int UP    = 0x08;
+	
 	// Movement and Input
 	public static final char KEY_RIGHT = Keys.D;
 	public static final char KEY_LEFT = Keys.A;
 	public static final char KEY_DOWN = Keys.S;
 	public static final char KEY_UP = Keys.W;
-	
 	
 	public static final char KEY_INV = Keys.P;
 
@@ -56,6 +56,17 @@ public class Constants {
 	// Inventory slot margin (in px)
 	public static final float INVENTORY_MARGIN = 1;
 
+	// World constants
+	public static final float TILE_WIDTH  = 8;
+	public static final float TILE_HEIGHT = 8;
+
+	public static final int CHUNK_WIDTH  = 10;
+	public static final int CHUNK_HEIGHT = 10;
+	
+	// Entity limits
+	public static final int MAX_ENTITIES_PER_TILE = 4;
+	public static final int MAX_ENTITIES_PER_CHUNK = MAX_ENTITIES_PER_TILE * CHUNK_WIDTH * CHUNK_HEIGHT;
+	
 	// Item offsets (in px)
 	public static final int INV_ITEM_OFFSET_X = 1;
 	public static final int INV_ITEM_OFFSET_Y = 1;

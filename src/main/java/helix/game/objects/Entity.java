@@ -12,7 +12,6 @@ import helix.game.GameObject;
 import helix.game.objects.entity.Collider;
 import helix.gfx.Sprite;
 import helix.utils.math.Point;
-import main.game.entities.mobs.Player;
 
 public abstract class Entity extends GameObject {
 	public static final BitmapFont font = new BitmapFont();
@@ -24,7 +23,6 @@ public abstract class Entity extends GameObject {
 	private Sprite currentSprite;
 	
 	private Collider collider;
-
 
 	public Entity(Data data, Point pos) {
 		super(data, pos);
@@ -41,10 +39,10 @@ public abstract class Entity extends GameObject {
 
 	@Override
 	protected void preStep(float delta) {
-		this.depth = this.getPos().getY();
+		this.updateDepth();
 	}
 	
-	public void render(SpriteBatch batch) {
+	public final void render(SpriteBatch batch) {
 		if (currentSprite != null) {
 			currentSprite.draw(batch, this.getPos().getX(), this.getPos().getY());
 		}
@@ -52,6 +50,13 @@ public abstract class Entity extends GameObject {
 		draw(batch);
 	}
 
+	/**
+	 * Override this as necessary
+	 */
+	protected void updateDepth() {
+		this.depth = this.getPos().getY();
+	}
+	
 	protected void draw(SpriteBatch batch) {
 	}
 

@@ -17,37 +17,36 @@ public final class Collider extends helix.utils.math.Rectangle {
 	}
 	
 	public Collider(Entity entity, ColliderOffset offsetType) {
+		super(entity.getPos().getX(), entity.getPos().getY(), entity.getWidth(), entity.getHeight());
 		offset = new Vector2(0, 0);
-		float entityWidth = entity.getWidth();
-		float entityHeight = entity.getHeight();
 		
 		switch(offsetType) {
 			case BOTTOM:
-				offset.setX(entityWidth / 2);
-				offset.setY(entityHeight);
+				offset.setX(this.getWidth() / 2);
+				offset.setY(this.getHeight());
 				break;
 			case BOTTOM_LEFT:
 				offset.setX(0);
-				offset.setY(entityHeight);
+				offset.setY(this.getHeight());
 				break;
 			case BOTTOM_RIGHT:
-				offset.setX(entityWidth);
-				offset.setY(entityHeight);
+				offset.setX(this.getWidth());
+				offset.setY(this.getHeight());
 				break;
 			case CENTER:
-				offset.setX(entityWidth / 2);
-				offset.setY(entityHeight / 2);
+				offset.setX(this.getWidth() / 2);
+				offset.setY(this.getHeight() / 2);
 				break;
 			case CENTER_LEFT:
 				offset.setX(0);
-				offset.setY(entityHeight / 2);
+				offset.setY(this.getHeight() / 2);
 				break;
 			case CENTER_RIGHT:
-				offset.setX(entityWidth);
-				offset.setY(entityHeight / 2);
+				offset.setX(this.getWidth());
+				offset.setY(this.getHeight() / 2);
 				break;
 			case TOP:
-				offset.setX(entityWidth / 2);
+				offset.setX(this.getWidth() / 2);
 				offset.setY(0);
 				break;
 			case TOP_LEFT:
@@ -55,7 +54,7 @@ public final class Collider extends helix.utils.math.Rectangle {
 				offset.setY(0);
 				break;
 			case TOP_RIGHT:
-				offset.setX(entityWidth);
+				offset.setX(this.getWidth());
 				offset.setY(0);
 				break;
 			default:

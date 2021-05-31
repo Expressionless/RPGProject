@@ -7,10 +7,9 @@ import helix.gfx.SpriteSheet;
 import main.game.RpgGame;
 import main.game.entities.Mob;
 import main.game.entities.mobs.Player;
-import main.game.inventory.Inventory;
+import main.game.inventory.Slot;
 import main.game.item.Item;
 import main.game.item.ItemType;
-import main.game.screens.GameScreen;
 
 public class GameData extends Data {
 	
@@ -24,12 +23,11 @@ public class GameData extends Data {
 	@Override
 	public void init() {
 		// Init inventory data
-		Inventory.slotSprite = this.createSprite("res/sprites/UI/inventory/slot.png");
-		Inventory.inventoryFont.getData().setScale(0.25f);
+		Slot.SPRITE = this.createSprite("res/sprites/UI/inventory/slot.png");
+		Slot.inventoryFont.getData().setScale(0.25f);
 		
 		// Init Item Data
 		Item.ITEM_SHEET = new SpriteSheet(this, main.Constants.ITEMS_DIRECTORY, 8, 8);
-		GameScreen.parseItems(this);
 	}
 	
 	public GameData(RpgGame game) {

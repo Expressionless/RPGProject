@@ -1,6 +1,7 @@
 package helix.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
@@ -17,8 +18,7 @@ public abstract class BaseGame extends Game {
 	private float progress, lastProgress;
 	
 	protected abstract void start();
-	protected abstract void queueLoadAssets();
-	protected abstract void initScreens();
+	protected abstract void addScreens();
 	
 	public BaseGame(String title, int frameWidth, int frameHeight) {
 		config = new Lwjgl3ApplicationConfiguration();
@@ -35,27 +35,32 @@ public abstract class BaseGame extends Game {
 		this.frameHeight = frameHeight;
 		
 		camera = new OrthographicCamera();
-		
 	}
 	
 	@Override
 	public final void create() {
+		this.addScreens();
 
 		// Load loading screen stuff
 		this.getData().getManager().finishLoading();
 		this.getData().setCamera(camera);
-		this.load();
-		
+
+		this.queueAssets();
+		this.loadTextures();
 		this.data.init();
+		
+		try {
+			this.setScreen(this.getData().screens.get(0));
+		} catch(NullPointerException e) {
+			
+		}
+		
 		this.start();
 	}
 	
-	private void load() {	
-		this.queueLoadAssets();
-		
+	private void loadTextures() {
 		// Load Resources
 		while (!this.getData().getManager().update()) {
-			
 			// Check if progress got updated
 			progress = this.getData().getManager().getProgress();
 			if(progress != lastProgress) {
@@ -63,7 +68,18 @@ public abstract class BaseGame extends Game {
 				this.lastProgress = progress;
 			}
 		}
+		
 	}
+	
+	private void queueAssets() {
+		for(int i = 0; i < this.getData().screens.size(); i++) {
+			this.getData().screens.get(i).queueAssets(this.getData().getManager());
+		}
+		
+		
+	}
+	
+	// Getters and Setters
 	
 	public final OrthographicCamera getCamera() {
 		return camera;
@@ -75,5 +91,10 @@ public abstract class BaseGame extends Game {
 	
 	public final void setData(Data data) {
 		this.data = data;
+	}
+	
+	@Override
+	public void setScreen(Screen s) {
+		super.setScreen(s);
 	}
 }
