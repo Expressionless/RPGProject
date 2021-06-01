@@ -54,7 +54,7 @@ public class RpgGame extends BaseGame {
 	public void render() {
 		ScreenUtils.clear(Constants.CLEAR_COLOR);
 		this.getScreen().render(Gdx.graphics.getDeltaTime());
-		//fps.log();
+		fps.log();
 	}
 
 	// Getters and Setters

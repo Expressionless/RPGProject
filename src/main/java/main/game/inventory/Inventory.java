@@ -72,7 +72,7 @@ public class Inventory {
 		if(this.isVisible()) {			
 			for(int i = 0; i < this.slots.length; i++) {
 				for(int j = 0; j < this.slots[i].length; j++) {
-					this.slots[i][j].render(b, COL);
+					this.slots[this.slots.length - 1 - i][this.slots[i].length - 1 - j].render(b, COL);
 				}
 			}
 		}
