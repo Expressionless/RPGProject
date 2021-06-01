@@ -25,7 +25,7 @@ public abstract class Mob extends Entity {
 	@Override
 	protected void preStep(float delta) {
 		super.preStep(delta);
-		this.inventory.update();
+		this.inventory.update(delta);
 	}
 
 	@SuppressWarnings("unchecked")

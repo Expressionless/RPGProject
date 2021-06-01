@@ -8,6 +8,7 @@ import main.Constants;
 import main.game.RpgGame;
 import main.game.entities.Mob;
 import main.game.inventory.Inventory;
+import main.game.inventory.Slot;
 
 import static main.Constants.UP;
 import static main.Constants.DOWN;
@@ -19,7 +20,11 @@ public class Player extends Mob {
 	public static final String PLAYER_DOWN = "res/sprites/player/down.png";
 	public static final String PLAYER_UP = "res/sprites/player/up.png";
 
+	// Inventories
 	private Inventory hotbar;
+	private Inventory equipped;
+	private Inventory armour;
+	
 	private int anim_duration = 750;
 	private int movement = 0x00;
 
@@ -31,6 +36,19 @@ public class Player extends Mob {
 		this.addSprite(PLAYER_UP, 4, anim_duration);
 
 		this.hotbar = new Inventory(game, new Point(40 - Constants.CAMERA_WIDTH / 4, 30 - Constants.CAMERA_HEIGHT * .6f), 8, 1);
+		this.hotbar.setVisible(true);
+		
+		Point armourPos = this.getInventory().getPos().copy();
+		armourPos.setX(armourPos.getX() - Slot.SPRITE.getWidth() - Constants.INVENTORY_MARGIN);
+		armourPos.setY(armourPos.getY() - Slot.SPRITE.getHeight());
+		this.armour = new Inventory(game, armourPos, 1, 4);
+		
+		Point equipPos = this.getHotbar().getPos().copy();
+		equipPos.setX(equipPos.getX() - Slot.SPRITE.getWidth() * 2.5f - Constants.INVENTORY_MARGIN);
+		equipPos.setY(equipPos.getY());
+		this.equipped = new Inventory(game, equipPos, 2, 1);
+		this.equipped.setVisible(true);
+		
 		this.setStat("speed", Constants.PLAYER_SPEED);
 
 		this.updateCollider();
@@ -40,7 +58,9 @@ public class Player extends Mob {
 	@Override
 	protected void preStep(float delta) {
 		super.preStep(delta);
-		this.hotbar.update();
+		this.hotbar.update(delta);
+		this.equipped.update(delta);
+		this.armour.update(delta);
 	}
 
 	@Override
@@ -55,6 +75,8 @@ public class Player extends Mob {
 
 		this.getInventory().render(batch);
 		this.hotbar.render(batch);
+		this.armour.render(batch);
+		this.equipped.render(batch);
 	}
 
 	private void handleMovement(float delta) {
@@ -113,6 +135,14 @@ public class Player extends Mob {
 	// Getters and Setters
 	public Inventory getHotbar() {
 		return this.hotbar;
+	}
+	
+	public Inventory getArmour() {
+		return this.armour;
+	}
+	
+	public Inventory getHands() {
+		return this.equipped;
 	}
 
 	public int getMovement(int bit) {

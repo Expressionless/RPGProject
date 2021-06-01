@@ -3,6 +3,7 @@ package main.game.inventory;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import helix.game.GameObject;
 import helix.utils.math.Point;
 import main.Constants;
 import main.GameData;
@@ -14,7 +15,7 @@ import main.game.item.ItemType;
  * @author bmeachem
  *
  */
-public class Inventory {
+public class Inventory extends GameObject {
 	public static final float INV_X = 40 - Constants.CAMERA_WIDTH / 4;
 	public static final float INV_Y = 15 - Constants.CAMERA_HEIGHT / 8;
 	
@@ -31,6 +32,7 @@ public class Inventory {
 	private RpgGame game;
 	
 	public Inventory(RpgGame game, Point screenPos, int w, int h) {
+		super(game.getGameData(), screenPos);
 		this.visible = false;
 		this.slots = new Slot[h][w];
 		this.screenPos = screenPos;
@@ -60,7 +62,7 @@ public class Inventory {
 		}
 	}
 	
-	public void update() {
+	public void step(float delta) {
 		for(Slot[] row : slots) {
 			for(Slot slot: row) {
 				slot.update();
@@ -134,16 +136,16 @@ public class Inventory {
 		
 		return false;
 	}
-
-	/*
-	 * public boolean remove(int itemID, int amount) { if(this.items[itemID] <
-	 * amount) return false;
-	 * 
-	 * this.items[itemID] -= amount; return true; }
-	 * 
-	 * public boolean remove(String name, int amount) { return
-	 * this.remove(ItemType.idOf(name), amount); }
-	 */
+	
+	public Slot getFirstFree() {
+		for(Slot[] row : this.getSlots()) {
+			for(Slot slot : row)
+				if(slot.isEmpty())
+					return slot;
+		}
+		
+		return null;
+	}
 	
 	public Slot getSlot(int x, int y) {
 		return slots[x][y];

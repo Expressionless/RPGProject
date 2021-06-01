@@ -12,6 +12,7 @@ import main.GameData;
 import main.game.RpgGame;
 import main.game.entities.doodads.Tree;
 import main.game.entities.mobs.Player;
+import main.game.inventory.Inventory;
 import main.game.inventory.InventoryCursor;
 import main.game.inventory.Slot;
 import main.game.item.ItemSpawner;
@@ -76,6 +77,32 @@ public final class GameScreen extends Screen {
 
 	private void handleInput() {
 		Gdx.input.setInputProcessor(new InputAdapter() {
+			private boolean handleInventory(InventoryCursor cursor, Inventory inventory) {
+				for (Slot[] slots : inventory.getSlots()) {
+					for (Slot slot : slots) {
+						if (slot.isCursorOver()) {
+							if (cursor.hasNothing() && !slot.isEmpty()) {
+								cursor.take(slot);
+								if(cursor.getQuickShift()) {
+									if(slot.getInventory().id == player.getInventory().id) {
+										Slot otherSlot = player.getHotbar().getFirstFree();
+										cursor.place(otherSlot);
+									}
+								}
+							} else if (!cursor.hasNothing()) {
+								if (slot.isEmpty())
+									cursor.place(slot);
+								else
+									cursor.swap(slot);
+							}
+
+							// Interaction is done
+							return true;
+						}
+					}
+				}
+				return false;
+			}
 
 			@Override
 			public boolean keyDown(int keycode) {
@@ -83,10 +110,8 @@ public final class GameScreen extends Screen {
 				case Constants.KEY_INV:
 					if (player.getInventory().isVisible()) {
 						player.getInventory().setVisible(false);
-						player.getHotbar().setVisible(false);
 					} else {
 						player.getInventory().setVisible(true);
-						player.getHotbar().setVisible(true);
 					}
 					break;
 				case Constants.KEY_DOWN:
@@ -100,6 +125,13 @@ public final class GameScreen extends Screen {
 					break;
 				case Constants.KEY_UP:
 					player.setMovement(Constants.UP, true);
+					break;
+				
+				case Constants.KEY_CHARACTER:
+					if(player.getArmour().isVisible())
+						player.getArmour().setVisible(false);
+					else
+						player.getArmour().setVisible(true);
 					break;
 				}
 				return true;
@@ -136,32 +168,35 @@ public final class GameScreen extends Screen {
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 				InventoryCursor cursor = getGameData().getCursor();
 				// TODO: Set inventory bounds and do a bounds check on that
-				for (Slot[] slots : player.getInventory().getSlots()) {
-					for (Slot slot : slots) {
-						if (slot.isCursorOver()) {
-							if(cursor.hasNothing() && !slot.isEmpty()) {
-								cursor.take(slot);
-							} else if(!cursor.hasNothing()) {
-								if(slot.isEmpty())
-									cursor.place(slot);
-								else
-									cursor.swap(slot);
-							}
-							
-							// Interaction is done
+				if (player.getInventory().isVisible()) {
+					if(handleInventory(cursor, player.getInventory()))
+						return true;
+
+					if(player.getHotbar().isVisible()) {
+						if(handleInventory(cursor, player.getHotbar()))
 							return true;
-						}
+					}
+					
+					if(player.getArmour().isVisible()) {
+						if(handleInventory(cursor, player.getArmour()))
+							return true;
+					}
+
+					if(player.getHands().isVisible()) {
+						if(handleInventory(cursor, player.getHands()))
+							return true;
 					}
 				}
+				
 				// if not over any slots place item on ground
-				if(cursor.getItem() != null) {
+				if (cursor.getItem() != null) {
 					ItemSpawner is = new ItemSpawner(getRpgGame());
 					is.spawnItem(cursor.getPos().copy(), cursor.getItem().ID, cursor.getAmount());
-					
+
 					cursor.setItem(null);
 					return true;
 				}
-				
+
 				// Interaction is done
 				return true;
 			}

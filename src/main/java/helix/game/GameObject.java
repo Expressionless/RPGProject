@@ -6,13 +6,17 @@ import helix.utils.math.Point;
 import helix.utils.math.Vector2;
 
 public abstract class GameObject {
-	private final Data data;
+	public static long ID_NEXT = 0;
+
+	public final long id;
 	
 	private Alarm[] alarm;
 	private boolean shouldDispose;
 
 	private Point pos;
 	private Vector2 direction;
+
+	private final Data data;
 	
 	protected void preStep(float delta) {}
 	protected abstract void step(float delta);
@@ -24,6 +28,7 @@ public abstract class GameObject {
 		this.direction = new Vector2(0, 0);
 		this.initAlarms();
 		
+		this.id = ID_NEXT++;
 		data.objects.add(this);
 	}
 	

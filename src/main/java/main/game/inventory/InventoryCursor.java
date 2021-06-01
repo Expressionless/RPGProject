@@ -12,6 +12,8 @@ public final class InventoryCursor extends Entity {
 	private ItemType item;
 	private int amount;
 	
+	private boolean quickShift = false;
+	
 	public InventoryCursor(RpgGame game) {
 		super(game, new Point(0, 0));
 		this.item = null;
@@ -101,5 +103,13 @@ public final class InventoryCursor extends Entity {
 
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+	
+public boolean getQuickShift() {
+		return quickShift;
+	}
+	
+	public void setQuickShift(boolean quick) {
+		this.quickShift = quick;
 	}
 }

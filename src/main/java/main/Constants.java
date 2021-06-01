@@ -45,8 +45,10 @@ public class Constants {
 	public static final char KEY_LEFT = Keys.A;
 	public static final char KEY_DOWN = Keys.S;
 	public static final char KEY_UP = Keys.W;
-	
+
 	public static final char KEY_INV = Keys.P;
+	public static final char KEY_CHARACTER = Keys.C;
+	
 	public static final char KEY_SHIFT = Keys.SHIFT_LEFT;
 	public static final char KEY_SHIFT_R = Keys.SHIFT_RIGHT;
 
