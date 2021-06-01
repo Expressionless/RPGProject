@@ -135,7 +135,7 @@ public final class GameScreen extends Screen {
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 				InventoryCursor cursor = getGameData().getCursor();
-				
+				// TODO: Set inventory bounds and do a bounds check on that
 				for (Slot[] slots : player.getInventory().getSlots()) {
 					for (Slot slot : slots) {
 						if (slot.isCursorOver()) {
@@ -147,9 +147,22 @@ public final class GameScreen extends Screen {
 								else
 									cursor.swap(slot);
 							}
+							
+							// Interaction is done
+							return true;
 						}
 					}
 				}
+				// if not over any slots place item on ground
+				if(cursor.getItem() != null) {
+					ItemSpawner is = new ItemSpawner(getRpgGame());
+					is.spawnItem(cursor.getPos().copy(), cursor.getItem().ID, cursor.getAmount());
+					
+					cursor.setItem(null);
+					return true;
+				}
+				
+				// Interaction is done
 				return true;
 			}
 		});

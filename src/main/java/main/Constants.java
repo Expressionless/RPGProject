@@ -47,6 +47,8 @@ public class Constants {
 	public static final char KEY_UP = Keys.W;
 	
 	public static final char KEY_INV = Keys.P;
+	public static final char KEY_SHIFT = Keys.SHIFT_LEFT;
+	public static final char KEY_SHIFT_R = Keys.SHIFT_RIGHT;
 
 	public static final float PLAYER_SPEED = 60f;
 	public static final float ITEM_SPEED = 15f;
