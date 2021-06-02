@@ -1,11 +1,10 @@
-package main.game.inventory.util;
+package main.game.inventory;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import helix.utils.math.Point;
 import main.game.Entity;
 import main.game.RpgGame;
-import main.game.inventory.Slot;
 import main.game.item.ItemInfo;
 
 public final class InventoryCursor extends Entity {

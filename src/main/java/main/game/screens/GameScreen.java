@@ -13,9 +13,8 @@ import main.game.RpgGame;
 import main.game.entities.doodads.Tree;
 import main.game.entities.mobs.Player;
 import main.game.inventory.Inventory;
+import main.game.inventory.InventoryCursor;
 import main.game.inventory.Slot;
-import main.game.inventory.subtypes.HotbarInventory;
-import main.game.inventory.util.InventoryCursor;
 import main.game.item.ItemSpawner;
 import main.game.world.World;
 
@@ -108,11 +107,6 @@ public final class GameScreen extends Screen {
 
 			@Override
 			public boolean keyDown(int keycode) {
-				HotbarInventory inv = player.getHotbar();
-				if(keycode >= Constants.KEY_0 && keycode <= (Constants.KEY_0 + player.getHotbar().getWidth())) {
-					int pos = keycode - Constants.KEY_0;
-					inv.getSelector().setCurrentSlot(pos);
-				}
 				switch (keycode) {
 				case Constants.KEY_INV:
 					if (player.getInventory().isVisible()) {

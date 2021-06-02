@@ -1,8 +1,8 @@
-package main.game.inventory.subtypes;
+package main.game.inventory;
 
 import helix.utils.math.Point;
 import main.game.RpgGame;
-import main.game.inventory.Inventory;
+import main.game.item.ItemType;
 
 public class ArmourInventory extends Inventory {
 
@@ -14,7 +14,8 @@ public class ArmourInventory extends Inventory {
 
 	@Override
 	public Inventory copy() {
-		return new ArmourInventory(this.getGame(), this.getPos().copy());
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

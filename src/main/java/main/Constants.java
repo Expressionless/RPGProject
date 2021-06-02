@@ -53,8 +53,6 @@ public class Constants {
 	
 	public static final char KEY_SHIFT = Keys.SHIFT_LEFT;
 	public static final char KEY_SHIFT_R = Keys.SHIFT_RIGHT;
-	public static final char KEY_0 = Keys.NUM_0;
-	public static final char KEY_9 = Keys.NUM_9;
 
 	public static final float PLAYER_SPEED = 60f;
 	public static final float ITEM_SPEED = 15f;
@@ -66,7 +64,6 @@ public class Constants {
 	// Inventory Constants
 	public static final int P_INV_WIDTH = 8;
 	public static final int P_INV_HEIGHT = 6;
-	
 	
 	// Default Accepted Inventory types
 	public static final ItemType[] DEF_ACCEPTED_ITEM_TYPES = ItemType.values();

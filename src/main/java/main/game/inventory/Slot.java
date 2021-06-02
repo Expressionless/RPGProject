@@ -11,7 +11,6 @@ import helix.gfx.Sprite;
 import helix.utils.math.Point;
 import helix.utils.math.Rectangle;
 import main.Constants;
-import main.game.inventory.util.InventoryCursor;
 import main.game.item.ItemInfo;
 
 public class Slot {
@@ -165,10 +164,6 @@ public class Slot {
 	
 	public Inventory getInventory() {
 		return inventory;
-	}
-	
-	public Point getPos() {
-		return new Point(bounds.getX(), bounds.getY());
 	}
 	
 	public String toString() {

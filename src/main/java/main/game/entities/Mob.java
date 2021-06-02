@@ -4,8 +4,8 @@ import helix.game.GameObject;
 import helix.utils.math.Point;
 import main.game.Entity;
 import main.game.RpgGame;
+import main.game.inventory.GenericInventory;
 import main.game.inventory.Inventory;
-import main.game.inventory.subtypes.GenericInventory;
 import main.game.item.Item;
 import main.game.item.ItemInfo;
 
@@ -18,7 +18,7 @@ public abstract class Mob extends Entity {
 		super(game, pos);
 		
 		this.stats = new MobStats();
-		//this.inventory = new GenericInventory(game, pos, 8, 6);
+		this.inventory = new GenericInventory(game, pos, 8, 6);
 
 		game.getGameData().mobs.add(this);
 	}
@@ -136,7 +136,7 @@ public abstract class Mob extends Entity {
 	}
 	
 	public void setInventory(Inventory inv) {
-		this.inventory = inv;
+		this.inventory = inv.copy();
 	}
 	
 	// Helper class

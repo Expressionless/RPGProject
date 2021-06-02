@@ -12,11 +12,10 @@ import helix.utils.math.Point;
 import main.Constants;
 import main.game.RpgGame;
 import main.game.entities.Mob;
+import main.game.inventory.ArmourInventory;
+import main.game.inventory.GenericInventory;
 import main.game.inventory.Inventory;
 import main.game.inventory.Slot;
-import main.game.inventory.subtypes.ArmourInventory;
-import main.game.inventory.subtypes.GenericInventory;
-import main.game.inventory.subtypes.HotbarInventory;
 
 public class Player extends Mob {
 	public static final String PLAYER_RIGHT = "res/sprites/player/right.png";
@@ -27,38 +26,32 @@ public class Player extends Mob {
 	private Inventory hotbar;
 	private Inventory equipped;
 	private Inventory armour;
-
+	
 	private int anim_duration = 750;
 	private int movement = 0x00;
 
 	public Player(RpgGame game, Point pos) {
 		super(game, pos);
-		float x = 40 - Constants.CAMERA_WIDTH / 4;
-		float y = 30 - Constants.CAMERA_HEIGHT * .6f + Slot.SPRITE.getHeight() * (Constants.P_INV_HEIGHT + 1);
-		Inventory newInv = new GenericInventory(game, new Point(x, y), Constants.P_INV_WIDTH, Constants.P_INV_HEIGHT);
-		this.setInventory(newInv);
+		this.setInventory(new GenericInventory(game, new Point(40 - Constants.CAMERA_WIDTH / 4, 30), Constants.P_INV_WIDTH, Constants.P_INV_HEIGHT));
 
 		this.addSprite(PLAYER_RIGHT, 4, anim_duration);
 		this.addSprite(PLAYER_DOWN, 4, anim_duration);
 		this.addSprite(PLAYER_UP, 4, anim_duration);
 
-		this.hotbar = new HotbarInventory(game,
-				new Point(40 - Constants.CAMERA_WIDTH / 4, 30 - Constants.CAMERA_HEIGHT * .6f));
+		this.hotbar = new GenericInventory(game, new Point(40 - Constants.CAMERA_WIDTH / 4, 30 - Constants.CAMERA_HEIGHT * .6f), 8, 1);
 		this.hotbar.setVisible(true);
-
+		
 		Point armourPos = this.getInventory().getPos().copy();
 		armourPos.setX(armourPos.getX() - Slot.SPRITE.getWidth() - Constants.INVENTORY_MARGIN);
 		armourPos.setY(armourPos.getY() - Slot.SPRITE.getHeight());
 		this.armour = new ArmourInventory(game, armourPos);
-
+		
 		Point equipPos = this.getHotbar().getPos().copy();
 		equipPos.setX(equipPos.getX() - Slot.SPRITE.getWidth() * 2.5f - Constants.INVENTORY_MARGIN);
 		equipPos.setY(equipPos.getY());
 		this.equipped = new GenericInventory(game, equipPos, 2, 1);
-		this.equipped.clearAllowedTypes();
-		this.equipped.addAllowedTypes("WEAPON", "TOOL");
 		this.equipped.setVisible(true);
-
+		
 		this.setStat("speed", Constants.PLAYER_SPEED);
 
 		this.updateCollider();
@@ -143,14 +136,14 @@ public class Player extends Mob {
 	}
 
 	// Getters and Setters
-	public HotbarInventory getHotbar() {
-		return (HotbarInventory) this.hotbar;
+	public Inventory getHotbar() {
+		return this.hotbar;
 	}
-
-	public ArmourInventory getArmour() {
-		return (ArmourInventory) this.armour;
+	
+	public Inventory getArmour() {
+		return this.armour;
 	}
-
+	
 	public Inventory getHands() {
 		return this.equipped;
 	}

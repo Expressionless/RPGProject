@@ -125,8 +125,6 @@ public abstract class Entity extends GameObject {
 	 * @param spriteName
 	 */
 	public final void setSprite(String spriteName) {
-		if(!this.sprites.containsKey(spriteName))
-			this.addSprite(spriteName);
 		if (this.currentSprite == null || !this.currentSprite.equals(sprites.get(spriteName)))
 			this.currentSprite = sprites.get(spriteName);
 	}
