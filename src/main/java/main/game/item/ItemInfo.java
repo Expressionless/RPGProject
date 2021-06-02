@@ -76,7 +76,7 @@ public final class ItemInfo implements Serializable {
 	// Getters and Setters
 	
 	public Sprite getSprite() {
-		return this.sprite;
+		return this.sprite.copy();
 	}
 
 	public boolean getFlag(String flag) {
