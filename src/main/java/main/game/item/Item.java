@@ -24,11 +24,11 @@ public class Item extends Doodad {
 		// manager.load(Constants.ITEMS_DIRECTORY, Texture.class);
 	}
 
-	public final ItemType item;
+	public final ItemInfo item;
 
 	public Item(RpgGame game, Point pos, int itemID, int amount) {
 		super(game, pos);
-		this.item = ItemType.get(itemID);
+		this.item = ItemInfo.get(itemID);
 		this.attachItemSprite();
 
 		game.getGameData().items.add(this);
@@ -41,7 +41,7 @@ public class Item extends Doodad {
 	}
 
 	public Item(RpgGame game, Point pos, String itemName) {
-		this(game, pos, ItemType.idOf(itemName), 1);
+		this(game, pos, ItemInfo.idOf(itemName), 1);
 	}
 
 	public static int[] IDtoImageIndex(int ID) {

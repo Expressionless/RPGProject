@@ -3,6 +3,8 @@ package main;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 
+import main.game.item.ItemType;
+
 public class Constants {
 
 	// Frame Dimensions
@@ -60,8 +62,12 @@ public class Constants {
 	public static final float ITEM_SUCK_DISTANCE = 12;
 	
 	// Inventory Constants
-	public static final int DEF_INV_WIDTH = 8;
-	public static final int DEF_INV_HEIGHT = 6;
+	public static final int P_INV_WIDTH = 8;
+	public static final int P_INV_HEIGHT = 6;
+	
+	// Default Accepted Inventory types
+	public static final ItemType[] DEF_ACCEPTED_ITEM_TYPES = ItemType.values();
+	
 	// Inventory slot margin (in px)
 	public static final float INVENTORY_MARGIN = 1;
 
@@ -105,5 +111,6 @@ public class Constants {
 	
 	// Tree Growth Cycle (in seconds)
 	public static final int TREE_GROWTH_CYCLE = 15;
+	
 	
 }

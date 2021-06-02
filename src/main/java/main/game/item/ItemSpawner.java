@@ -32,7 +32,7 @@ public class ItemSpawner {
 	}
 	
 	public void spawnItem(Point pos, String name, int amount) {
-		this.spawnItem(pos, ItemType.idOf(name), amount);
+		this.spawnItem(pos, ItemInfo.idOf(name), amount);
 	}
 
 	public void spawnItem(Point pos, String name) {
@@ -40,10 +40,10 @@ public class ItemSpawner {
 	}
 
 	public void spawnItem(double x, double y, String name) {
-		this.spawnItem(new Point(x, y), ItemType.idOf(name), 1);
+		this.spawnItem(new Point(x, y), ItemInfo.idOf(name), 1);
 	}
 	
 	public void spawnItem(double x, double y, String name, int amount) {
-		this.spawnItem(new Point(x, y), ItemType.idOf(name), amount);
+		this.spawnItem(new Point(x, y), ItemInfo.idOf(name), amount);
 	}
 }

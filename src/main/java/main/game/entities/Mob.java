@@ -4,9 +4,10 @@ import helix.game.GameObject;
 import helix.utils.math.Point;
 import main.game.Entity;
 import main.game.RpgGame;
+import main.game.inventory.GenericInventory;
 import main.game.inventory.Inventory;
 import main.game.item.Item;
-import main.game.item.ItemType;
+import main.game.item.ItemInfo;
 
 public abstract class Mob extends Entity {
 	private Inventory inventory;
@@ -17,7 +18,7 @@ public abstract class Mob extends Entity {
 		super(game, pos);
 		
 		this.stats = new MobStats();
-		this.inventory = new Inventory(game);
+		this.inventory = new GenericInventory(game, pos, 8, 6);
 
 		game.getGameData().mobs.add(this);
 	}
@@ -59,7 +60,7 @@ public abstract class Mob extends Entity {
 	}
 
 	public Item findItem(String name) {
-		return this.findItem(ItemType.idOf(name));
+		return this.findItem(ItemInfo.idOf(name));
 	}
 	
 	public Item findItem(int ID) {
@@ -91,7 +92,7 @@ public abstract class Mob extends Entity {
 	}
 	
 	public Item findNearestItem(String name) {
-		return this.findNearestItem(ItemType.idOf(name));
+		return this.findNearestItem(ItemInfo.idOf(name));
 	}
 	
 	public Item findNearestItem(int ID) {
@@ -134,6 +135,9 @@ public abstract class Mob extends Entity {
 		return this.inventory;
 	}
 	
+	public void setInventory(Inventory inv) {
+		this.inventory = inv.copy();
+	}
 	
 	// Helper class
 	@SuppressWarnings("unused")

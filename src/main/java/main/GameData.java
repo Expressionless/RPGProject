@@ -13,11 +13,11 @@ import main.game.entities.mobs.Player;
 import main.game.inventory.InventoryCursor;
 import main.game.inventory.Slot;
 import main.game.item.Item;
-import main.game.item.ItemType;
+import main.game.item.ItemInfo;
 
 public final class GameData extends Data {
 	
-	public static final ArrayList<ItemType> ITEM_TYPES = new ArrayList<>();
+	public static final ArrayList<ItemInfo> ITEM_TYPES = new ArrayList<>();
 	public final ArrayList<Mob> mobs;
 	public final ArrayList<Item> items;
 	

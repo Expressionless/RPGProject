@@ -1,13 +1,20 @@
 package main.game.inventory;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import helix.game.GameObject;
+import helix.game.Serializable;
+import helix.utils.io.DataReader;
+import helix.utils.io.DataWriter;
 import helix.utils.math.Point;
 import main.Constants;
 import main.GameData;
 import main.game.RpgGame;
+import main.game.item.ItemInfo;
 import main.game.item.ItemType;
 
 /**
@@ -15,7 +22,7 @@ import main.game.item.ItemType;
  * @author bmeachem
  *
  */
-public class Inventory extends GameObject {
+public abstract class Inventory extends GameObject implements Serializable {
 	public static final float INV_X = 40 - Constants.CAMERA_WIDTH / 4;
 	public static final float INV_Y = 15 - Constants.CAMERA_HEIGHT / 8;
 	
@@ -30,6 +37,9 @@ public class Inventory extends GameObject {
 	private Point screenPos;
 	
 	private RpgGame game;
+	private Set<ItemType> allowedTypes;
+
+	public abstract Inventory copy();
 	
 	public Inventory(RpgGame game, Point screenPos, int w, int h) {
 		super(game.getGameData(), screenPos);
@@ -38,28 +48,14 @@ public class Inventory extends GameObject {
 		this.screenPos = screenPos;
 		this.game = game;
 		
+		this.allowedTypes = new HashSet<>();
+		
 		initSlots(w, h);
+		System.out.println("NEw inv: " + w + ", " + h);
 	}
 	
 	public Inventory(RpgGame game, int w, int h) {
 		this(game, new Point(INV_X, INV_Y), w, h);
-	}
-	
-	public Inventory(RpgGame game) {
-		this(game, Constants.DEF_INV_WIDTH, Constants.DEF_INV_HEIGHT);
-	}
-	
-	private void initSlots(int w, int h) {
-
-		int row, column;
-		float x, y;
-		for(column = 0; column < h; column++) {
-			y = this.screenPos.getY() - column * (Slot.SPRITE.getHeight() + Constants.INVENTORY_MARGIN);
-			for(row = 0; row < w; row++) {
-				x = this.screenPos.getX() + row * (Slot.SPRITE.getWidth() + Constants.INVENTORY_MARGIN);
-				slots[column][row] = new Slot(this, new Point(x, y), h * column + row);
-			}
-		}
 	}
 	
 	public void step(float delta) {
@@ -70,7 +66,7 @@ public class Inventory extends GameObject {
 		}
 	}
 	
-	public void render(SpriteBatch b) {		
+	public void render(SpriteBatch b) {
 		if(this.isVisible()) {			
 			for(int i = 0; i < this.slots.length; i++) {
 				for(int j = 0; j < this.slots[i].length; j++) {
@@ -79,22 +75,19 @@ public class Inventory extends GameObject {
 			}
 		}
 	}
-	
-	private void addToSlot(Slot s, ItemType item, int amount) {
-		s.addItem(item, amount);
-	}
 
-	public boolean add(ItemType item, int amount) {
-		return this.add(item, amount, false);
+	public boolean remove(Slot s, int amount) {
+		return s.remove(amount);
 	}
 	
-	public boolean add(ItemType item, int amount, boolean dryRun) {
-		// Null checks
-		if(slots.length == 0)
+	public boolean remove(Slot s) {
+		return this.remove(s, s.getAmount());
+	}
+	
+	public boolean add(ItemInfo item, int amount, boolean dryRun) {
+		System.out.println(verify(item.getType()));
+		if(!verify(item.getType()))
 			return false;
-		if(slots[0].length == 0)
-			return false;
-		
 		int row, column;
 		Slot firstFree = null;
 		
@@ -129,12 +122,73 @@ public class Inventory extends GameObject {
 		
 		if(firstFree != null) {
 			if(!dryRun) {
-				firstFree.addItem(item, amount);
+				firstFree.add(item, amount);
 			}
 			return true;
 		}
 		
 		return false;
+	}
+	
+	public boolean add(ItemInfo item, int amount) {
+		return this.add(item, amount, false);
+	}
+	
+	private void addToSlot(Slot s, ItemInfo item, int amount) {
+		s.add(item, amount);
+	}
+	
+	private void initSlots(int w, int h) {
+
+		int row, column;
+		float x, y;
+		for(column = 0; column < h; column++) {
+			y = this.screenPos.getY() - column * (Slot.SPRITE.getHeight() + Constants.INVENTORY_MARGIN);
+			for(row = 0; row < w; row++) {
+				x = this.screenPos.getX() + row * (Slot.SPRITE.getWidth() + Constants.INVENTORY_MARGIN);
+				slots[column][row] = new Slot(this, new Point(x, y), h * column + row);
+			}
+		}
+	}
+	
+	// Allowed ItemType handlers
+	public void clearAllowedTypes() {
+		this.allowedTypes.clear();
+	}
+	
+	public void resetAllowedTypes() {
+		ItemType[] vals = ItemType.values();
+		for(ItemType item : vals) {
+			this.addAllowedType(item.name());
+		}
+	}
+	
+	public boolean addAllowedType(String type) {
+		ItemType t = ItemType.valueOf(type);
+		return this.allowedTypes.add(t);
+	}
+	
+	public boolean addAllowedTypes(String... types) {
+		for(String type : types)
+			if(!this.addAllowedType(type))
+				return false;
+		return true;
+	}
+	
+	public void removeAllowedType(String type) {
+		this.allowedTypes.remove(ItemType.valueOf(type));
+	}
+	
+	public boolean verifyType(ItemType type) {
+		for(ItemType t : this.allowedTypes)
+			if(type.name() == t.name())
+				return true;
+		return false;
+	}
+	
+	// Getters and Setters
+	public Set<ItemType> getAllowedItemTypes() {
+		return this.allowedTypes;
 	}
 	
 	public Slot getFirstFree() {
@@ -171,19 +225,35 @@ public class Inventory extends GameObject {
 		return game.getGameData();
 	}
 	
-	private String slotToString(Slot s) {
-		return "|" + (!s.isEmpty() ? s.getItem().ID : Constants.NO_ITEM) + "." + s.getAmount() + "|";
+	public int getWidth() {
+		return slots[0].length;
 	}
 	
-	public void print() {
-		for(int x = 0; x < this.slots.length; x++) {
-			String row = "";
-			for(int y = 0; y < this.slots[x].length; y++) {
-				row += slotToString(slots[x][y]);
-			}
-			
-			System.out.println(row);
-		}
+	public int getHeight() {
+		return slots.length;
+	}
+	
+	private boolean verify(ItemType type) {
+		// Null checks
+		if(slots.length == 0)
+			return false;
+		if(slots[0].length == 0)
+			return false;
 		
+		return this.verifyType(type);
+	}
+
+	// Serialization
+	
+	@Override
+	public boolean write(DataWriter writer, int pos) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean parse(DataReader reader, int pos) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

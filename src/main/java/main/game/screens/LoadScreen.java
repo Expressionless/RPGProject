@@ -7,7 +7,7 @@ import helix.gfx.Screen;
 import main.Constants;
 import main.GameData;
 import main.game.RpgGame;
-import main.game.item.ItemType;
+import main.game.item.ItemInfo;
 
 public class LoadScreen extends Screen {
 	
@@ -54,7 +54,7 @@ public class LoadScreen extends Screen {
 		
 		int itemsToParse = gameData.getReader().getBytes().size() / Constants.ITEM_SIZE;
 		for(int i = 0; i < itemsToParse; i++) {
-			ItemType item = new ItemType();
+			ItemInfo item = new ItemInfo();
 			item.parse(gameData.getReader(), i);
 			System.out.println(item.toString());
 			GameData.ITEM_TYPES.add(item);

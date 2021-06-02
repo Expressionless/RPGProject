@@ -11,7 +11,7 @@ import helix.gfx.Sprite;
 import helix.utils.math.Point;
 import helix.utils.math.Rectangle;
 import main.Constants;
-import main.game.item.ItemType;
+import main.game.item.ItemInfo;
 
 public class Slot {
 	// Slot sprite
@@ -26,14 +26,14 @@ public class Slot {
 	private Inventory inventory;
 	
 	private Sprite itemSprite;
-	private ItemType item;
+	private ItemInfo item;
 	private int amount;
 	
 	private Rectangle bounds;
 	
 	private final Point screenPos;
 	
-	public Slot(Inventory inventory, Point pos, int id, ItemType item, int amount) {
+	public Slot(Inventory inventory, Point pos, int id, ItemInfo item, int amount) {
 		this.inventory = inventory;
 		this.ID = id;
 		this.item = item;
@@ -81,10 +81,30 @@ public class Slot {
 		}
 	}
 	
-	public boolean addItem(ItemType item, int amount) {
+	public boolean remove() {
+		return this.remove(this.getAmount());
+	}
+	
+	public boolean remove(int amount) {
+		if(this.isEmpty())
+			return false;
+		if(this.getAmount() < amount)
+			return false;
+		
+		if(this.getAmount() == amount)
+			this.item = null;
+		this.amount -= amount;
+		
+		return true;
+			
+	}
+	
+	public boolean add(ItemInfo item, int amount) {
 		if(item == null)
 			return false;
 		if(amount == 0)
+			return false;
+		if(!this.getInventory().verifyType(item.getType()))
 			return false;
 		
 		if(this.item != null) {
@@ -103,8 +123,8 @@ public class Slot {
 		}
 	}
 	
-	public boolean addItem(ItemType item) {
-		return this.addItem(item, 1);
+	public boolean add(ItemInfo item) {
+		return this.add(item, 1);
 	}
 
 	// Getters and Setters
@@ -116,19 +136,19 @@ public class Slot {
 		return (this.amount == 0 && this.item == null);
 	}
 	
-	public boolean contains(ItemType item) {
+	public boolean contains(ItemInfo item) {
 		return (this.isEmpty()) ? false :(this.item.ID == item.ID);
 	}
 	
-	public ItemType getItem() {
+	public ItemInfo getItem() {
 		return item;
 	}
 
-	public void setItem(ItemType item) {
+	public void setItem(ItemInfo item) {
 		this.setItem(item, 1);
 	}
 	
-	public void setItem(ItemType item, int amount) {
+	public void setItem(ItemInfo item, int amount) {
 		this.item = item;
 		this.amount = amount;
 		this.itemSprite = (item != null) ? item.getSprite() : null;

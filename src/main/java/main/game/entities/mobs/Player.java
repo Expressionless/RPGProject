@@ -1,5 +1,10 @@
 package main.game.entities.mobs;
 
+import static main.Constants.DOWN;
+import static main.Constants.LEFT;
+import static main.Constants.RIGHT;
+import static main.Constants.UP;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import helix.utils.math.Angle;
@@ -7,13 +12,10 @@ import helix.utils.math.Point;
 import main.Constants;
 import main.game.RpgGame;
 import main.game.entities.Mob;
+import main.game.inventory.ArmourInventory;
+import main.game.inventory.GenericInventory;
 import main.game.inventory.Inventory;
 import main.game.inventory.Slot;
-
-import static main.Constants.UP;
-import static main.Constants.DOWN;
-import static main.Constants.LEFT;
-import static main.Constants.RIGHT;
 
 public class Player extends Mob {
 	public static final String PLAYER_RIGHT = "res/sprites/player/right.png";
@@ -30,23 +32,24 @@ public class Player extends Mob {
 
 	public Player(RpgGame game, Point pos) {
 		super(game, pos);
+		this.setInventory(new GenericInventory(game, new Point(40 - Constants.CAMERA_WIDTH / 4, 30), Constants.P_INV_WIDTH, Constants.P_INV_HEIGHT));
 
 		this.addSprite(PLAYER_RIGHT, 4, anim_duration);
 		this.addSprite(PLAYER_DOWN, 4, anim_duration);
 		this.addSprite(PLAYER_UP, 4, anim_duration);
 
-		this.hotbar = new Inventory(game, new Point(40 - Constants.CAMERA_WIDTH / 4, 30 - Constants.CAMERA_HEIGHT * .6f), 8, 1);
+		this.hotbar = new GenericInventory(game, new Point(40 - Constants.CAMERA_WIDTH / 4, 30 - Constants.CAMERA_HEIGHT * .6f), 8, 1);
 		this.hotbar.setVisible(true);
 		
 		Point armourPos = this.getInventory().getPos().copy();
 		armourPos.setX(armourPos.getX() - Slot.SPRITE.getWidth() - Constants.INVENTORY_MARGIN);
 		armourPos.setY(armourPos.getY() - Slot.SPRITE.getHeight());
-		this.armour = new Inventory(game, armourPos, 1, 4);
+		this.armour = new ArmourInventory(game, armourPos);
 		
 		Point equipPos = this.getHotbar().getPos().copy();
 		equipPos.setX(equipPos.getX() - Slot.SPRITE.getWidth() * 2.5f - Constants.INVENTORY_MARGIN);
 		equipPos.setY(equipPos.getY());
-		this.equipped = new Inventory(game, equipPos, 2, 1);
+		this.equipped = new GenericInventory(game, equipPos, 2, 1);
 		this.equipped.setVisible(true);
 		
 		this.setStat("speed", Constants.PLAYER_SPEED);

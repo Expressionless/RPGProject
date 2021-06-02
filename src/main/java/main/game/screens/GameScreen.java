@@ -83,6 +83,7 @@ public final class GameScreen extends Screen {
 						if (slot.isCursorOver()) {
 							if (cursor.hasNothing() && !slot.isEmpty()) {
 								cursor.take(slot);
+								
 								if(cursor.getQuickShift()) {
 									if(slot.getInventory().id == player.getInventory().id) {
 										Slot otherSlot = player.getHotbar().getFirstFree();

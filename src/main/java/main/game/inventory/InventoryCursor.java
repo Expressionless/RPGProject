@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import helix.utils.math.Point;
 import main.game.Entity;
 import main.game.RpgGame;
-import main.game.item.ItemType;
+import main.game.item.ItemInfo;
 
 public final class InventoryCursor extends Entity {
 
-	private ItemType item;
+	private ItemInfo item;
 	private int amount;
 	
 	private boolean quickShift = false;
@@ -41,30 +41,49 @@ public final class InventoryCursor extends Entity {
 	protected void step(float delta) {
 	}
 	
-	public void take(Slot s) {
-		if(s.getItem() != null) {
-			this.setItem(s.getItem());
-			this.setAmount(s.getAmount());
-			
-			s.setItem(null);
-		}
+	public boolean take(Slot s) {
+		return this.take(s, s.getAmount());
 	}
 	
-	public void swap(Slot s) {
-		ItemType item = s.getItem();
+	public boolean take(Slot s, int amount) {
+		if(s.isEmpty())
+			return false;
+		
+		this.setItem(s.getItem());
+		this.setAmount(s.getAmount());
+			
+		s.remove(amount);
+		
+		return true;
+	}
+	
+	public boolean swap(Slot s) {
+		ItemInfo item = s.getItem();
 		int amount = s.getAmount();
+		
 		if(item.ID == this.item.ID) {
-			s.setItem(this.item, this.amount + amount);
-			this.setItem(null);
+			if(!this.place(s, this.amount + amount))
+				return false;
 		} else {
-			s.setItem(this.item, this.amount);
+			if(!this.place(s))
+				return false;
 			this.setItem(item, amount);
 		}
+		
+		return true;
 	}
 	
-	public void place(Slot s) {
-		s.setItem(this.item, this.amount);
+	public boolean place(Slot s, int amount) {
+		if(!s.getInventory().verifyType(this.item.getType()))
+			return false;
+		s.add(this.item, this.amount);
 		this.setItem(null);
+		
+		return true;
+	}
+	
+	public boolean place(Slot s) {
+		return place(s, this.amount);
 	}
 	
 	// Getters and Setters
@@ -72,13 +91,13 @@ public final class InventoryCursor extends Entity {
 		return (this.item == null && this.amount == 0);
 	}
 	
-	public void setItem(ItemType item, int amount) {
+	public void setItem(ItemInfo item, int amount) {
 		this.item = item;
 		this.amount = amount;
 	}
 	
 	public void setItem(int id, int amount) {
-		this.setItem(ItemType.get(id));
+		this.setItem(ItemInfo.get(id));
 	}
 	
 	public void setItem(int id) {
@@ -86,14 +105,14 @@ public final class InventoryCursor extends Entity {
 	}
 	
 	public void setItem(String name, int amount) {
-		this.setItem(ItemType.idOf(name), amount);
+		this.setItem(ItemInfo.idOf(name), amount);
 	}
 	
-	public void setItem(ItemType item) {
+	public void setItem(ItemInfo item) {
 		this.setItem(item, 1);
 	}
 	
-	public ItemType getItem() {
+	public ItemInfo getItem() {
 		return this.item;
 	}
 
