@@ -23,8 +23,9 @@ public class LoadScreen extends Screen {
 		manager.load("res/sprites/player/down.png", Texture.class);
 		manager.load("res/sprites/player/right.png", Texture.class);
 		manager.load("res/sprites/player/up.png", Texture.class);
-		
+
 		manager.load("res/sprites/UI/inventory/slot.png", Texture.class);
+		manager.load("res/sprites/UI/inventory/selector.png", Texture.class);
 		
 		manager.load("res/sprites/items.png", Texture.class);
 		manager.load("res/sprites/tiles.png", Texture.class);

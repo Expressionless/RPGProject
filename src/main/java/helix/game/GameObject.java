@@ -115,7 +115,7 @@ public abstract class GameObject {
 	}
 	
 	// Getters and Setters
-	public final Point getPos() {
+	public Point getPos() {
 		return pos;
 	}
 	

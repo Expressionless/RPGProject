@@ -11,6 +11,7 @@ import helix.game.Serializable;
 import helix.utils.io.DataReader;
 import helix.utils.io.DataWriter;
 import helix.utils.math.Point;
+import helix.utils.math.Rectangle;
 import main.Constants;
 import main.GameData;
 import main.game.RpgGame;
@@ -35,23 +36,24 @@ public abstract class Inventory extends GameObject implements Serializable {
 	
 	private boolean visible;
 	private Point screenPos;
+	private Rectangle bounds;
 	
 	private RpgGame game;
 	private Set<ItemType> allowedTypes;
 
 	public abstract Inventory copy();
 	
-	public Inventory(RpgGame game, Point screenPos, int w, int h) {
+	public Inventory(RpgGame game, Point screenPos, int h, int w) {
 		super(game.getGameData(), screenPos);
 		this.visible = false;
 		this.slots = new Slot[h][w];
 		this.screenPos = screenPos;
+		this.bounds = new Rectangle(screenPos.getX(), screenPos.getY(), w * Slot.SPRITE.getWidth(), h * Slot.SPRITE.getHeight());
 		this.game = game;
 		
 		this.allowedTypes = new HashSet<>();
 		
 		initSlots(w, h);
-		System.out.println("NEw inv: " + w + ", " + h);
 	}
 	
 	public Inventory(RpgGame game, int w, int h) {
@@ -143,9 +145,9 @@ public abstract class Inventory extends GameObject implements Serializable {
 		int row, column;
 		float x, y;
 		for(column = 0; column < h; column++) {
-			y = this.screenPos.getY() - column * (Slot.SPRITE.getHeight() + Constants.INVENTORY_MARGIN);
+			y = this.getPos().getY() - column * (Slot.SPRITE.getHeight() + Constants.INVENTORY_MARGIN);
 			for(row = 0; row < w; row++) {
-				x = this.screenPos.getX() + row * (Slot.SPRITE.getWidth() + Constants.INVENTORY_MARGIN);
+				x = this.getPos().getX() + row * (Slot.SPRITE.getWidth() + Constants.INVENTORY_MARGIN);
 				slots[column][row] = new Slot(this, new Point(x, y), h * column + row);
 			}
 		}
@@ -241,6 +243,19 @@ public abstract class Inventory extends GameObject implements Serializable {
 			return false;
 		
 		return this.verifyType(type);
+	}
+	
+	public Rectangle getBounds() {
+		return this.bounds;
+	}
+	
+	@Override
+	public Point getPos() {
+		return new Point(bounds.getX(), bounds.getY());
+	}
+	
+	public Point getScreenPos() {
+		return screenPos;
 	}
 
 	// Serialization

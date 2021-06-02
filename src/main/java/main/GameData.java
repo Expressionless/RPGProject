@@ -10,8 +10,8 @@ import helix.utils.math.Point;
 import main.game.RpgGame;
 import main.game.entities.Mob;
 import main.game.entities.mobs.Player;
-import main.game.inventory.InventoryCursor;
 import main.game.inventory.Slot;
+import main.game.inventory.util.InventoryCursor;
 import main.game.item.Item;
 import main.game.item.ItemInfo;
 
