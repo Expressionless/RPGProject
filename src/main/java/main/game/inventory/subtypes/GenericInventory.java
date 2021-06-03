@@ -7,9 +7,8 @@ import main.game.inventory.Inventory;
 public class GenericInventory extends Inventory {
 
 	public GenericInventory(RpgGame game, Point screenPos, int w, int h) {
-		super(game, screenPos, h, w);
+		super(game, screenPos, w, h);
 		this.resetAllowedTypes();
-		System.out.println("New inv: " + w + ", " + h);
 	}
 
 	@Override

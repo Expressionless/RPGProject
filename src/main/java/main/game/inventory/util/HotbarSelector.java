@@ -25,9 +25,9 @@ public class HotbarSelector extends Entity {
 	}
 
 	@Override
-	protected void step(float delta) {
+	public void step(float delta) {
 		// Keep it within range of the inventory
-		currentSlot = (int)NumberUtils.clamp(currentSlot, 0, this.focusedInventory.getWidth());
+		currentSlot = (int)NumberUtils.loop(currentSlot, 0, this.focusedInventory.getWidth() - 1);
 		
 		Slot slot = this.getCurrentSlot();
 		this.setPos(slot.getPos().copy());
@@ -52,7 +52,9 @@ public class HotbarSelector extends Entity {
 		this.focusedInventory = focusedInventory;
 	}
 	
-	public void setCurrentSlot(int pos) {
+	public void setCurrentSlot(int pos, boolean relative) {
+		if(relative)
+			pos = this.currentSlot + pos;
 		this.currentSlot = pos;
 	}
 	

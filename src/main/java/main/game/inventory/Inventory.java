@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 
 import helix.game.GameObject;
 import helix.game.Serializable;
@@ -43,12 +44,12 @@ public abstract class Inventory extends GameObject implements Serializable {
 
 	public abstract Inventory copy();
 	
-	public Inventory(RpgGame game, Point screenPos, int h, int w) {
+	public Inventory(RpgGame game, Point screenPos, int w, int h) {
 		super(game.getGameData(), screenPos);
 		this.visible = false;
 		this.slots = new Slot[h][w];
 		this.screenPos = screenPos;
-		this.bounds = new Rectangle(screenPos.getX(), screenPos.getY(), w * Slot.SPRITE.getWidth(), h * Slot.SPRITE.getHeight());
+		this.bounds = new Rectangle(screenPos.getX(), screenPos.getY(), w * (Slot.SPRITE.getWidth() + Constants.INVENTORY_MARGIN), h * (Slot.SPRITE.getHeight() + Constants.INVENTORY_MARGIN));
 		this.game = game;
 		
 		this.allowedTypes = new HashSet<>();
@@ -61,6 +62,11 @@ public abstract class Inventory extends GameObject implements Serializable {
 	}
 	
 	public void step(float delta) {
+		// Track the screen
+		Vector3 camera = this.getGameData().getCamera().position;
+		this.getBounds().setX(screenPos.getX() + camera.x);
+		this.getBounds().setY(screenPos.getY() + camera.y);
+		
 		for(Slot[] row : slots) {
 			for(Slot slot: row) {
 				slot.update();
@@ -87,7 +93,6 @@ public abstract class Inventory extends GameObject implements Serializable {
 	}
 	
 	public boolean add(ItemInfo item, int amount, boolean dryRun) {
-		System.out.println(verify(item.getType()));
 		if(!verify(item.getType()))
 			return false;
 		int row, column;

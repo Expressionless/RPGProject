@@ -12,7 +12,7 @@ public class WriteItems {
 	
 	public static void main(String[] args) {
 		DataWriter writer = new DataWriter("/data/item");
-		new ItemInfo(0,"armour", "grass", Constants.MAX_STACK, STACKABLE).write(writer);
+		new ItemInfo(0,"material", "grass", Constants.MAX_STACK, STACKABLE).write(writer);
 		new ItemInfo(1, "material", "wood", Constants.MAX_STACK, STACKABLE).write(writer);
 		new ItemInfo(2, "weapon"  , "sword", 1, NONSTACKABLE).write(writer);
 		new ItemInfo(3, "weapon"  , "bow", 1, NONSTACKABLE).write(writer);

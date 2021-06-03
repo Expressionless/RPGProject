@@ -2,6 +2,7 @@ package helix.game;
 
 import helix.Constants;
 import helix.game.objects.alarm.Alarm;
+import helix.game.objects.alarm.Event;
 import helix.utils.math.Point;
 import helix.utils.math.Vector2;
 
@@ -19,7 +20,7 @@ public abstract class GameObject {
 	private final Data data;
 	
 	protected void preStep(float delta) {}
-	protected abstract void step(float delta);
+	public abstract void step(float delta);
 	protected void postStep(float delta) {}
 	
 	public GameObject(Data data, Point pos) {
@@ -105,14 +106,23 @@ public abstract class GameObject {
 		this.setPos(getPos().add(direction.multiply(speed)));
 	}
 	
+	public final void moveTo(Point point, float speed) {
+		Vector2 dir = this.getPos().sub(point).toVector2();
+		this.move(dir, -speed);
+	}
+	
+	public final void moveTo(GameObject target, float speed) {
+		this.moveTo(target.getPos(), speed);
+	}
+	
+	public final void moveTo(Point point) {
+		this.moveTo(point, Constants.DEFAULT_SPEED);
+	}
+	
 	public final void moveTo(GameObject target) {
 		this.moveTo(target, Constants.DEFAULT_SPEED);
 	}
 	
-	public final void moveTo(GameObject target, float speed) {
-		Vector2 dir = this.getPos().sub(target.getPos()).toVector2();
-		this.move(dir, -speed);
-	}
 	
 	// Getters and Setters
 	public Point getPos() {
@@ -156,5 +166,9 @@ public abstract class GameObject {
 	
 	public final Alarm getAlarm(int index) {
 		return alarm[index];
+	}
+	
+	public final void setAlarm(int index, Event action, int timer) {
+		this.getAlarm(0).setAlarm(action, timer);
 	}
 }

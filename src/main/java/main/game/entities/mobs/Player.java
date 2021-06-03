@@ -54,6 +54,7 @@ public class Player extends Mob {
 		Point equipPos = this.getHotbar().getPos().copy();
 		equipPos.setX(equipPos.getX() - Slot.SPRITE.getWidth() * 2.5f - Constants.INVENTORY_MARGIN);
 		equipPos.setY(equipPos.getY());
+		
 		this.equipped = new GenericInventory(game, equipPos, 2, 1);
 		this.equipped.clearAllowedTypes();
 		this.equipped.addAllowedTypes("WEAPON", "TOOL");
@@ -108,6 +109,11 @@ public class Player extends Mob {
 
 		if (this.getDirection().length() != 0)
 			this.move(this.getStat("speed") * delta);
+	}
+
+	@Override
+	protected boolean handleState(float delta) {
+		return false;
 	}
 
 	private void updateSprite() {
@@ -168,5 +174,4 @@ public class Player extends Mob {
 			movement &= bit;
 		}
 	}
-
 }

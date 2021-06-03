@@ -106,12 +106,18 @@ public final class GameScreen extends Screen {
 				return false;
 			}
 
+			public boolean scrolled(float amountX, float amountY) {
+				HotbarInventory inv = player.getHotbar();
+				inv.getSelector().setCurrentSlot((int)amountY, true);
+				return true;
+			}
+			
 			@Override
 			public boolean keyDown(int keycode) {
 				HotbarInventory inv = player.getHotbar();
 				if(keycode >= Constants.KEY_0 && keycode <= (Constants.KEY_0 + player.getHotbar().getWidth())) {
 					int pos = keycode - Constants.KEY_0;
-					inv.getSelector().setCurrentSlot(pos);
+					inv.getSelector().setCurrentSlot(pos, false);
 				}
 				switch (keycode) {
 				case Constants.KEY_INV:
@@ -196,13 +202,17 @@ public final class GameScreen extends Screen {
 				}
 				
 				// if not over any slots place item on ground
-				if (cursor.getItem() != null) {
-					ItemSpawner is = new ItemSpawner(getRpgGame());
-					is.spawnItem(cursor.getPos().copy(), cursor.getItem().ID, cursor.getAmount());
-
-					cursor.setItem(null);
-					return true;
-				}
+				boolean onGround = !player.getInventory().getBounds().contains(cursor.getPos());
+				System.out.println(player.getInventory().getBounds().toString());
+				System.out.println("Mouse: " + cursor.getPos());
+				if(onGround || !player.getInventory().isVisible())
+					if (cursor.getItem() != null) {
+						ItemSpawner is = new ItemSpawner(getRpgGame());
+						is.spawnItem(cursor.getPos().copy(), cursor.getItem().ID, cursor.getAmount());
+	
+						cursor.setItem(null);
+						return true;
+					}
 
 				// Interaction is done
 				return true;

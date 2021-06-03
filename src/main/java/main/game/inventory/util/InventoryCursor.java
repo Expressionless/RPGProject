@@ -39,7 +39,7 @@ public final class InventoryCursor extends Entity {
 	}
 		
 	@Override
-	protected void step(float delta) {
+	public void step(float delta) {
 	}
 	
 	public boolean take(Slot s) {

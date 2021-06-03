@@ -4,8 +4,8 @@ import helix.game.GameObject;
 import helix.utils.math.Point;
 import main.game.Entity;
 import main.game.RpgGame;
+import main.game.entities.mobs.MobState;
 import main.game.inventory.Inventory;
-import main.game.inventory.subtypes.GenericInventory;
 import main.game.item.Item;
 import main.game.item.ItemInfo;
 
@@ -13,6 +13,9 @@ public abstract class Mob extends Entity {
 	private Inventory inventory;
 	
 	private final MobStats stats;
+	private MobState currentState, lastState;
+	
+	protected abstract boolean handleState(float delta);
 	
 	public Mob(RpgGame game, Point pos) {
 		super(game, pos);
@@ -27,6 +30,7 @@ public abstract class Mob extends Entity {
 	protected void preStep(float delta) {
 		super.preStep(delta);
 		this.inventory.update(delta);
+		this.handleState(delta);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -165,6 +169,24 @@ public abstract class Mob extends Entity {
 
 			return 0;
 		}
+	}
+	
+	public MobState getState() {
+		return currentState;
+	}
+	
+	public MobState getLastState() {
+		return lastState;
+	}
+	
+	public void setCurrentState(MobState state) {
+		if(this.currentState != null)
+			this.lastState = this.currentState;
+		this.currentState = state;
+	}
+	
+	public void setCurrentState(String state) {
+		this.setCurrentState(MobState.valueOf(state));
 	}
 	
 }
