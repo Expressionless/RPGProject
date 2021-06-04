@@ -193,7 +193,30 @@ public abstract class Inventory extends GameObject implements Serializable {
 		return false;
 	}
 	
-	// Getters and Setters
+	// Getters and Setters and condition checks
+	/**
+	 * Check whether the inventory is full, specifying an item ID will check the inventory for items
+	 * with the same ID at the same time, and return false if they exist. More cpu efficient than checking
+	 * if the inventory is full or if it contains(int ID)
+	 * @param id - ID of the item to check for
+	 * @return - true if the inventory is full and does not contain the specified item, false if it is empty or does contain the item
+	 */
+	public boolean isFull(int itemID) {
+		int i, j;
+		
+		for(i = 0; i < this.slots.length; i++) {
+			for(j = 0; j < this.slots[i].length; j++) {
+				ItemInfo item = this.slots[i][j].getItem();
+				if(item == null)
+					return false;
+				
+				if(itemID != -1 && item.ID == itemID)
+					return false;
+			}
+		}
+		return true;
+	}
+	
 	public Set<ItemType> getAllowedItemTypes() {
 		return this.allowedTypes;
 	}

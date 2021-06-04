@@ -7,9 +7,9 @@ import helix.utils.math.Point;
 import helix.utils.math.Vector2;
 
 public abstract class GameObject {
-	public static long ID_NEXT = 0;
+	public static int ID_NEXT = 0;
 
-	public final long id;
+	public final int id;
 	
 	private Alarm[] alarm;
 	private boolean shouldDispose;

@@ -47,6 +47,15 @@ public final class GameScreen extends Screen {
 		is.spawnItem(50, 130, "bow");
 		is.spawnItem(50, 160, "bow");
 		is.spawnItem(50, 190, "bow");
+		is.spawnItem(50, 130, "bow");
+		is.spawnItem(50, 160, "bow");
+		is.spawnItem(50, 190, "bow");
+		is.spawnItem(50, 130, "bow");
+		is.spawnItem(50, 160, "bow");
+		is.spawnItem(50, 190, "bow");
+		is.spawnItem(50, 130, "bow");
+		is.spawnItem(50, 160, "bow");
+		is.spawnItem(50, 190, "bow");
 		is.spawnItem(50, 220, "shaft");
 		is.spawnItem(50, 250, "boOmerang");
 		is.spawnItem(50, 250, "axe");

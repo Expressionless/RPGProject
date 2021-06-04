@@ -192,7 +192,7 @@ public final class ItemInfo implements Serializable {
 			return false;
 		if(name.length() > Constants.MAX_ITEM_NAME_LEN)
 			return false;
-		writer.writeInts((int)ID);
+		writer.writeInts(ID);
 		writer.write(type.name(), Constants.MAX_ITEM_TYPE_LEN);
 		writer.write(name, Constants.MAX_ITEM_NAME_LEN);
 		writer.writeInts(maxStack);

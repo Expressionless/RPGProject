@@ -39,7 +39,8 @@ public class HotbarSelector extends Entity {
 		ItemInfo item = currentSlot.getItem();
 		if(item != null) {
 			item.getSprite().draw(b, this.getPos().getX() + Constants.INV_ITEM_OFFSET_X, this.getPos().getY() + Constants.INV_ITEM_OFFSET_Y);
-			Slot.inventoryFont.draw(b, Integer.toString(currentSlot.getAmount()), currentSlot.getPos().getX() + Slot.SPRITE.getWidth() - 3, currentSlot.getPos().getY() + 3);
+			if(item.getFlag("stackable"))
+				Slot.inventoryFont.draw(b, Integer.toString(currentSlot.getAmount()), currentSlot.getPos().getX() + Slot.SPRITE.getWidth() - 3, currentSlot.getPos().getY() + 3);
 		}
 	}
 

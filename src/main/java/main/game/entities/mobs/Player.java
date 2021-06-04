@@ -37,7 +37,7 @@ public class Player extends Mob {
 		super(game, pos);
 		float x = 40 - Constants.CAMERA_WIDTH / 4;
 		float y = 30 - Constants.CAMERA_HEIGHT * .6f + Slot.SPRITE.getHeight() * (Constants.P_INV_HEIGHT + 1);
-		Inventory newInv = new GenericInventory(game, new Point(x, y), Constants.P_INV_WIDTH, Constants.P_INV_HEIGHT);
+		GenericInventory newInv = new GenericInventory(game, new Point(x, y), Constants.P_INV_WIDTH, Constants.P_INV_HEIGHT);
 		this.setInventory(newInv);
 
 		this.addSprite(PLAYER_RIGHT, 4, anim_duration);

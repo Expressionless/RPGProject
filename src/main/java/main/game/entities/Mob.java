@@ -7,11 +7,12 @@ import main.game.Entity;
 import main.game.RpgGame;
 import main.game.entities.mobs.MobState;
 import main.game.inventory.Inventory;
+import main.game.inventory.subtypes.GenericInventory;
 import main.game.item.Item;
 import main.game.item.ItemInfo;
 
 public abstract class Mob extends Entity implements Serializable {
-	private Inventory inventory;
+	private GenericInventory inventory;
 	
 	private final MobStats stats;
 	private MobState currentState, lastState;
@@ -136,11 +137,11 @@ public abstract class Mob extends Entity implements Serializable {
 		return stats;
 	}
 	
-	public Inventory getInventory() {
+	public GenericInventory getInventory() {
 		return this.inventory;
 	}
 	
-	public void setInventory(Inventory inv) {
+	public void setInventory(GenericInventory inv) {
 		this.inventory = inv;
 	}
 	

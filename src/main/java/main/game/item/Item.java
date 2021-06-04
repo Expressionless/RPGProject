@@ -11,7 +11,10 @@ import helix.utils.math.Point;
 import main.Constants;
 import main.game.RpgGame;
 import main.game.entities.Doodad;
+import main.game.entities.mobs.Player;
 import main.game.inventory.Inventory;
+import main.game.inventory.subtypes.GenericInventory;
+import main.game.inventory.subtypes.HotbarInventory;
 
 public class Item extends Doodad {
 	public static SpriteSheet ITEM_SHEET;
@@ -77,8 +80,15 @@ public class Item extends Doodad {
 		if (this.distTo(this.getGame().getGameData().getPlayer()) < Constants.ITEM_SUCK_DISTANCE) {
 			if (pInv.add(item, amount, true)) {
 				if (this.distTo(this.getGame().getGameData().getPlayer()) <= Constants.PICKUP_DISTANCE) {
-					if (this.getGame().getGameData().getPlayer().getInventory().add(this.item, this.amount))
-					this.dispose();
+					
+					Player player = this.getGame().getGameData().getPlayer();
+					HotbarInventory hotbar = player.getHotbar();
+					GenericInventory mainInv = player.getInventory();
+					
+					if (hotbar.add(this.item, this.amount))
+						this.dispose();
+					else if(mainInv.add(this.item, this.amount))
+						this.dispose();
 				}
 				this.moveTo(this.getGame().getGameData().getPlayer(), Constants.ITEM_SPEED * delta);
 			}
