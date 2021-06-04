@@ -1,6 +1,7 @@
 package main.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -115,8 +116,13 @@ public final class GameScreen extends Screen {
 			@Override
 			public boolean keyDown(int keycode) {
 				HotbarInventory inv = player.getHotbar();
+				int pos;
 				if(keycode >= Constants.KEY_0 && keycode <= (Constants.KEY_0 + player.getHotbar().getWidth())) {
-					int pos = keycode - Constants.KEY_0;
+					if(keycode != Keys.NUM_0) {
+						pos = keycode - Keys.NUM_1;
+					} else {
+						pos = Keys.NUM_9 - Constants.KEY_0;
+					}
 					inv.getSelector().setCurrentSlot(pos, false);
 				}
 				switch (keycode) {
