@@ -264,7 +264,7 @@ public abstract class Inventory extends GameObject implements Serializable {
 	}
 
 	// Serialization
-	
+	/**/
 	@Override
 	public boolean write(DataWriter writer, int pos) {
 		// TODO Auto-generated method stub

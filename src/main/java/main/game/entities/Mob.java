@@ -1,6 +1,7 @@
 package main.game.entities;
 
 import helix.game.GameObject;
+import helix.game.Serializable;
 import helix.utils.math.Point;
 import main.game.Entity;
 import main.game.RpgGame;
@@ -9,7 +10,7 @@ import main.game.inventory.Inventory;
 import main.game.item.Item;
 import main.game.item.ItemInfo;
 
-public abstract class Mob extends Entity {
+public abstract class Mob extends Entity implements Serializable {
 	private Inventory inventory;
 	
 	private final MobStats stats;

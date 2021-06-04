@@ -151,6 +151,35 @@ public final class ItemInfo implements Serializable {
 		}
 	}
 
+	
+	// Static Fetch code
+	/**
+	 * Get the ID of an Item based on it's name (not case sensitive)
+	 * 
+	 * @param name - name of the item to find
+	 * @return id of the item or -1 if no item has the specified name
+	 */
+	public static int idOf(final String name) {
+		for (int i = 0; i < GameData.ITEM_TYPES.size(); i++) {
+			if (GameData.ITEM_TYPES.get(i).name.toLowerCase().equals(name.toLowerCase()))
+				return GameData.ITEM_TYPES.get(i).ID;
+		}
+		System.err.println("Could not get ID: " + name);
+		return -1;
+	}
+
+	public static String nameOf(final int id) {
+		try {
+			return ItemInfo.get(id).name;
+		} catch (NullPointerException e) {
+			return "UNDEFINED";
+		}
+	}
+
+	public static ItemInfo get(final int ID) {
+		return GameData.ITEM_TYPES.get(ID);
+	}
+
 	// Serialization
 	
 	public boolean write(DataWriter writer) {
@@ -163,10 +192,10 @@ public final class ItemInfo implements Serializable {
 			return false;
 		if(name.length() > Constants.MAX_ITEM_NAME_LEN)
 			return false;
-		writer.write(ID);
+		writer.writeInts((int)ID);
 		writer.write(type.name(), Constants.MAX_ITEM_TYPE_LEN);
 		writer.write(name, Constants.MAX_ITEM_NAME_LEN);
-		writer.write(maxStack);
+		writer.writeInts(maxStack);
 		writer.writeBools(itemFlags.getFlags());
 		return true;
 	}
@@ -198,35 +227,6 @@ public final class ItemInfo implements Serializable {
 		if(com.badlogic.gdx.Gdx.files != null)
 			this.attachSprite();
 		return true;
-	}
-
-	
-	// Static Fetch code
-	/**
-	 * Get the ID of an Item based on it's name (not case sensitive)
-	 * 
-	 * @param name - name of the item to find
-	 * @return id of the item or -1 if no item has the specified name
-	 */
-	public static int idOf(final String name) {
-		for (int i = 0; i < GameData.ITEM_TYPES.size(); i++) {
-			if (GameData.ITEM_TYPES.get(i).name.toLowerCase().equals(name.toLowerCase()))
-				return GameData.ITEM_TYPES.get(i).ID;
-		}
-		System.err.println("Could not get ID: " + name);
-		return -1;
-	}
-
-	public static String nameOf(final int id) {
-		try {
-			return ItemInfo.get(id).name;
-		} catch (NullPointerException e) {
-			return "UNDEFINED";
-		}
-	}
-
-	public static ItemInfo get(final int ID) {
-		return GameData.ITEM_TYPES.get(ID);
 	}
 
 }

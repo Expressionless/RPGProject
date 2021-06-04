@@ -7,14 +7,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
+import helix.game.Serializable;
 import helix.gfx.Sprite;
+import helix.utils.io.DataReader;
+import helix.utils.io.DataWriter;
 import helix.utils.math.Point;
 import helix.utils.math.Rectangle;
 import main.Constants;
 import main.game.inventory.util.InventoryCursor;
 import main.game.item.ItemInfo;
 
-public class Slot {
+public class Slot implements Serializable {
 	// Slot sprite
 	public static Sprite SPRITE;
 	
@@ -22,7 +25,7 @@ public class Slot {
 	// Logger
 	private static final Logger log = Logger.getLogger(Inventory.class.getName());
 	
-	public final int ID;
+	public int slotID;
 	
 	private Inventory inventory;
 	
@@ -36,7 +39,7 @@ public class Slot {
 	
 	public Slot(Inventory inventory, Point pos, int id, ItemInfo item, int amount) {
 		this.inventory = inventory;
-		this.ID = id;
+		this.slotID = id;
 		this.item = item;
 		this.amount = amount;
 		this.screenPos = pos;
@@ -114,7 +117,7 @@ public class Slot {
 				this.amount += amount;
 				return true;				
 			} else {
-				log.fine("Can't add item to slot " + this.ID + ": " + item.name 
+				log.fine("Can't add item to slot " + this.slotID + ": " + item.name 
 						+ "\nCurrently contains: " + this.getItem().name);
 				return false;
 			}
@@ -173,11 +176,35 @@ public class Slot {
 	
 	public String toString() {
 		return "Slot [" + 
-				"id=" + ID + "," +
+				"id=" + slotID + "," +
 				"itemSprite=" + ((itemSprite != null) ? itemSprite.getName() : "null") + "," +
 				"amount=" + this.amount + "," + 
 				"bounds=[x="+this.getBounds().getX() + ",y="+this.getBounds().getY() + ",w=" + this.getBounds().getWidth() +",h=" + this.getBounds().getHeight() +"]"
 				+ "]";
 		
+	}
+
+	/*
+	 * Save:
+	 *  - id
+	 * 	- item ID, amount
+	 *  - inventory id
+	 * */
+	@Override
+	public boolean write(DataWriter writer, int pos) {
+		// Write id
+		writer.write(this.slotID);
+		writer.write(this.getItem().ID);
+		writer.write(this.amount);
+		writer.write(this.inventory.id);
+		return true;
+	}
+
+	@Override
+	public boolean parse(DataReader reader, int pos) {
+		this.slotID = reader.getInt(pos);
+		this.setItem(ItemInfo.get(reader.getInt(pos + 1)), reader.getInt(pos + 2));
+		// TODO: Keep track of inventories
+		return true;
 	}
 }

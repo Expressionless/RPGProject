@@ -7,6 +7,8 @@ import static main.Constants.UP;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import helix.utils.io.DataReader;
+import helix.utils.io.DataWriter;
 import helix.utils.math.Angle;
 import helix.utils.math.Point;
 import main.Constants;
@@ -173,5 +175,19 @@ public class Player extends Mob {
 			bit = 0xF - bit;
 			movement &= bit;
 		}
+	}
+
+	// TODO: Implement Serialization of player object
+	/*
+	 * Save the position 
+	 */
+	@Override
+	public boolean write(DataWriter writer, int pos) {
+		return false;
+	}
+
+	@Override
+	public boolean parse(DataReader reader, int pos) {
+		return false;
 	}
 }

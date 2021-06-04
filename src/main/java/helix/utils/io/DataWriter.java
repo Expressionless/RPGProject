@@ -57,6 +57,14 @@ public class DataWriter {
 		}
 		this.write(bytes);
 	}
+	
+	public void writeInts(int... intBytes) {
+		byte[] bytes = new byte[intBytes.length];
+		for (int i = 0; i < intBytes.length; i++) {
+			bytes[i] = (byte) intBytes[i];
+		}
+		this.write(bytes);
+	}
 
 	/**
 	 * Write a string to data. Will convert to binary first
@@ -72,19 +80,19 @@ public class DataWriter {
 
 	public void writeBools(boolean[] flags, int numBlocks) {
 		int[] blocks = new int[numBlocks];
-		for(int i = 0; i < blocks.length; i++) {
-			for(int j = 0; j < flags.length; j++) {
-				if(flags[j]) {
-					blocks[i] = (blocks[i] ^ (int)Math.pow(2, j));
+		for (int i = 0; i < blocks.length; i++) {
+			for (int j = 0; j < flags.length; j++) {
+				if (flags[j]) {
+					blocks[i] = (blocks[i] ^ (int) Math.pow(2, j));
 				}
 			}
-			
+
 			this.write(blocks);
 		}
 	}
 
 	public void writeBools(boolean[] flags) {
-		if(flags.length != 4)
+		if (flags.length != 4)
 			return;
 		this.writeBools(flags, 1);
 	}
@@ -96,5 +104,20 @@ public class DataWriter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public byte[] longToByte(long x) {
+		byte[] result = new byte[8];
+	    for (int i = 7; i >= 0; i--) {
+	        result[i] = (byte)(x & 0xFF);
+	        x >>= 8;
+	    }
+	    
+	    return result;
+	}
+	
+	public void write(long num) {
+		byte[] bytes = this.longToByte(num);
+		this.write(bytes);
 	}
 }
