@@ -5,8 +5,8 @@ import helix.game.Serializable;
 import helix.utils.math.Point;
 import main.game.Entity;
 import main.game.RpgGame;
-import main.game.entities.mobs.MobState;
-import main.game.inventory.Inventory;
+import main.game.entities.mobs.state.MobState;
+import main.game.entities.mobs.state.StateMachine;
 import main.game.inventory.subtypes.GenericInventory;
 import main.game.item.Item;
 import main.game.item.ItemInfo;
@@ -17,12 +17,18 @@ public abstract class Mob extends Entity implements Serializable {
 	private final MobStats stats;
 	private MobState currentState, lastState;
 	
+	private StateMachine stateMachine;
+	
+	private Mob target;
+	private Point destination;
+	
 	protected abstract boolean handleState(float delta);
 	
 	public Mob(RpgGame game, Point pos) {
 		super(game, pos);
 		
 		this.stats = new MobStats();
+		this.destination = pos.copy();
 		//this.inventory = new GenericInventory(game, pos, 8, 6);
 
 		game.getGameData().mobs.add(this);
@@ -143,6 +149,21 @@ public abstract class Mob extends Entity implements Serializable {
 	
 	public void setInventory(GenericInventory inv) {
 		this.inventory = inv;
+	}
+	public Mob getTarget() {
+		return target;
+	}
+	
+	public void setTarget(Mob mob) {
+		this.target = mob;
+	}
+	
+	public Point getDest() {
+		return destination;
+	}
+	
+	public void setDest(Point point) {
+		this.destination = point;
 	}
 	
 	// Helper class

@@ -12,5 +12,4 @@ public class Boot {
 		BaseGame game = new RpgGame();
 		new Lwjgl3Application(game, game.config);
 	}
-
 }

@@ -1,4 +1,4 @@
-package main.game.entities.mobs;
+package main.game.entities.mobs.state;
 
 public enum MobState {
 
