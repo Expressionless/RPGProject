@@ -20,9 +20,12 @@ public class LoadScreen extends Screen {
 		manager.load("res/sprites/doodads/shrub.png", Texture.class);
 		manager.load("res/sprites/doodads/tree.png", Texture.class);
 		
-		manager.load("res/sprites/player/down.png", Texture.class);
-		manager.load("res/sprites/player/right.png", Texture.class);
-		manager.load("res/sprites/player/up.png", Texture.class);
+		manager.load("res/sprites/mob/player/down.png", Texture.class);
+		manager.load("res/sprites/mob/player/right.png", Texture.class);
+		manager.load("res/sprites/mob/player/up.png", Texture.class);
+
+		manager.load("res/sprites/mob/enemy/tiny_mage_right.png", Texture.class);
+		manager.load("res/sprites/mob/enemy/tiny_mage_up_right.png", Texture.class);
 
 		manager.load("res/sprites/UI/inventory/slot.png", Texture.class);
 		manager.load("res/sprites/UI/inventory/selector.png", Texture.class);
@@ -40,13 +43,11 @@ public class LoadScreen extends Screen {
 
 	@Override
 	protected void step() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	protected void draw(float delta) {
-		// TODO Auto-generated method stub
 		
 	}
 

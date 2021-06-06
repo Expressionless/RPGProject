@@ -21,9 +21,9 @@ import main.game.inventory.subtypes.GenericInventory;
 import main.game.inventory.subtypes.HotbarInventory;
 
 public class Player extends Mob {
-	public static final String PLAYER_RIGHT = "res/sprites/player/right.png";
-	public static final String PLAYER_DOWN = "res/sprites/player/down.png";
-	public static final String PLAYER_UP = "res/sprites/player/up.png";
+	public static final String PLAYER_RIGHT = "res/sprites/mob/player/right.png";
+	public static final String PLAYER_DOWN = "res/sprites/mob/player/down.png";
+	public static final String PLAYER_UP = "res/sprites/mob/player/up.png";
 
 	// Inventories
 	private Inventory hotbar;
@@ -111,11 +111,6 @@ public class Player extends Mob {
 
 		if (this.getDirection().length() != 0)
 			this.move(this.getStat("speed") * delta);
-	}
-
-	@Override
-	protected boolean handleState(float delta) {
-		return false;
 	}
 
 	private void updateSprite() {

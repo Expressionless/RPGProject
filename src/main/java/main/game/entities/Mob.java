@@ -5,7 +5,6 @@ import helix.game.Serializable;
 import helix.utils.math.Point;
 import main.game.Entity;
 import main.game.RpgGame;
-import main.game.entities.mobs.state.MobState;
 import main.game.entities.mobs.state.StateMachine;
 import main.game.inventory.subtypes.GenericInventory;
 import main.game.item.Item;
@@ -15,30 +14,26 @@ public abstract class Mob extends Entity implements Serializable {
 	private GenericInventory inventory;
 	
 	private final MobStats stats;
-	private MobState currentState, lastState;
-	
-	private StateMachine stateMachine;
+	private final StateMachine stateMachine;
 	
 	private Mob target;
 	private Point destination;
-	
-	protected abstract boolean handleState(float delta);
 	
 	public Mob(RpgGame game, Point pos) {
 		super(game, pos);
 		
 		this.stats = new MobStats();
 		this.destination = pos.copy();
-		//this.inventory = new GenericInventory(game, pos, 8, 6);
-
+		this.stateMachine = new StateMachine();		
+		// Do this last, always
 		game.getGameData().mobs.add(this);
 	}
 	
 	@Override
 	protected void preStep(float delta) {
 		super.preStep(delta);
-		this.inventory.update(delta);
-		this.handleState(delta);
+		if(this.inventory != null)
+			this.inventory.update(delta);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -147,6 +142,10 @@ public abstract class Mob extends Entity implements Serializable {
 		return this.inventory;
 	}
 	
+	public StateMachine getStateMachine() {
+		return this.stateMachine;
+	}
+	
 	public void setInventory(GenericInventory inv) {
 		this.inventory = inv;
 	}
@@ -193,23 +192,4 @@ public abstract class Mob extends Entity implements Serializable {
 			return 0;
 		}
 	}
-	
-	public MobState getState() {
-		return currentState;
-	}
-	
-	public MobState getLastState() {
-		return lastState;
-	}
-	
-	public void setCurrentState(MobState state) {
-		if(this.currentState != null)
-			this.lastState = this.currentState;
-		this.currentState = state;
-	}
-	
-	public void setCurrentState(String state) {
-		this.setCurrentState(MobState.valueOf(state));
-	}
-	
 }

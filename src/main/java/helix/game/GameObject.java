@@ -86,20 +86,14 @@ public abstract class GameObject {
 		return this.getPos().sub(other.getPos()).length();
 	}
 	
-	public final void move() {
-		this.move(this.getDirection(), 1);
-	}
-	
 	public final void move(float speed) {
 		this.move(this.getDirection(), speed);
 	}
-	
-	public final void move(Vector2 direction) {
-		this.move(direction, 1);
-	}
-	
+
 	public final void move(Vector2 direction, float speed) {
-		direction = direction.getUnitVector();
+		if(direction.length() == 0)
+			this.direction = null;
+		this.direction = direction.getUnitVector();
 		// TODO: Fix flickering movement glitch
 		//System.out.println(direction.multiply(speed).toString());
 		//direction.setX(Math.round(direction.getX(), );

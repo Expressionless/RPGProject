@@ -1,4 +1,4 @@
-package main.game.entities.mobs.enemies;
+package main.game.entities.mobs.template;
 
 import helix.utils.io.DataReader;
 import helix.utils.io.DataWriter;
@@ -11,12 +11,6 @@ public class AggroEnemy extends Enemy {
 	public AggroEnemy(RpgGame game, Point pos) {
 		super(game, pos);
 	}
-
-	@Override
-	protected boolean handleState(float delta) {
-		return false;
-	}
-
 	@Override
 	public void step(float delta) {
 		

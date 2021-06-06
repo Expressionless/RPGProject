@@ -9,12 +9,10 @@ public abstract class Enemy extends Mob {
 	private String type;
 	
 	public Enemy(RpgGame game, Point pos) {
-		super(game, pos);
+		super(game, pos); 
 	}
 	
 	// Getters and Setters
-	
-	
 	public String getType() {
 		return type;
 	}

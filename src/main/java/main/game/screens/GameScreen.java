@@ -13,6 +13,7 @@ import main.GameData;
 import main.game.RpgGame;
 import main.game.entities.doodads.Tree;
 import main.game.entities.mobs.Player;
+import main.game.entities.mobs.enemies.Mage;
 import main.game.inventory.Inventory;
 import main.game.inventory.Slot;
 import main.game.inventory.subtypes.HotbarInventory;
@@ -61,6 +62,8 @@ public final class GameScreen extends Screen {
 		is.spawnItem(50, 250, "axe");
 		is.spawnItem(50, 300, "pickaxe");
 		new Tree(getRpgGame(), new Point(100, 80));
+		
+		new Mage(getRpgGame(), new Point(50, 40));
 	}
 
 	@Override
