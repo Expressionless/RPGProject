@@ -104,8 +104,9 @@ public final class GameScreen extends Screen {
 							} else if (!cursor.hasNothing()) {
 								if (slot.isEmpty())
 									cursor.place(slot);
-								else
+								else {
 									cursor.swap(slot);
+								}
 							}
 
 							// Interaction is done
