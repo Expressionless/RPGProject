@@ -85,24 +85,14 @@ public abstract class GameObject {
 	public final float distTo(GameObject other) {
 		return this.getPos().sub(other.getPos()).length();
 	}
-	
-	public final void move(float speed) {
-		this.move(this.getDirection(), speed);
-	}
 
-	public final void move(Vector2 direction, float speed) {
-		if(direction.length() == 0)
-			this.direction = null;
-		this.direction = direction.getUnitVector();
-		// TODO: Fix flickering movement glitch
-		//System.out.println(direction.multiply(speed).toString());
-		//direction.setX(Math.round(direction.getX(), );
+	public final void move(float speed) {
 		this.setPos(getPos().add(direction.multiply(speed)));
 	}
 	
 	public final void moveTo(Point point, float speed) {
-		Vector2 dir = this.getPos().sub(point).toVector2();
-		this.move(dir, -speed);
+		this.direction = point.sub(this.getPos()).toVector2().getUnitVector();
+		this.move(speed);
 	}
 	
 	public final void moveTo(GameObject target, float speed) {
@@ -138,6 +128,10 @@ public abstract class GameObject {
 
 	public final Vector2 getDirection() {
 		return direction;
+	}
+	
+	public final void setDirection(Vector2 dir) {
+		this.direction = dir;
 	}
 	
 	public String toString() {
