@@ -22,10 +22,6 @@ public class Item extends Doodad {
 	private float animOffset, animPeriodOffset;
 	private int amount;
 
-	@Override
-	public void loadSprites(AssetManager manager) {
-		// manager.load(Constants.ITEMS_DIRECTORY, Texture.class);
-	}
 
 	public final ItemInfo item;
 

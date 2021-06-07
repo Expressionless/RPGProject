@@ -19,6 +19,8 @@ public abstract class Mob extends Entity implements Serializable {
 	private Mob target;
 	private Point destination;
 	
+	protected abstract void updateSprite();
+	
 	public Mob(RpgGame game, Point pos) {
 		super(game, pos);
 		
@@ -32,8 +34,21 @@ public abstract class Mob extends Entity implements Serializable {
 	@Override
 	protected void preStep(float delta) {
 		super.preStep(delta);
+
+		if(this.getDirection().length() == 0) {
+			this.getSprite().restart();
+			this.getSprite().stop();
+		} else {
+			this.updateSprite();
+		}
+		
 		if(this.inventory != null)
 			this.inventory.update(delta);
+	}
+	
+	@Override
+	public void step(float delta) {
+		this.getStateMachine().next();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -170,12 +185,14 @@ public abstract class Mob extends Entity implements Serializable {
 	protected class MobStats {
 
 		private float speed = 0, maxSpeed = 1.5f;
-		private float acc = 0;
-		private float defence;
-		private float attack;
-
+		private float vel, acc = 0;
+		private float defence, attack, health, maxHealth;
+		private float sight, attack_range;
+		
 		public void setStat(String stat, float val) {
 			try {
+				if(stat == "maxHealth")
+					MobStats.class.getDeclaredField("health").set(this, val);
 				MobStats.class.getDeclaredField(stat).set(this, val);
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				e.printStackTrace();

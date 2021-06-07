@@ -10,20 +10,43 @@ import java.util.logging.Logger;
 
 import helix.Constants;
 
-public class DataReader {
-	private static final Logger log = Logger.getLogger(DataReader.class.getName());
+/**
+ * Read in binary from a location
+ * Stores an array of bytes read in from a file
+ * @author bmeachem
+ *
+ * @see {@link Byte}
+ */
+public class BinaryReader {
+	private static final Logger log = Logger.getLogger(BinaryReader.class.getName());
 
+	/**
+	 * Reference to the path of the file being read in
+	 */
 	public final String filePath;
 
 	private InputStream is;
 	
 	private final ArrayList<Byte> bytes;
 	
-	public DataReader(String filePath) {
+	/**
+	 * Read in the bytes from this file (relative to absolute directory)
+	 * @param filePath - Path of the file to read in
+	 * 
+	 * @see {@link helix.Constants#ABS_PATH}
+	 */
+	public BinaryReader(String filePath) {
 		this(filePath, true);
 	}
 	
-	public DataReader(String filePath, boolean relative) {
+	/**
+	 * Read in the bytes from this file
+	 * @param filePath - Path of the file to read in
+	 * @param relative - whether or not the file path is relative to the absolute directory
+	 * 
+	 * @see {@link helix.Constants#ABS_PATH}
+	 */
+	public BinaryReader(String filePath, boolean relative) {
 		this.bytes = new ArrayList<Byte>();
 		
 		if(relative)
@@ -39,6 +62,12 @@ public class DataReader {
 		System.out.println("Read in " + this.bytes.size() + " Bytes from " + this.filePath);
 	}
 	
+	/**
+	 * Fetch a string from a position in the {@link BinaryReader#bytes} array
+	 * @param position - position to read from in the byte array
+	 * @param length - length to read in the byte array
+	 * @return - A string containing data from the byte array at the specified position, up to the length requested
+	 */
 	public String getString(int position, int length) {
 		// start at specified position
 		byte[] data = new byte[length];
@@ -51,14 +80,24 @@ public class DataReader {
 	
 	/**
 	 * Return a boolean value from a byte at a specified position
-	 * @param bytePosition - Position of the byte in the data to look at
-	 * @param bitPosition - Position of the bit in the data to look at
-	 * @return
+	 * @param bytePosition - Position of the byte in the {@link bytes} to look at
+	 * @param bitPosition - Position of the bit in the byte to look at
+	 * @return - boolean value of the bit requested
+	 * 
+	 * @see {@link BinaryReader#getBoolean}
 	 */
 	public boolean getBool(int bytePosition, int bitPosition) {
 		return this.getBoolean(bytePosition, bitPosition);
 	}
-	
+
+	/**
+	 * Return a boolean value from a byte at a specified position
+	 * @param bytePosition - Position of the byte in the {@link bytes} to look at
+	 * @param bitPosition - Position of the bit in the byte to look at
+	 * @return - boolean value of the bit requested
+	 * 
+	 * @see {@link BinaryReader#getBool}
+	 */
 	public boolean getBoolean(int bytePosition, int bitPosition) {
 		int block = 0x00;
 		
@@ -68,6 +107,12 @@ public class DataReader {
 		return ((block & convertedBitPosition) != 0);
 	}
 	
+	/**
+	 * Fetch bytes from a given position up to a length
+	 * @param position - position in the {@link BinaryReader#bytes} to read from
+	 * @param len - amount of bytes to fetch
+	 * @return - an array of bytes containing all the bytes fetched
+	 */
 	public byte[] getBytes(int position, int len) {
 		byte[] bytes = new byte[len];
 		for(int i = 0; i < bytes.length; i++) {
@@ -77,10 +122,17 @@ public class DataReader {
 		return bytes;
 	}
 	
+	/**
+	 * Fetch a (single byte) integer from the {@link BinaryReader#bytes}
+	 * @param position - position to get the integer from
+	 */
 	public int getInt(int position) {
 		return (int)bytes.get(position);
 	}
 	
+	/**
+	 * Reading byte array helper function
+	 */
 	private void readBytes() {
 		bytes.removeAll(bytes);
 		try {

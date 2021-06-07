@@ -3,19 +3,37 @@ package helix.game.objects.entity;
 import helix.game.objects.Entity;
 import helix.utils.math.Vector2;
 
+/**
+ * Basic Collider class that expands on
+ * {@link helix.utils.match.Rectangle}
+ * @author bmeachem
+ *
+ */
 public final class Collider extends helix.utils.math.Rectangle {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -829325656055031009L;
 	
+	/**
+	 * Current Collider offset
+	 */
 	private Vector2 offset;
 	
+	/**
+	 * Create a new Collider in the top left of the entity, matching the entity's
+	 * dimensions
+	 * @param entity
+	 */
 	public Collider(Entity entity) {
 		this(entity, ColliderOffset.TOP_LEFT);
 	}
 	
+	/**
+	 * Create a new Collider with the specified offset for an entity
+	 * @param entity - Entity to attach Collider to
+	 * @param offsetType - ColliderOffset to use
+	 * 
+	 * @see {@link Entity}, {@link ColliderOffset}
+	 */
 	public Collider(Entity entity, ColliderOffset offsetType) {
 		super(entity.getPos().getX(), entity.getPos().getY(), entity.getWidth(), entity.getHeight());
 		offset = new Vector2(0, 0);
@@ -63,6 +81,8 @@ public final class Collider extends helix.utils.math.Rectangle {
 				break;
 		}
 	}
+	
+	// Getters and Setters
 	
 	public Vector2 getOffset() {
 		return this.offset;

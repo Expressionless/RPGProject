@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 
 import helix.game.Serializable;
 import helix.gfx.Sprite;
-import helix.utils.io.DataReader;
-import helix.utils.io.DataWriter;
+import helix.utils.io.BinaryReader;
+import helix.utils.io.BinaryWriter;
 import helix.utils.math.Point;
 import helix.utils.math.Rectangle;
 import main.Constants;
@@ -191,7 +191,7 @@ public class Slot implements Serializable {
 	 *  - inventory id
 	 * */
 	@Override
-	public boolean write(DataWriter writer, int pos) {
+	public boolean write(BinaryWriter writer, int pos) {
 		// Write id
 		writer.write(this.slotID);
 		writer.write(this.getItem().ID);
@@ -201,7 +201,7 @@ public class Slot implements Serializable {
 	}
 
 	@Override
-	public boolean parse(DataReader reader, int pos) {
+	public boolean parse(BinaryReader reader, int pos) {
 		this.slotID = reader.getInt(pos);
 		this.setItem(ItemInfo.get(reader.getInt(pos + 1)), reader.getInt(pos + 2));
 		// TODO: Keep track of inventories

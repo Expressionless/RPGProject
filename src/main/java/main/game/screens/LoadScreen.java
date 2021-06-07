@@ -35,14 +35,14 @@ public class LoadScreen extends Screen {
 	}
 
 	@Override
-	protected void create() {
+	public void show() {
 		this.parseItems(this.getGameData());
 		
 		this.getRpgGame().setScreen(1);
 	}
 
 	@Override
-	protected void step() {
+	protected void step(float delta) {
 		
 	}
 

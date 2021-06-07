@@ -17,12 +17,12 @@ public class MenuScreen extends Screen {
 	}
 
 	@Override
-	public void create() {
+	public void show() {
 		
 	}
 
 	@Override
-	protected void step() {
+	protected void step(float delta) {
 		
 	}
 

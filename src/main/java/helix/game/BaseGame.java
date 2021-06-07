@@ -5,28 +5,63 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-
+/**
+ * Basic implementation of {@link com.badlogic.gdx.Game}
+ * 
+ * @author bmeachem
+ *
+ */
 public abstract class BaseGame extends Game {
 
+	/**
+	 * config for the application
+	 */
 	public final Lwjgl3ApplicationConfiguration config;
+	/**
+	 * Application dimensions
+	 */
 	public final int frameWidth, frameHeight;
+	/**
+	 * Application title
+	 */
 	public final String title;
 	
+	/**
+	 * Application's data object. Keeps track of all the {@link helix.game.GameObject}s and
+	 * {@link helix.game.objects.Entity}s and such
+	 */
 	private Data data;
 	
+	/**
+	 * main game camera
+	 */
 	private OrthographicCamera camera;
+	/** Asset loading progress */
 	private float progress, lastProgress;
 	
+	/**
+	 * Ran as the last thing to do on launch
+	 */
 	protected abstract void start();
+	
+	/**
+	 * Ran before {@link BaseGame#start}. Used to add {@link helix.game.gfx.Screen}s to the game
+	 */
 	protected abstract void addScreens();
 	
+	/**
+	 * Create a new {@link BaseGame} with specified frame title, height and width
+	 * @param title - String
+	 * @param frameWidth - px
+	 * @param frameHeight - px
+	 */
 	public BaseGame(String title, int frameWidth, int frameHeight) {
 		config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle(title);
 		config.setWindowedMode(frameWidth, frameHeight);
 
-		config.setIdleFPS(0);
-		config.setForegroundFPS(0);
+		config.setIdleFPS(60);
+		config.setForegroundFPS(90);
 		config.useVsync(true);
 		config.setResizable(false);
 		
@@ -58,6 +93,9 @@ public abstract class BaseGame extends Game {
 		this.start();
 	}
 	
+	/**
+	 * Load all assets into the game
+	 */
 	private void loadTextures() {
 		// Load Resources
 		while (!this.getData().getManager().update()) {
@@ -71,16 +109,19 @@ public abstract class BaseGame extends Game {
 		
 	}
 	
+	/**
+	 * Queue all assets into the game.
+	 * Assets should be queued in this method here
+	 * {@link helix.gfx.Screen#queueAssets(com.badlogic.gdx.assets.AssetManager)}
+	 * within the first {@link helix.gfx.Screen} of the BaseGame
+	 */
 	private void queueAssets() {
 		for(int i = 0; i < this.getData().screens.size(); i++) {
 			this.getData().screens.get(i).queueAssets(this.getData().getManager());
 		}
-		
-		
 	}
 	
 	// Getters and Setters
-	
 	public final OrthographicCamera getCamera() {
 		return camera;
 	}

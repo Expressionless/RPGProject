@@ -33,7 +33,7 @@ public final class GameScreen extends Screen {
 	}
 
 	@Override
-	public void create() {
+	public void show() {
 		this.world = new World(32, 32);
 		world.setGame(this.getRpgGame());
 
@@ -41,40 +41,20 @@ public final class GameScreen extends Screen {
 		this.batch = new SpriteBatch();
 		ItemSpawner is = new ItemSpawner(this.getRpgGame());
 		is.spawnItem(50, 20, "grass", 5);
-		is.spawnItem(50, 110, "wood", 5);
-		is.spawnItem(50, 150, "wood", 5);
-		is.spawnItem(50, 110, "wood", 5);
-		is.spawnItem(50, 110, "wood", 5);
-		is.spawnItem(50, 130, "bow");
-		is.spawnItem(50, 160, "bow");
-		is.spawnItem(50, 190, "bow");
-		is.spawnItem(50, 130, "bow");
-		is.spawnItem(50, 160, "bow");
-		is.spawnItem(50, 190, "bow");
-		is.spawnItem(50, 130, "bow");
-		is.spawnItem(50, 160, "bow");
-		is.spawnItem(50, 190, "bow");
-		is.spawnItem(50, 130, "bow");
-		is.spawnItem(50, 160, "bow");
-		is.spawnItem(50, 190, "bow");
-		is.spawnItem(50, 220, "shaft");
-		is.spawnItem(50, 250, "boOmerang");
-		is.spawnItem(50, 250, "axe");
-		is.spawnItem(50, 300, "pickaxe");
 		new Tree(getRpgGame(), new Point(100, 80));
 		
 		new Mage(getRpgGame(), new Point(50, 40));
 	}
 
 	@Override
-	protected void step() {
+	protected void step(float delta) {
 		this.handleInput();
 		this.updateCamera();
 	}
 
 	@Override
 	protected void draw(float delta) {
-		this.getGameData().update(Gdx.graphics.getDeltaTime());
+		this.getGameData().update(delta);
 		this.getGameData().getCamera().update();
 
 		this.batch.begin();

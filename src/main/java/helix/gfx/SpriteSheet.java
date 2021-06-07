@@ -5,12 +5,33 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import helix.game.Data;
 
+/**
+ * SpriteSheet class to hold references to a grid of {@link Sprite}s
+ * @author bmeachem
+ *
+ */
 public class SpriteSheet {
 
+	/**
+	 * Base {@link TextureRegion}s
+	 */
 	private TextureRegion[][] spriteTextures;
+	
+	/**
+	 * Sprites in the sprite sheet
+	 * 
+	 * @see {@link Sprite}
+	 */
 	private Sprite[][] sprites;
+	
+	/**
+	 * File reference
+	 */
 	private String ref;
 	
+	/**
+	 * Dimensions in terms of individual {@link Sprite}s
+	 */
 	private int width, height;
 	
 	/**
@@ -39,11 +60,13 @@ public class SpriteSheet {
 			}
 		}
 	}
-	/*
-	 * Different implementation for Sprite Sheets
+	
+	/**
 	 * @param x - x location of the subimage
 	 * @param y - y location of the subimage
-	 * @return
+	 * @return the Sprite at the given location
+	 * 
+	 * @see {@link Sprite}
 	 */
 	public Sprite getSubSprite(int x, int y) {
 		return sprites[y][x];

@@ -4,6 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * Basic animation to handle and store animation data
+ * takes in a {@link TextureRegion} and spits out an animation
+ * 
+ * 
+ * @author bmeachem
+ */
 public class Animation {
 	private static final float MILLISECONDS = 1000;
 
@@ -21,10 +28,10 @@ public class Animation {
 	private boolean playing = true;
 	
 	/**
-	 * Create an animation from a filepath
-	 * @param filepath
-	 * @param frameCount
-	 * @param animTime
+	 * Create an animation from a {@link TextureRegion}
+	 * @param region - {@link TextureRegion} to load from
+	 * @param frameCount - Number of Frames
+	 * @param animTime - animation time (ms)
 	 */
 	public Animation(TextureRegion region, String name, int frameCount, float animTime) {
 		this.baseTex = region;
@@ -42,10 +49,15 @@ public class Animation {
 		this.name = name;
 	}
 	
+	/**
+	 * Update the animation as necessary\
+	 */
 	public void update() {
 		if(!playing)
 			return;
+		
 		currentFrameTime += Gdx.graphics.getDeltaTime();
+		
 		if(currentFrameTime > maxFrameTime) {
 			frame++;
 			currentFrameTime = 0;
@@ -58,28 +70,41 @@ public class Animation {
 		}
 	}
 	
-	public void draw() {
-		
-	}
-	
+	/**
+	 * Start this Animation
+	 */
 	public void start() {
 		this.playing = true;
 	}
 	
+	/**
+	 * Play the Animation from the start
+	 */
 	public void restart() {
 		frame = 0;
 		playing = true;
 	}
 	
+	/**
+	 * Stop the Animation
+	 */
 	public void stop() {
 		playing = false;
+	}
+	
+	/**
+	 * Reset the Animation
+	 */
+	public void reset() {
+		playing = false;
+		frame = 0;
 	}
 	
 	// Getters and Setters
 
 	/**
 	 * Set time in millis for how long the animation lasts
-	 * @param duration
+	 * @param duration - time (ms)
 	 */
 	public void setAnimTime(float duration) {
 		this.maxFrameTime = (duration / MILLISECONDS) / frameCount;

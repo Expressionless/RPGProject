@@ -7,8 +7,8 @@ import static main.Constants.UP;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import helix.utils.io.DataReader;
-import helix.utils.io.DataWriter;
+import helix.utils.io.BinaryReader;
+import helix.utils.io.BinaryWriter;
 import helix.utils.math.Angle;
 import helix.utils.math.Point;
 import main.Constants;
@@ -63,6 +63,9 @@ public class Player extends Mob {
 		this.equipped.setVisible(true);
 
 		this.setStat("speed", Constants.PLAYER_SPEED);
+		this.setStat("maxHealth", 150);
+		System.out.println(this.getStat("health"));
+		System.out.println(this.getStat("maxHealth"));
 
 		this.updateCollider();
 		game.getGameData().setPlayer(this);
@@ -100,20 +103,12 @@ public class Player extends Mob {
 
 		this.getDirection().setX(xVal);
 		this.getDirection().setY(yVal);
-
-		// Update sprite
-		if (this.getDirection().length() == 0) {
-			this.getSprite().restart();
-			this.getSprite().stop();
-		} else {
-			this.updateSprite();
-		}
-
+		
 		if (this.getDirection().length() != 0)
 			this.move(this.getStat("speed") * delta);
 	}
 
-	private void updateSprite() {
+	protected void updateSprite() {
 		double angle = this.getDirection().getAngle();
 
 		boolean up = angle < Angle.TOP_LEFT.angle && angle > Angle.TOP_RIGHT.angle;
@@ -177,12 +172,12 @@ public class Player extends Mob {
 	 * Save the position 
 	 */
 	@Override
-	public boolean write(DataWriter writer, int pos) {
+	public boolean write(BinaryWriter writer, int pos) {
 		return false;
 	}
 
 	@Override
-	public boolean parse(DataReader reader, int pos) {
+	public boolean parse(BinaryReader reader, int pos) {
 		return false;
 	}
 }

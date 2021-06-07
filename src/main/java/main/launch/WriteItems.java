@@ -1,7 +1,7 @@
 package main.launch;
 
-import helix.utils.io.DataReader;
-import helix.utils.io.DataWriter;
+import helix.utils.io.BinaryReader;
+import helix.utils.io.BinaryWriter;
 import main.Constants;
 import main.game.item.ItemInfo;
 
@@ -11,7 +11,7 @@ public class WriteItems {
 	private static boolean[] NONSTACKABLE = {false, false, false, false};
 	
 	public static void main(String[] args) {
-		DataWriter writer = new DataWriter("/data/item");
+		BinaryWriter writer = new BinaryWriter("/data/item");
 		new ItemInfo(0, "material", "grass", Constants.MAX_STACK, STACKABLE).write(writer);
 		new ItemInfo(1, "material", "wood", Constants.MAX_STACK, STACKABLE).write(writer);
 		new ItemInfo(2, "weapon"  , "sword", 1, NONSTACKABLE).write(writer);
@@ -22,7 +22,7 @@ public class WriteItems {
 		new ItemInfo(7, "crafting", "shaft", 1, STACKABLE).write(writer);
 		new ItemInfo(8, "tool"    , "pickaxe", 1, NONSTACKABLE).write(writer);
 		
-		DataReader reader = new DataReader("/data/item");
+		BinaryReader reader = new BinaryReader("/data/item");
 		ItemInfo item = new ItemInfo();
 		item.parse(reader, 0);
 		System.out.println(item);

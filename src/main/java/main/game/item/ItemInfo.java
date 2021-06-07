@@ -4,8 +4,8 @@ import java.util.logging.Logger;
 
 import helix.game.Serializable;
 import helix.gfx.Sprite;
-import helix.utils.io.DataReader;
-import helix.utils.io.DataWriter;
+import helix.utils.io.BinaryReader;
+import helix.utils.io.BinaryWriter;
 import main.Constants;
 import main.GameData;
 
@@ -182,12 +182,12 @@ public final class ItemInfo implements Serializable {
 
 	// Serialization
 	
-	public boolean write(DataWriter writer) {
+	public boolean write(BinaryWriter writer) {
 		return this.write(writer, ID);
 	}
 	
 	@Override
-	public boolean write(DataWriter writer, int position) {
+	public boolean write(BinaryWriter writer, int position) {
 		if(writer == null)
 			return false;
 		if(name.length() > Constants.MAX_ITEM_NAME_LEN)
@@ -201,7 +201,7 @@ public final class ItemInfo implements Serializable {
 	}
 
 	@Override
-	public boolean parse(DataReader reader, int position) {
+	public boolean parse(BinaryReader reader, int position) {
 		if(reader == null)
 			return false;
 		position *= Constants.ITEM_SIZE;

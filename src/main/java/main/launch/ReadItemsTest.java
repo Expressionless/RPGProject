@@ -1,12 +1,12 @@
 package main.launch;
 
-import helix.utils.io.DataReader;
+import helix.utils.io.BinaryReader;
 import main.Constants;
 
 public class ReadItemsTest {
 
 	public static void main(String[] args) {
-		DataReader reader = new DataReader("/data/item");
+		BinaryReader reader = new BinaryReader("/data/item");
 		
 		if(reader.getBytes().size() == 0) {
 			System.exit(-1);

@@ -2,7 +2,6 @@ package helix.game.objects;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -13,17 +12,40 @@ import helix.game.objects.entity.Collider;
 import helix.gfx.Sprite;
 import helix.utils.math.Point;
 
+/**
+ * Entity class. Contains basic rendering and collision data and extends from
+ * {@link helix.game.GameObject}
+ * @author bmeachem
+ *
+ */
 public abstract class Entity extends GameObject {
 	public static final BitmapFont font = new BitmapFont();
 	public static final ShapeRenderer renderer = new ShapeRenderer();
 
+	/**
+	 * Depth to render entity at (less depth means entity is rendered more towards background)
+	 */
 	private float depth;
 	
+	/**
+	 * All sprites that the entity uses
+	 */
 	private HashMap<String, Sprite> sprites;
+	/**
+	 * Current sprite being rendered
+	 */
 	private Sprite currentSprite;
 	
+	/**
+	 * Entity collider
+	 */
 	private Collider collider;
 
+	/**
+	 * Create a basic Entity
+	 * @param data - {@link helix.game.Data}
+	 * @param pos
+	 */
 	public Entity(Data data, Point pos) {
 		super(data, pos);
 
@@ -34,14 +56,16 @@ public abstract class Entity extends GameObject {
 		
 		this.getData().entities.add(this);
 	}
-	
-	public void loadSprites(AssetManager manager) {};
 
 	@Override
 	protected void preStep(float delta) {
 		this.updateDepth();
 	}
 	
+	/**
+	 * Render the Current sprite and run the abstract draw event after that
+	 * @param batch - SpriteBatch to draw the entity with
+	 */
 	public final void render(SpriteBatch batch) {
 		if (currentSprite != null) {
 			currentSprite.draw(batch, this.getPos().getX(), this.getPos().getY());
@@ -51,23 +75,47 @@ public abstract class Entity extends GameObject {
 	}
 
 	/**
-	 * Override this as necessary
+	 * Override this as necessary.
+	 * Updates the depth of the entity
+	 * Default: depth = y coord of entity
 	 */
 	protected void updateDepth() {
 		this.depth = this.getPos().getY();
 	}
-	
+
+	/**
+	 * Overrideable draw method
+	 * @param batch - SpriteBatch to draw the entity with
+	 */
 	protected void draw(SpriteBatch batch) {
 	}
 
+	/**
+	 * Add a spriter to the entity's spriteset
+	 * @param spriteName - Name of the sprite
+	 * @param numFrames - Number of frames the sprite has in it
+	 * @return - if the sprite was added successfully
+	 */
 	public final boolean addSprite(String spriteName, int numFrames) {
 		return this.addSprite(spriteName, numFrames, -1);
 	}
 
+	/**
+	 * Add a spriter to the entity's spriteset
+	 * @param spriteName - Name of the sprite
+	 * @return - if the sprite was added successfully
+	 */
 	public final boolean addSprite(String spriteName) {
 		return this.addSprite(spriteName, 1);
 	}
 
+	/**
+	 * Add a spriter to the entity's spriteset
+	 * @param spriteName - Name of the sprite
+	 * @param numFrames - Number of frames the sprite has in it
+	 * @param duration - duration (in ms)
+	 * @return - if the sprite was added successfully
+	 */
 	public final boolean addSprite(String spriteName, int numFrames, int duration) {
 		if (sprites.containsKey(spriteName))
 			return false;
@@ -79,6 +127,12 @@ public abstract class Entity extends GameObject {
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * Find another the first occurrence of a specified {@link Entity}
+	 * @param <T> - Some class that extends {@link Entity}
+	 * @param searchClass - The class of the instance to be found
+	 * @return - an instance of the searchClass type. Null if none exist
+	 */
 	public final <T extends Entity> T findEntity(Class<T> searchClass) {
 		for(GameObject object : this.getData().entities) {
 			if(searchClass.isInstance(object))
@@ -88,6 +142,12 @@ public abstract class Entity extends GameObject {
 	}
 	
 	@SuppressWarnings("unchecked")
+	/**
+	 * Find the nearest instance of a specified class that extends {@link Entity}
+	 * @param <T> - Some class that extends {@link Entity}
+	 * @param searchClass - The class of the instance to be found
+	 * @return - the nearest instance of the searchClass type. Null if none exist
+	 */
 	public final <T extends Entity> T findNearestEntity(Class<T> searchClass) {
 		GameObject current = null;
 		for(GameObject object : this.getData().entities) {

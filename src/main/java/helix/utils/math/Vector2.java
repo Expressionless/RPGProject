@@ -2,41 +2,91 @@ package helix.utils.math;
 
 import java.text.DecimalFormat;
 
+/**
+ * A 2 Dimensional Vector class with some basic operations
+ * @author bmeachem
+ *
+ */
 public class Vector2 {
 	private static final DecimalFormat df = new DecimalFormat("0.00");
 
+	/**
+	 * Dimensions
+	 */
 	private float x, y;
 
+	/**
+	 * Create a new Vector2 with specified coordinates
+	 * @param x (float)
+	 * @param y (float)
+	 */
 	public Vector2(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
-	
+
+	/**
+	 * Create a new Vector2 with specified coordinates
+	 * @param x
+	 * @param y
+	 */
 	public Vector2(Number x, Number y) {
-		this.x = x.floatValue();
-		this.y = y.floatValue();
+		this(x.floatValue(), y.floatValue());
 	}
 
+	/**
+	 * Sub another {@link Vector2} from this one
+	 * (this - other)
+	 * @param other
+	 * @return - a new resultant Vector2 from the operation
+	 */
 	public Vector2 sub(Vector2 other) {
 		return new Vector2(this.x - other.x, this.y - other.y);
 	}
 
+	/**
+	 * Sub a set of coordinates from this Vector2
+	 * (this - new Vector2(x, y))
+	 * @param x
+	 * @param y
+	 * @return - a new resultant Vector2 from the operation
+	 */
 	public Vector2 sub(float x, float y) {
 		return this.sub(new Vector2(x, y));
 	}
 
+	/**
+	 * Add a {@link Vector2} to this one
+	 * @param other - Other Vector2 to add
+	 * @return - a new resultant Vector2 from the operation
+	 */
 	public Vector2 add(Vector2 other) {
 		return new Vector2(other.x + x, other.y + y);
 	}
 
+	/**
+	 * Add a set of coordinates to this Vector2
+	 * @param x
+	 * @param y
+	 * @return - a new resultant Vector2 from the operation
+	 */
 	public Vector2 add(float x, float y) {
 		return this.add(new Vector2(x, y));
 	}
 
+	/**
+	 * Multiply this Vector2 by a scalar value
+	 * @param scalar
+	 * @return - a new resultant Vector2 from the operation
+	 */
 	public Vector2 multiply(float scalar) {
 		return new Vector2(this.x * scalar, this.y * scalar);
 	}
 
+	/**
+	 * Calculate the length of this Vector2
+	 * @return length (double)
+	 */
 	public double length() {
 		double disX = Math.pow(this.x, 2);
 		double disY = Math.pow(this.y, 2);
@@ -44,6 +94,10 @@ public class Vector2 {
 		return Math.pow(disX + disY, 0.5);
 	}
 
+	/*
+	 * Get the angle of this Vector2 in degrees,
+	 * relative to the positive x axis
+	 */
 	public double getAngle() {
 		double angle = 0;
 		double sin = 0,
@@ -75,6 +129,10 @@ public class Vector2 {
 		return Double.parseDouble(df.format(Math.toDegrees(angle)));
 	}
 	
+	/**
+	 * Get a Unit Vector of this Vector2. Unit Vectors always have length = 1
+	 * @return a Unit Vector of this Vector2
+	 */
 	public Vector2 getUnitVector() {
 		Vector2 vector = this.copy();
 		double mag = vector.length();
@@ -82,13 +140,22 @@ public class Vector2 {
 			return new Vector2(0 ,0);
 		
 		vector = new Vector2(vector.getX() / mag, vector.getY() / mag);
+		if(vector.length() != 1)
+			System.err.println("BAD UNIT VECTOR OF: " + this.toString());
 		return vector;
 	}
 
+	/**
+	 * Return a copy of this Vector2
+	 * @return a copy of this Vector2
+	 */
 	public Vector2 copy() {
 		return new Vector2(x, y);
 	}
 	
+	/**
+	 * Return this Vector2 as {@link Point}
+	 */
 	public Point toPoint() {
 		return new Point(x, y);
 	}

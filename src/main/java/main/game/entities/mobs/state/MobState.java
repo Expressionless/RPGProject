@@ -4,6 +4,7 @@ public enum MobState {
 
 	ATTACK,
 	MOVE,
+	CHASE,
 	BLOCK,
 	IDLE
 }

@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 
 import helix.game.GameObject;
 import helix.game.Serializable;
-import helix.utils.io.DataReader;
-import helix.utils.io.DataWriter;
+import helix.utils.io.BinaryReader;
+import helix.utils.io.BinaryWriter;
 import helix.utils.math.Point;
 import helix.utils.math.Rectangle;
 import main.Constants;
@@ -289,13 +289,13 @@ public abstract class Inventory extends GameObject implements Serializable {
 	// Serialization
 	/**/
 	@Override
-	public boolean write(DataWriter writer, int pos) {
+	public boolean write(BinaryWriter writer, int pos) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean parse(DataReader reader, int pos) {
+	public boolean parse(BinaryReader reader, int pos) {
 		// TODO Auto-generated method stub
 		return false;
 	}

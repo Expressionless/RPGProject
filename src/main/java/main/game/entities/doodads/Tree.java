@@ -1,8 +1,5 @@
 package main.game.entities.doodads;
 
-
-import com.badlogic.gdx.assets.AssetManager;
-
 import helix.utils.math.Point;
 import main.Constants;
 import main.game.RpgGame;
@@ -22,11 +19,6 @@ public class Tree extends Doodad {
 		this.getAlarm(0).setAlarm(() -> {
 			
 		}, (int)growtimer);
-	}
-
-	@Override
-	public void loadSprites(AssetManager manager) {
-		
 	}
 
 	@Override

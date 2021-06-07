@@ -1,7 +1,19 @@
 package helix.utils.math;
 
+/**
+ * Some helpful utilities to use when working with numbers
+ * @author bmeachem
+ *
+ */
 public class NumberUtils {
 
+	/**
+	 * Clamp a number between a minimum and maximum value
+	 * @param val - value to clamp
+	 * @param min - minimum value
+	 * @param max - maximum value
+	 * @return - clamped value
+	 */
 	public static Number clamp(final Number val, final Number min, final Number max) {
 		if(val.doubleValue() < min.doubleValue())
 			return min;
@@ -10,6 +22,13 @@ public class NumberUtils {
 		else return val;
 	}
 	
+	/**
+	 * Loop a number between a minimum and maximum value
+	 * @param val - value to loop
+	 * @param min - minimum value
+	 * @param max - maximum value
+	 * @return - looped number
+	 */
 	public static Number loop(final Number val, final Number min, final Number max) {
 		if(val.doubleValue() < min.doubleValue())
 			return max;
