@@ -2,16 +2,15 @@ package main.game.item;
 
 import java.util.Random;
 
-import com.badlogic.gdx.assets.AssetManager;
-
 import helix.game.Data;
 import helix.gfx.Sprite;
 import helix.gfx.SpriteSheet;
 import helix.utils.math.Point;
-import main.Constants;
+import main.constants.AssetConstants;
+import main.constants.PlayerConstants;
 import main.game.RpgGame;
 import main.game.entities.Doodad;
-import main.game.entities.mobs.Player;
+import main.game.entities.mobs.neutral.Player;
 import main.game.inventory.Inventory;
 import main.game.inventory.subtypes.GenericInventory;
 import main.game.inventory.subtypes.HotbarInventory;
@@ -34,8 +33,8 @@ public class Item extends Doodad {
 
 		Random r = new Random();
 		
-		this.animOffset = (float) (r.nextFloat() * (Constants.ITEM_BREATHE_LENGTH / 2 * Math.PI));
-		this.animPeriodOffset = (float) (r.nextFloat() * (Constants.ITEM_BREATHE_LENGTH / 2) + Constants.ITEM_BREATHE_LENGTH / 2);
+		this.animOffset = (float) (r.nextFloat() * (AssetConstants.ITEM_BREATHE_LENGTH / 2 * Math.PI));
+		this.animPeriodOffset = (float) (r.nextFloat() * (AssetConstants.ITEM_BREATHE_LENGTH / 2) + AssetConstants.ITEM_BREATHE_LENGTH / 2);
 		this.amount = amount;
 	}
 
@@ -73,9 +72,9 @@ public class Item extends Doodad {
 		}
 		Inventory pInv = this.getGame().getGameData().getPlayer().getInventory();
 
-		if (this.distTo(this.getGame().getGameData().getPlayer()) < Constants.ITEM_SUCK_DISTANCE) {
+		if (this.distTo(this.getGame().getGameData().getPlayer()) < AssetConstants.ITEM_SUCK_DISTANCE) {
 			if (pInv.add(item, amount, true)) {
-				if (this.distTo(this.getGame().getGameData().getPlayer()) <= Constants.PICKUP_DISTANCE) {
+				if (this.distTo(this.getGame().getGameData().getPlayer()) <= PlayerConstants.PICKUP_DISTANCE) {
 					
 					Player player = this.getGame().getGameData().getPlayer();
 					HotbarInventory hotbar = player.getHotbar();
@@ -86,7 +85,7 @@ public class Item extends Doodad {
 					else if(mainInv.add(this.item, this.amount))
 						this.dispose();
 				}
-				this.moveTo(this.getGame().getGameData().getPlayer(), Constants.ITEM_SPEED * delta);
+				this.moveTo(this.getGame().getGameData().getPlayer(), AssetConstants.ITEM_SPEED * delta);
 			}
 		}
 	}

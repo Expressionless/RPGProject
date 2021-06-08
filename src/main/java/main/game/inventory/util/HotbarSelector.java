@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import helix.utils.math.NumberUtils;
 import helix.utils.math.Point;
-import main.Constants;
+import main.constants.InventoryConstants;
 import main.game.Entity;
 import main.game.RpgGame;
 import main.game.inventory.Inventory;
@@ -38,7 +38,7 @@ public class HotbarSelector extends Entity {
 		Slot currentSlot = this.getCurrentSlot();
 		ItemInfo item = currentSlot.getItem();
 		if(item != null) {
-			item.getSprite().draw(b, this.getPos().getX() + Constants.INV_ITEM_OFFSET_X, this.getPos().getY() + Constants.INV_ITEM_OFFSET_Y);
+			item.getSprite().draw(b, this.getPos().getX() + InventoryConstants.INV_ITEM_OFFSET_X, this.getPos().getY() + InventoryConstants	.INV_ITEM_OFFSET_Y);
 			if(item.getFlag("stackable"))
 				Slot.inventoryFont.draw(b, Integer.toString(currentSlot.getAmount()), currentSlot.getPos().getX() + Slot.SPRITE.getWidth() - 3, currentSlot.getPos().getY() + 3);
 		}

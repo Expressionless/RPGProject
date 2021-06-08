@@ -1,9 +1,9 @@
-package main.game.entities.mobs;
+package main.game.entities.mobs.neutral;
 
-import static main.Constants.DOWN;
-import static main.Constants.LEFT;
-import static main.Constants.RIGHT;
-import static main.Constants.UP;
+import static main.constants.PlayerConstants.DOWN;
+import static main.constants.PlayerConstants.LEFT;
+import static main.constants.PlayerConstants.RIGHT;
+import static main.constants.PlayerConstants.UP;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -11,7 +11,7 @@ import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
 import helix.utils.math.Angle;
 import helix.utils.math.Point;
-import main.Constants;
+import main.constants.*;
 import main.game.RpgGame;
 import main.game.entities.Mob;
 import main.game.inventory.Inventory;
@@ -35,9 +35,9 @@ public class Player extends Mob {
 
 	public Player(RpgGame game, Point pos) {
 		super(game, pos);
-		float x = 40 - Constants.CAMERA_WIDTH / 4;
-		float y = 30 - Constants.CAMERA_HEIGHT * .6f + Slot.SPRITE.getHeight() * (Constants.P_INV_HEIGHT + 1);
-		GenericInventory newInv = new GenericInventory(game, new Point(x, y), Constants.P_INV_WIDTH, Constants.P_INV_HEIGHT);
+		float x = 40 - ApplicationConstants.CAMERA_WIDTH / 4;
+		float y = 30 - ApplicationConstants.CAMERA_HEIGHT * .6f + Slot.SPRITE.getHeight() * (PlayerConstants.P_INV_HEIGHT + 1);
+		GenericInventory newInv = new GenericInventory(game, new Point(x, y), PlayerConstants.P_INV_WIDTH, PlayerConstants.P_INV_HEIGHT);
 		this.setInventory(newInv);
 
 		this.addSprite(PLAYER_RIGHT, 4, anim_duration);
@@ -45,16 +45,16 @@ public class Player extends Mob {
 		this.addSprite(PLAYER_UP, 4, anim_duration);
 
 		this.hotbar = new HotbarInventory(game,
-				new Point(40 - Constants.CAMERA_WIDTH / 4, 30 - Constants.CAMERA_HEIGHT * .6f));
+				new Point(40 - ApplicationConstants.CAMERA_WIDTH / 4, 30 - ApplicationConstants.CAMERA_HEIGHT * .6f));
 		this.hotbar.setVisible(true);
 
 		Point armourPos = this.getInventory().getPos().copy();
-		armourPos.setX(armourPos.getX() - Slot.SPRITE.getWidth() - Constants.INVENTORY_MARGIN);
+		armourPos.setX(armourPos.getX() - Slot.SPRITE.getWidth() - InventoryConstants.INVENTORY_MARGIN);
 		armourPos.setY(armourPos.getY() - Slot.SPRITE.getHeight());
 		this.armour = new ArmourInventory(game, armourPos);
 
 		Point equipPos = this.getHotbar().getPos().copy();
-		equipPos.setX(equipPos.getX() - Slot.SPRITE.getWidth() * 2.5f - Constants.INVENTORY_MARGIN);
+		equipPos.setX(equipPos.getX() - Slot.SPRITE.getWidth() * 2.5f - InventoryConstants.INVENTORY_MARGIN);
 		equipPos.setY(equipPos.getY());
 		
 		this.equipped = new GenericInventory(game, equipPos, 2, 1);
@@ -62,11 +62,10 @@ public class Player extends Mob {
 		this.equipped.addAllowedTypes("WEAPON", "TOOL");
 		this.equipped.setVisible(true);
 
-		this.setStat("speed", Constants.PLAYER_SPEED);
+		this.setStat("speed", PlayerConstants.PLAYER_SPEED);
 		this.setStat("maxHealth", 150);
-		System.out.println(this.getStat("health"));
-		System.out.println(this.getStat("maxHealth"));
-
+		this.setStat("health", 75);
+		
 		this.updateCollider();
 		game.getGameData().setPlayer(this);
 	}

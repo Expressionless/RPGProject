@@ -8,9 +8,10 @@ import helix.utils.math.Vector2;
 
 /**
  * GameObject that stores basic stuff for Game Objects,
- * such as {@link Alarm}s, a position, direction, and access to {@link Data}
+ * such as Alarms, a position, direction, and access to the Data object
  * @author bmeachem
  *
+ * @see {@link Data}, {@link Alarm}
  */
 public abstract class GameObject {
 	/**

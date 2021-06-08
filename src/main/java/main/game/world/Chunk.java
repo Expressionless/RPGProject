@@ -9,7 +9,7 @@ import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
 import helix.utils.math.Point;
 import helix.utils.math.Rectangle;
-import main.Constants;
+import main.constants.WorldConstants;
 import main.game.Entity;
 import main.game.RpgGame;
 
@@ -23,13 +23,13 @@ public final class Chunk implements Serializable {
 	}
 
 	public Chunk(RpgGame game, float x, float y) {
-		this.bounds = new Rectangle(x, y, Constants.CHUNK_WIDTH * Constants.TILE_WIDTH,
-				Constants.CHUNK_HEIGHT * Constants.TILE_HEIGHT);
+		this.bounds = new Rectangle(x, y, WorldConstants.CHUNK_WIDTH * WorldConstants.TILE_WIDTH,
+				WorldConstants.CHUNK_HEIGHT * WorldConstants.TILE_HEIGHT);
 		this.entities = new ArrayList<>();
 	}
 
 	public void step(float delta) {
-		while(entities.size() > Constants.MAX_ENTITIES_PER_CHUNK)
+		while(entities.size() > WorldConstants.MAX_ENTITIES_PER_CHUNK)
 			entities.remove(entities.get(entities.size() - 1));
 	}
 
@@ -43,7 +43,7 @@ public final class Chunk implements Serializable {
 	}
 	
 	public void addEntity(Entity entity) {
-		if(entities.size() >= Constants.MAX_ENTITIES_PER_CHUNK)
+		if(entities.size() >= WorldConstants.MAX_ENTITIES_PER_CHUNK)
 			return;
 		entities.add(entity);
 	}

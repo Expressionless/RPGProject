@@ -13,7 +13,7 @@ import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
 import helix.utils.math.Point;
 import helix.utils.math.Rectangle;
-import main.Constants;
+import main.constants.InventoryConstants;
 import main.game.inventory.util.InventoryCursor;
 import main.game.item.ItemInfo;
 
@@ -71,7 +71,7 @@ public class Slot implements Serializable {
 		SPRITE.draw(b, x, y, col);
 
 		if(!isEmpty() && itemSprite != null) {
-			itemSprite.draw(b, x + Constants.INV_ITEM_OFFSET_X, y + Constants.INV_ITEM_OFFSET_Y, col);
+			itemSprite.draw(b, x + InventoryConstants.INV_ITEM_OFFSET_X, y + InventoryConstants.INV_ITEM_OFFSET_Y, col);
 			
 			if(this.getItem().getFlag("stackable")) {
 				String string = Integer.toString(this.getAmount());

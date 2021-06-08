@@ -140,8 +140,8 @@ public class Vector2 {
 			return new Vector2(0 ,0);
 		
 		vector = new Vector2(vector.getX() / mag, vector.getY() / mag);
-		if(vector.length() != 1)
-			System.err.println("BAD UNIT VECTOR OF: " + this.toString());
+		if((int)Math.round(vector.length()) != 1)
+			System.err.println("BAD UNIT VECTOR OF: " + vector.toString());
 		return vector;
 	}
 

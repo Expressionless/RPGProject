@@ -97,7 +97,7 @@ public class Sprite {
 	 */
 	public void draw(SpriteBatch batch, float x, float y, Color color) {
 		this.animation.update();
-		this.setBounds(x, y, this.animation.getWidth(), this.animation.getHeight());
+		this.setBounds(x, y, this.animation.getWidth() * scale.getX(), this.animation.getHeight() * scale.getY());
 		
 		Color last = batch.getColor();
 		batch.setColor(color);

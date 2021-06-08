@@ -4,8 +4,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 
 import helix.gfx.Screen;
-import main.Constants;
 import main.GameData;
+import main.constants.SerializationConstants;
 import main.game.RpgGame;
 import main.game.item.ItemInfo;
 
@@ -32,6 +32,9 @@ public class LoadScreen extends Screen {
 		
 		manager.load("res/sprites/items.png", Texture.class);
 		manager.load("res/sprites/tiles.png", Texture.class);
+
+		manager.load("res/sprites/UI/bar/bar.png", Texture.class);
+		manager.load("res/sprites/UI/bar/bar_display.png", Texture.class);
 	}
 
 	@Override
@@ -54,7 +57,7 @@ public class LoadScreen extends Screen {
 	private void parseItems(GameData gameData) {
 		gameData.beginReading("/data/item");
 		
-		int itemsToParse = gameData.getReader().getBytes().size() / Constants.ITEM_SIZE;
+		int itemsToParse = gameData.getReader().getBytes().size() / SerializationConstants.ITEM_SIZE;
 		for(int i = 0; i < itemsToParse; i++) {
 			ItemInfo item = new ItemInfo();
 			item.parse(gameData.getReader(), i);

@@ -7,8 +7,8 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import helix.game.BaseGame;
-import main.Constants;
 import main.GameData;
+import main.constants.ApplicationConstants;
 import main.game.screens.GameScreen;
 import main.game.screens.LoadScreen;
 
@@ -19,14 +19,16 @@ public class RpgGame extends BaseGame {
 	private FPSLogger fps;
 
 	public RpgGame() {
-		super(Constants.TITLE, Constants.FRAME_WIDTH, Constants.FRAME_HEIGHT);
+		super(ApplicationConstants.TITLE, ApplicationConstants.FRAME_WIDTH, ApplicationConstants.FRAME_HEIGHT);
 
-		config.setIdleFPS(Constants.IDLE_FPS);
-		config.setForegroundFPS(Constants.TARGET_FPS);
+		config.setIdleFPS(ApplicationConstants.IDLE_FPS);
+		config.setForegroundFPS(ApplicationConstants.TARGET_FPS);
 		config.useVsync(true);
 		config.setResizable(false);
 		fps = new FPSLogger();
 		this.setData(new GameData(this));
+		
+		System.out.println(ApplicationConstants.FRAME_WIDTH + "x" + ApplicationConstants.FRAME_HEIGHT);
 	}
 
 	@Override
@@ -39,7 +41,7 @@ public class RpgGame extends BaseGame {
 	protected void start() {
 
 		this.getCamera().setToOrtho(false, frameWidth, frameHeight);
-		viewport = new ExtendViewport(Constants.CAMERA_WIDTH, Constants.CAMERA_HEIGHT, this.getCamera());
+		viewport = new ExtendViewport(ApplicationConstants.CAMERA_WIDTH, ApplicationConstants.CAMERA_HEIGHT, this.getCamera());
 		viewport.apply();
 
 		this.getGameData().setViewport(viewport);
@@ -52,7 +54,7 @@ public class RpgGame extends BaseGame {
 
 	@Override
 	public void render() {
-		ScreenUtils.clear(Constants.CLEAR_COLOR);
+		ScreenUtils.clear(ApplicationConstants.CLEAR_COLOR);
 		this.getScreen().render(Gdx.graphics.getDeltaTime());
 		//fps.log();
 	}

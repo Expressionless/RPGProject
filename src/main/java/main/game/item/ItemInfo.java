@@ -6,8 +6,10 @@ import helix.game.Serializable;
 import helix.gfx.Sprite;
 import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
-import main.Constants;
 import main.GameData;
+import main.constants.Constants;
+import main.constants.InventoryConstants;
+import main.constants.SerializationConstants;
 
 public final class ItemInfo implements Serializable {
 	private static final Logger log = Logger.getLogger(ItemInfo.class.getCanonicalName());
@@ -46,7 +48,7 @@ public final class ItemInfo implements Serializable {
 	}
 
 	private ItemInfo(int id, String name, int flags) {
-		this(id, name, Constants.MAX_STACK, flags);
+		this(id, name, InventoryConstants.MAX_STACK, flags);
 	}
 
 	private ItemInfo(int id, String name) {
@@ -190,11 +192,11 @@ public final class ItemInfo implements Serializable {
 	public boolean write(BinaryWriter writer, int position) {
 		if(writer == null)
 			return false;
-		if(name.length() > Constants.MAX_ITEM_NAME_LEN)
+		if(name.length() > SerializationConstants.MAX_ITEM_NAME_LEN)
 			return false;
 		writer.writeInts(ID);
-		writer.write(type.name(), Constants.MAX_ITEM_TYPE_LEN);
-		writer.write(name, Constants.MAX_ITEM_NAME_LEN);
+		writer.write(type.name(), SerializationConstants.MAX_ITEM_TYPE_LEN);
+		writer.write(name, SerializationConstants.MAX_ITEM_NAME_LEN);
 		writer.writeInts(maxStack);
 		writer.writeBools(itemFlags.getFlags());
 		return true;
@@ -204,24 +206,24 @@ public final class ItemInfo implements Serializable {
 	public boolean parse(BinaryReader reader, int position) {
 		if(reader == null)
 			return false;
-		position *= Constants.ITEM_SIZE;
+		position *= SerializationConstants.ITEM_SIZE;
 
 		log.fine("Parsing new item at: " + position);
 		// Read in the ID
-		this.ID = reader.getInt(position + Constants.ID_POS);
+		this.ID = reader.getInt(position + SerializationConstants.ID_POS);
 		log.fine("ID: "  + this.ID);
 		
 		// Read in the type
-		this.type = ItemType.valueOf(reader.getString(position + Constants.TYPE_POS, Constants.MAX_ITEM_TYPE_LEN));
+		this.type = ItemType.valueOf(reader.getString(position + SerializationConstants.TYPE_POS, SerializationConstants.MAX_ITEM_TYPE_LEN));
 		log.fine("TYPE: "  + this.type);
 		// Read in the name
-		this.name = reader.getString(position + Constants.NAME_POS, Constants.MAX_ITEM_NAME_LEN);
+		this.name = reader.getString(position + SerializationConstants.NAME_POS, SerializationConstants.MAX_ITEM_NAME_LEN);
 		log.fine("Name: " + this.name);
 		// Read in maxStack
-		this.maxStack = reader.getInt(position + Constants.STACK_POS);
+		this.maxStack = reader.getInt(position + SerializationConstants.STACK_POS);
 		log.fine("Stack: " + this.maxStack);
 		// Read in the flags
-		int flags = reader.getInt(position + Constants.FLAG_POS);
+		int flags = reader.getInt(position + SerializationConstants.FLAG_POS);
 		itemFlags.setFlags(flags);
 		log.fine("Flags: " + flags);
 		if(com.badlogic.gdx.Gdx.files != null)

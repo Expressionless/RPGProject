@@ -8,22 +8,24 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import helix.gfx.Screen;
 import helix.utils.math.Point;
-import main.Constants;
 import main.GameData;
+import main.constants.PlayerConstants;
 import main.game.RpgGame;
 import main.game.entities.doodads.Tree;
-import main.game.entities.mobs.Player;
 import main.game.entities.mobs.enemies.Mage;
+import main.game.entities.mobs.neutral.Player;
 import main.game.inventory.Inventory;
 import main.game.inventory.Slot;
 import main.game.inventory.subtypes.HotbarInventory;
 import main.game.inventory.util.InventoryCursor;
 import main.game.item.ItemSpawner;
+import main.game.ui.UI;
 import main.game.world.World;
 
 public final class GameScreen extends Screen {
 
 	private World world;
+	private UI ui;
 
 	private Player player;
 	private SpriteBatch batch;
@@ -36,6 +38,7 @@ public final class GameScreen extends Screen {
 	public void show() {
 		this.world = new World(32, 32);
 		world.setGame(this.getRpgGame());
+		this.ui = new UI(this.getRpgGame());
 
 		player = new Player(getRpgGame(), new Point(30, 30));
 		this.batch = new SpriteBatch();
@@ -110,36 +113,36 @@ public final class GameScreen extends Screen {
 			public boolean keyDown(int keycode) {
 				HotbarInventory inv = player.getHotbar();
 				int pos;
-				if(keycode >= Constants.KEY_0 && keycode <= (Constants.KEY_0 + player.getHotbar().getWidth())) {
+				if(keycode >= PlayerConstants.KEY_0 && keycode <= (PlayerConstants.KEY_0 + player.getHotbar().getWidth())) {
 					if(keycode != Keys.NUM_0) {
 						pos = keycode - Keys.NUM_1;
 					} else {
-						pos = Keys.NUM_9 - Constants.KEY_0;
+						pos = Keys.NUM_9 - PlayerConstants.KEY_0;
 					}
 					inv.getSelector().setCurrentSlot(pos, false);
 				}
 				switch (keycode) {
-				case Constants.KEY_INV:
+				case PlayerConstants.KEY_INV:
 					if (player.getInventory().isVisible()) {
 						player.getInventory().setVisible(false);
 					} else {
 						player.getInventory().setVisible(true);
 					}
 					break;
-				case Constants.KEY_DOWN:
-					player.setMovement(Constants.DOWN, true);
+				case PlayerConstants.KEY_DOWN:
+					player.setMovement(PlayerConstants.DOWN, true);
 					break;
-				case Constants.KEY_RIGHT:
-					player.setMovement(Constants.RIGHT, true);
+				case PlayerConstants.KEY_RIGHT:
+					player.setMovement(PlayerConstants.RIGHT, true);
 					break;
-				case Constants.KEY_LEFT:
-					player.setMovement(Constants.LEFT, true);
+				case PlayerConstants.KEY_LEFT:
+					player.setMovement(PlayerConstants.LEFT, true);
 					break;
-				case Constants.KEY_UP:
-					player.setMovement(Constants.UP, true);
+				case PlayerConstants.KEY_UP:
+					player.setMovement(PlayerConstants.UP, true);
 					break;
 				
-				case Constants.KEY_CHARACTER:
+				case PlayerConstants.KEY_CHARACTER:
 					if(player.getArmour().isVisible())
 						player.getArmour().setVisible(false);
 					else
@@ -152,17 +155,17 @@ public final class GameScreen extends Screen {
 			@Override
 			public boolean keyUp(int keycode) {
 				switch (keycode) {
-				case Constants.KEY_DOWN:
-					player.setMovement(Constants.DOWN, false);
+				case PlayerConstants.KEY_DOWN:
+					player.setMovement(PlayerConstants.DOWN, false);
 					break;
-				case Constants.KEY_RIGHT:
-					player.setMovement(Constants.RIGHT, false);
+				case PlayerConstants.KEY_RIGHT:
+					player.setMovement(PlayerConstants.RIGHT, false);
 					break;
-				case Constants.KEY_LEFT:
-					player.setMovement(Constants.LEFT, false);
+				case PlayerConstants.KEY_LEFT:
+					player.setMovement(PlayerConstants.LEFT, false);
 					break;
-				case Constants.KEY_UP:
-					player.setMovement(Constants.UP, false);
+				case PlayerConstants.KEY_UP:
+					player.setMovement(PlayerConstants.UP, false);
 					break;
 				}
 				return true;

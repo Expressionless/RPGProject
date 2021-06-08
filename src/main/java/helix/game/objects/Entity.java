@@ -14,7 +14,7 @@ import helix.utils.math.Point;
 
 /**
  * Entity class. Contains basic rendering and collision data and extends from
- * {@link helix.game.GameObject}
+ * {@link GameObject}
  * @author bmeachem
  *
  */
@@ -66,7 +66,7 @@ public abstract class Entity extends GameObject {
 	 * Render the Current sprite and run the abstract draw event after that
 	 * @param batch - SpriteBatch to draw the entity with
 	 */
-	public final void render(SpriteBatch batch) {
+	public void render(SpriteBatch batch) {
 		if (currentSprite != null) {
 			currentSprite.draw(batch, this.getPos().getX(), this.getPos().getY());
 		}
@@ -219,6 +219,10 @@ public abstract class Entity extends GameObject {
 	
 	public final float getDepth() {
 		return this.depth;
+	}
+	
+	public final void setDepth(float depth) {
+		this.depth = depth;
 	}
 	
 	public final Collider getCollider() {

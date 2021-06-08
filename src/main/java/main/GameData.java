@@ -7,13 +7,17 @@ import com.badlogic.gdx.math.Vector3;
 import helix.game.Data;
 import helix.gfx.SpriteSheet;
 import helix.utils.math.Point;
+import main.constants.ApplicationConstants;
+import main.constants.AssetConstants;
+import main.constants.UIConstants;
 import main.game.RpgGame;
 import main.game.entities.Mob;
-import main.game.entities.mobs.Player;
+import main.game.entities.mobs.neutral.Player;
 import main.game.inventory.Slot;
 import main.game.inventory.util.InventoryCursor;
 import main.game.item.Item;
 import main.game.item.ItemInfo;
+import main.game.ui.components.Bar;
 
 public final class GameData extends Data {
 	
@@ -27,12 +31,26 @@ public final class GameData extends Data {
 
 	@Override
 	public void init() {
+		// Init Bar Sprite
+		Bar.BAR_SPRITE = new SpriteSheet(this, "res/sprites/UI/bar/bar_display.png", 8, 12);
+		Bar.bar = this.createSprite("res/sprites/UI/bar/bar.png");
+		
 		// Init inventory data
 		Slot.SPRITE = this.createSprite("res/sprites/UI/inventory/slot.png");
 		Slot.inventoryFont.getData().setScale(0.25f);
 		
 		// Init Item Data
-		Item.ITEM_SHEET = new SpriteSheet(this, main.Constants.ITEMS_DIRECTORY, 8, 8);
+		Item.ITEM_SHEET = new SpriteSheet(this, AssetConstants.ITEMS_DIRECTORY, 8, 8);
+		
+		
+		Bar.left_disp = Bar.BAR_SPRITE.getSubSprite(0, 0);
+		Bar.center_disp = Bar.BAR_SPRITE.getSubSprite(1, 0);
+		Bar.right_disp = Bar.BAR_SPRITE.getSubSprite(2, 0);
+				
+		Bar.left_disp.setScale(UIConstants.BAR_SCALE);
+		Bar.center_disp.setScale(UIConstants.BAR_SCALE);
+		Bar.right_disp.setScale(UIConstants.BAR_SCALE);
+		
 		
 		cursor = new InventoryCursor(this.getGame());
 	}
@@ -61,8 +79,8 @@ public final class GameData extends Data {
 	 */
 	public Point toScreenCoords(float x, float y) {
 		Vector3 camPos = this.getCamera().position;
-		x = (x - camPos.x + Constants.CAMERA_WIDTH / 2) * Constants.RATIO_X;
-		y = (y - camPos.y - Constants.CAMERA_HEIGHT / 2) * (-Constants.RATIO_Y);
+		x = (x - camPos.x + ApplicationConstants.CAMERA_WIDTH / 2) * ApplicationConstants.RATIO_X;
+		y = (y - camPos.y - ApplicationConstants.CAMERA_HEIGHT / 2) * (-ApplicationConstants.RATIO_Y);
 		return new Point(x, y);
 	}
 
@@ -74,8 +92,8 @@ public final class GameData extends Data {
 	 */
 	public Point toGameCoords(float x, float y) {
 		Vector3 camPos = this.getCamera().position;
-		x = camPos.x - Constants.CAMERA_WIDTH / 2 + (x / Constants.RATIO_X);
-		y = camPos.y + Constants.CAMERA_HEIGHT / 2 + (-y / Constants.RATIO_Y);
+		x = camPos.x - ApplicationConstants.CAMERA_WIDTH / 2 + (x / ApplicationConstants.RATIO_X);
+		y = camPos.y + ApplicationConstants.CAMERA_HEIGHT / 2 + (-y / ApplicationConstants.RATIO_Y);
 		return new Point(x, y);
 	}
 	

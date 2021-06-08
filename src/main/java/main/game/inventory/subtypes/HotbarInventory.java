@@ -1,7 +1,8 @@
 package main.game.inventory.subtypes;
 
 import helix.utils.math.Point;
-import main.Constants;
+import main.constants.Constants;
+import main.constants.InventoryConstants;
 import main.game.RpgGame;
 import main.game.inventory.Inventory;
 import main.game.inventory.Slot;
@@ -12,7 +13,7 @@ public class HotbarInventory extends Inventory {
 	private HotbarSelector selector;
 	
 	public HotbarInventory(RpgGame game, Point screenPos) {
-		super(game, screenPos, Constants.HOTBAR_WIDTH, Constants.HOTBAR_HEIGHT);
+		super(game, screenPos, InventoryConstants.HOTBAR_WIDTH, InventoryConstants.HOTBAR_HEIGHT);
 		selector = new HotbarSelector(game, screenPos.copy(), this);
 		
 		this.resetAllowedTypes();

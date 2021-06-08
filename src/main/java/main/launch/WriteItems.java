@@ -2,7 +2,7 @@ package main.launch;
 
 import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
-import main.Constants;
+import main.constants.InventoryConstants;
 import main.game.item.ItemInfo;
 
 public class WriteItems {
@@ -12,8 +12,8 @@ public class WriteItems {
 	
 	public static void main(String[] args) {
 		BinaryWriter writer = new BinaryWriter("/data/item");
-		new ItemInfo(0, "material", "grass", Constants.MAX_STACK, STACKABLE).write(writer);
-		new ItemInfo(1, "material", "wood", Constants.MAX_STACK, STACKABLE).write(writer);
+		new ItemInfo(0, "material", "grass", InventoryConstants.MAX_STACK, STACKABLE).write(writer);
+		new ItemInfo(1, "material", "wood", InventoryConstants.MAX_STACK, STACKABLE).write(writer);
 		new ItemInfo(2, "weapon"  , "sword", 1, NONSTACKABLE).write(writer);
 		new ItemInfo(3, "weapon"  , "bow", 1, NONSTACKABLE).write(writer);
 		new ItemInfo(4, "weapon"  , "boomerang", 1, NONSTACKABLE).write(writer);

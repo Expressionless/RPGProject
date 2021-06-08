@@ -1,7 +1,7 @@
 package main.game.entities.doodads;
 
 import helix.utils.math.Point;
-import main.Constants;
+import main.constants.Constants;
 import main.game.RpgGame;
 import main.game.entities.Doodad;
 

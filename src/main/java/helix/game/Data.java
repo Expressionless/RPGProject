@@ -22,9 +22,10 @@ import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
 import helix.utils.math.Point;
 /**
- * Basic Data class that stores all the {@link GameObject}s, {@link Entity}s and {@link Screen}s
+ * Basic Data class that stores all the objects, entities and screens
  * @author bmeachem
  *
+ * @see {@link GameObject}, {@link Entity}, {@link Screen}
  */
 public abstract class Data {
 	protected static Logger log = Logger.getLogger(Data.class.getCanonicalName());

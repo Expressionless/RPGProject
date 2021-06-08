@@ -2,6 +2,8 @@ package helix;
 
 import java.io.File;
 
+import helix.utils.math.NumberUtils;
+
 /**
  * Engine constants
  * @author bmeachem
@@ -19,5 +21,12 @@ public class Constants {
 	public static final float DEFAULT_SPEED = 15f;
 	public static final int NO_ANIM = -1;
 	public static final String DEFAULT_SPRITE = "DEFAULT";
+
+	/**
+	 *  Minimum Lerp "Change" Distance
+	 *  
+	 *  @see {@link NumberUtils#lerp}
+	 */
+	public static final float MIN_LERP_DIST = 0.001f;
 	
 }

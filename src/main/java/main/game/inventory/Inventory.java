@@ -13,8 +13,9 @@ import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
 import helix.utils.math.Point;
 import helix.utils.math.Rectangle;
-import main.Constants;
 import main.GameData;
+import main.constants.ApplicationConstants;
+import main.constants.InventoryConstants;
 import main.game.RpgGame;
 import main.game.item.ItemInfo;
 import main.game.item.ItemType;
@@ -25,8 +26,8 @@ import main.game.item.ItemType;
  *
  */
 public abstract class Inventory extends GameObject implements Serializable {
-	public static final float INV_X = 40 - Constants.CAMERA_WIDTH / 4;
-	public static final float INV_Y = 15 - Constants.CAMERA_HEIGHT / 8;
+	public static final float INV_X = 40 - ApplicationConstants.CAMERA_WIDTH / 4;
+	public static final float INV_Y = 15 - ApplicationConstants.CAMERA_HEIGHT / 8;
 	
 	public static final Color COL = new Color(1, 1, 1, 0.6f);
 	
@@ -49,7 +50,7 @@ public abstract class Inventory extends GameObject implements Serializable {
 		this.visible = false;
 		this.slots = new Slot[h][w];
 		this.screenPos = screenPos;
-		this.bounds = new Rectangle(screenPos.getX(), screenPos.getY(), w * (Slot.SPRITE.getWidth() + Constants.INVENTORY_MARGIN), h * (Slot.SPRITE.getHeight() + Constants.INVENTORY_MARGIN));
+		this.bounds = new Rectangle(screenPos.getX(), screenPos.getY(), w * (Slot.SPRITE.getWidth() + InventoryConstants.INVENTORY_MARGIN), h * (Slot.SPRITE.getHeight() + InventoryConstants.INVENTORY_MARGIN));
 		this.game = game;
 		
 		this.allowedTypes = new HashSet<>();
@@ -150,9 +151,9 @@ public abstract class Inventory extends GameObject implements Serializable {
 		int row, column;
 		float x, y;
 		for(column = 0; column < h; column++) {
-			y = this.getPos().getY() - column * (Slot.SPRITE.getHeight() + Constants.INVENTORY_MARGIN);
+			y = this.getPos().getY() - column * (Slot.SPRITE.getHeight() + InventoryConstants.INVENTORY_MARGIN);
 			for(row = 0; row < w; row++) {
-				x = this.getPos().getX() + row * (Slot.SPRITE.getWidth() + Constants.INVENTORY_MARGIN);
+				x = this.getPos().getX() + row * (Slot.SPRITE.getWidth() + InventoryConstants.INVENTORY_MARGIN);
 				slots[column][row] = new Slot(this, new Point(x, y), h * column + row);
 			}
 		}

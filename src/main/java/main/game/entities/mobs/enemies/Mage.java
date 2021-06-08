@@ -4,7 +4,7 @@ import helix.utils.math.Angle;
 import helix.utils.math.Point;
 import helix.utils.math.Vector2;
 import main.game.RpgGame;
-import main.game.entities.mobs.Player;
+import main.game.entities.mobs.neutral.Player;
 import main.game.entities.mobs.state.MobState;
 import main.game.entities.mobs.template.BasicEnemy;
 
@@ -55,15 +55,14 @@ public class Mage extends BasicEnemy {
 					}
 				}
 				
-				return MobState.CHASE;
 			} else {
 				if (this.getPos().getDistTo(this.getTarget().getPos()) <= this.getStat("attack_range")) {
 					this.setDirection(new Vector2(0, 0));
 				} else {
 					this.moveTo(this.getTarget().getPos(), this.getStat("speed"));
 				}
-				return MobState.CHASE;
 			}
+			return MobState.CHASE;
 		});
 	}
 

@@ -3,7 +3,7 @@ package main.game.world;
 import helix.game.Serializable;
 import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
-import main.Constants;
+import main.constants.WorldConstants;
 import main.game.RpgGame;
 
 public final class World implements Serializable {
@@ -20,7 +20,7 @@ public final class World implements Serializable {
 	
 	private void initChunks() {
 		int x, y;
-		int xPos = Constants.CHUNK_WIDTH, yPos = Constants.CHUNK_HEIGHT;
+		int xPos = WorldConstants.CHUNK_WIDTH, yPos = WorldConstants.CHUNK_HEIGHT;
 		
 		for(y = 0; y < chunks.length; y++) {
 			for(x = 0; x < chunks[y].length; x++) {
