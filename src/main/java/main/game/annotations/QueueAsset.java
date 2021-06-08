@@ -7,8 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface QueueTexture {
-
-	String value();
-
+public @interface QueueAsset {
+	public Class<?> type();
+	public String ref();
 }

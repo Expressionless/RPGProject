@@ -14,21 +14,16 @@ public class DynamicLoaderCode {
 		
 		System.out.println("Trying dynamic loader");
 		
-		Set<String> classNames = ClassUtils.getClasses(CLASS_PATH);
+		Set<Class<?>> classes = ClassUtils.getClasses(CLASS_PATH);
 		ArrayList<String> names = new ArrayList<>();
 		
-		for(String name : classNames)
-			names.add(name);
+		for(Class<?> clazz : classes) {}
+			//System.out.println(clazz.toString());
 		
 		names.sort(new Comparator<String>() {
 			public int compare(String s1, String s2) {
 				return s1.toCharArray()[0] - s2.toCharArray()[0];
 			}
 		});
-		
-		for(String name : names)
-			System.out.println(name);
-		
-		System.out.println("Found: " + classNames.size());
 	}
 }

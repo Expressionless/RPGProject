@@ -1,15 +1,15 @@
 package main.game.entities.doodads;
 
-import java.lang.reflect.Field;
+import com.badlogic.gdx.graphics.Texture;
 
 import helix.utils.math.Point;
 import main.constants.Constants;
 import main.game.RpgGame;
-import main.game.annotations.QueueTexture;
+import main.game.annotations.QueueAsset;
 import main.game.entities.Doodad;
 
 public class Tree extends Doodad {
-	@QueueTexture("res/sprites/doodads/tree.png")
+	@QueueAsset(type=Texture.class, ref="res/sprites/doodads/tree.png")
 	public static String TREE_REF = "res/sprites/doodads/tree.png";
 	
 	private float growtimer;
@@ -21,12 +21,6 @@ public class Tree extends Doodad {
 		this.growtimer = Constants.TREE_GROWTH_CYCLE;
 		this.getSprite().setScale(1, 0.5f);
 		this.getAlarm(0).setAlarm((int)growtimer, () -> {});
-		
-		for(Field field : this.getClass().getFields()) {
-			if(field.isAnnotationPresent(QueueTexture.class)) {
-				System.out.println(field.getAnnotation(QueueTexture.class).value());
-			}
-		}
 	}
 
 	@Override

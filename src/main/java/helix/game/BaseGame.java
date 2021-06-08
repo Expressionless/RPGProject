@@ -1,9 +1,16 @@
 package helix.game;
 
+import java.lang.reflect.Field;
+import java.util.Set;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+
+import helix.Constants;
+import helix.utils.ClassUtils;
+import main.game.annotations.QueueAsset;
 
 /**
  * Basic implementation of {@link com.badlogic.gdx.Game}
@@ -25,34 +32,37 @@ public abstract class BaseGame extends Game {
 	 * Application title
 	 */
 	public final String title;
-	
+
 	/**
-	 * Application's data object. Keeps track of all the {@link helix.game.GameObject}s and
-	 * {@link helix.game.objects.Entity}s and such
+	 * Application's data object. Keeps track of all the
+	 * {@link helix.game.GameObject}s and {@link helix.game.objects.Entity}s and
+	 * such
 	 */
 	private Data data;
-	
+
 	/**
 	 * main game camera
 	 */
 	private OrthographicCamera camera;
 	/** Asset loading progress */
 	private float progress, lastProgress;
-	
+
 	/**
 	 * Ran as the last thing to do on launch
 	 */
 	protected abstract void start();
-	
+
 	/**
-	 * Ran before {@link BaseGame#start}. Used to add {@link helix.game.gfx.Screen}s to the game
+	 * Ran before {@link BaseGame#start}. Used to add {@link helix.game.gfx.Screen}s
+	 * to the game
 	 */
 	protected abstract void addScreens();
-	
+
 	/**
 	 * Create a new {@link BaseGame} with specified frame title, height and width
-	 * @param title - String
-	 * @param frameWidth - px
+	 * 
+	 * @param title       - String
+	 * @param frameWidth  - px
 	 * @param frameHeight - px
 	 */
 	public BaseGame(String title, int frameWidth, int frameHeight) {
@@ -64,14 +74,14 @@ public abstract class BaseGame extends Game {
 		config.setForegroundFPS(90);
 		config.useVsync(true);
 		config.setResizable(false);
-		
+
 		this.title = title;
 		this.frameWidth = frameWidth;
 		this.frameHeight = frameHeight;
-		
+
 		camera = new OrthographicCamera();
 	}
-	
+
 	@Override
 	public final void create() {
 		this.addScreens();
@@ -83,59 +93,77 @@ public abstract class BaseGame extends Game {
 		this.queueAssets();
 		this.loadTextures();
 		this.data.init();
-		
+
 		try {
 			this.setScreen(this.getData().screens.get(0));
-		} catch(NullPointerException e) {
-			
+		} catch (NullPointerException e) {
+
 		}
-		
+
 		this.start();
 	}
-	
+
 	/**
 	 * Load all assets into the game
 	 */
 	private void loadTextures() {
+		// Queue Resources
+		Set<Class<?>> classes = ClassUtils.getClasses();
+
+		for (Class<?> clazz : classes) {
+			Field texField;
+			try {
+				texField = clazz.getDeclaredField(Constants.TEXTURE_FIELD_NAME);
+			} catch (NoSuchFieldException | SecurityException e) {
+				continue;
+			}
+
+			if (!texField.isAnnotationPresent(QueueAsset.class))
+				continue;
+
+			QueueAsset queueAnnotation = texField.getAnnotation(QueueAsset.class);
+			ClassUtils.setStatic(clazz, Constants.TEXTURE_FIELD_NAME, queueAnnotation.ref());
+			
+			this.getData().getManager().load(queueAnnotation.ref(), queueAnnotation.type());
+			System.out.println(this.getData().getManager().getQueuedAssets());
+		}
+
 		// Load Resources
-		
-		
 		while (!this.getData().getManager().update()) {
 			// Check if progress got updated
 			progress = this.getData().getManager().getProgress();
-			if(progress != lastProgress) {
+			if (progress != lastProgress) {
 				System.out.println("loading: " + this.getData().getManager().getProgress());
 				this.lastProgress = progress;
 			}
 		}
-		
+
 	}
-	
+
 	/**
-	 * Queue all assets into the game.
-	 * Assets should be queued in this method here
+	 * Queue all assets into the game. Assets should be queued in this method here
 	 * {@link helix.gfx.Screen#queueAssets(com.badlogic.gdx.assets.AssetManager)}
 	 * within the first {@link helix.gfx.Screen} of the BaseGame
 	 */
 	private void queueAssets() {
-		for(int i = 0; i < this.getData().screens.size(); i++) {
+		for (int i = 0; i < this.getData().screens.size(); i++) {
 			this.getData().screens.get(i).queueAssets(this.getData().getManager());
 		}
 	}
-	
+
 	// Getters and Setters
 	public final OrthographicCamera getCamera() {
 		return camera;
 	}
-	
+
 	public final Data getData() {
 		return data;
 	}
-	
+
 	public final void setData(Data data) {
 		this.data = data;
 	}
-	
+
 	@Override
 	public void setScreen(Screen s) {
 		super.setScreen(s);

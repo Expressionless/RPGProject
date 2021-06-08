@@ -28,5 +28,7 @@ public class Constants {
 	 *  @see {@link NumberUtils#lerp}
 	 */
 	public static final float MIN_LERP_DIST = 0.001f;
+
+	public static final String TEXTURE_FIELD_NAME = "TEXTURE_REF";
 	
 }
