@@ -129,6 +129,14 @@ public class Sprite {
 	public void stop() {
 		this.animation.stop();
 	}
+	
+	/**
+	 * Restart and then stop the animation
+	 * @return
+	 */
+	public void reset() {
+		this.animation.reset();
+	}
 
 	// Getters and Setters
 

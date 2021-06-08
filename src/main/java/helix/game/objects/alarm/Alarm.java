@@ -57,9 +57,9 @@ public final class Alarm {
 	 */
 	public void update(float delta) {
 		if(ms >= 1000f) {
-			if(timer > 0) {
+			if(timer > 0)
 				timer--;
-			} else if (timer == 0) {
+			if (timer == 0) {
 				action.event();
 				timer = NO_ALARM;
 			}
@@ -108,6 +108,18 @@ public final class Alarm {
 	 */
 	public boolean isActive() {
 		return (timer != NO_ALARM);
+	}
+	
+	public String toString() {
+		return "Alarm [timer=" + this.getTimer() + 
+				".init_timer=" + this.startTime +
+				",event=" + this.action
+				+ "]";
+	}
+
+	public void cancel() {
+		this.timer = -1;
+		this.action = null;
 	}
 	
 }

@@ -6,5 +6,6 @@ public enum MobState {
 	MOVE,
 	CHASE,
 	BLOCK,
-	IDLE
+	IDLE,
+	SEARCHING
 }

@@ -46,7 +46,7 @@ public final class GameScreen extends Screen {
 		is.spawnItem(50, 20, "grass", 5);
 		new Tree(getRpgGame(), new Point(100, 80));
 		
-		new Mage(getRpgGame(), new Point(50, 40));
+		new Mage(getRpgGame(), new Point(-300, 40));
 	}
 
 	@Override

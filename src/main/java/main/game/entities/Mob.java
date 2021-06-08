@@ -5,7 +5,6 @@ import helix.game.Serializable;
 import helix.utils.math.Point;
 import main.game.Entity;
 import main.game.RpgGame;
-import main.game.entities.mobs.state.StateMachine;
 import main.game.inventory.subtypes.GenericInventory;
 import main.game.item.Item;
 import main.game.item.ItemInfo;
@@ -14,7 +13,6 @@ public abstract class Mob extends Entity implements Serializable {
 	private GenericInventory inventory;
 	
 	private final MobStats stats;
-	private final StateMachine stateMachine;
 	
 	private Mob target;
 	private Point destination;
@@ -23,10 +21,9 @@ public abstract class Mob extends Entity implements Serializable {
 	
 	public Mob(RpgGame game, Point pos) {
 		super(game, pos);
-		
 		this.stats = new MobStats();
 		this.destination = pos.copy();
-		this.stateMachine = new StateMachine();		
+		
 		// Do this last, always
 		game.getGameData().mobs.add(this);
 	}
@@ -44,11 +41,6 @@ public abstract class Mob extends Entity implements Serializable {
 		
 		if(this.inventory != null)
 			this.inventory.update(delta);
-	}
-	
-	@Override
-	public void step(float delta) {
-		this.getStateMachine().next();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -148,6 +140,10 @@ public abstract class Mob extends Entity implements Serializable {
 	public void setStat(String stat, float val) {
 		this.stats.setStat(stat, val);
 	}
+	
+	public void subStat(String stat, float val) {
+		this.stats.subStat(stat, val);
+	}
 
 	public MobStats getMobStats() {
 		return stats;
@@ -155,10 +151,6 @@ public abstract class Mob extends Entity implements Serializable {
 	
 	public GenericInventory getInventory() {
 		return this.inventory;
-	}
-	
-	public StateMachine getStateMachine() {
-		return this.stateMachine;
 	}
 	
 	public void setInventory(GenericInventory inv) {
@@ -186,8 +178,8 @@ public abstract class Mob extends Entity implements Serializable {
 
 		private float speed = 0, maxSpeed = 1.5f;
 		private float vel, acc = 0;
-		private float defence, attack, health, maxHealth;
-		private float sight, attack_range;
+		private float defence, health, maxHealth;
+		private float sight, attack, attack_range, attack_speed;
 		
 		public void setStat(String stat, float val) {
 			try {
@@ -207,6 +199,11 @@ public abstract class Mob extends Entity implements Serializable {
 			}
 
 			return 0;
+		}
+		
+		public void subStat(String stat, float val) {
+			float newVal = this.getStat(stat) - val; 
+			this.setStat(stat, newVal);
 		}
 	}
 }

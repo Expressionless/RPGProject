@@ -2,9 +2,8 @@ package main.game.entities.mobs;
 
 import helix.utils.math.Point;
 import main.game.RpgGame;
-import main.game.entities.Mob;
 
-public abstract class Enemy extends Mob {
+public abstract class Enemy extends StateBasedMob {
 
 	private String type;
 	

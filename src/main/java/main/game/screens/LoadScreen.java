@@ -24,8 +24,8 @@ public class LoadScreen extends Screen {
 		manager.load("res/sprites/mob/player/right.png", Texture.class);
 		manager.load("res/sprites/mob/player/up.png", Texture.class);
 
-		manager.load("res/sprites/mob/enemy/tiny_mage_right.png", Texture.class);
-		manager.load("res/sprites/mob/enemy/tiny_mage_up_right.png", Texture.class);
+		manager.load("res/sprites/mob/enemy/mage/tiny_mage_right.png", Texture.class);
+		manager.load("res/sprites/mob/enemy/mage/tiny_mage_up_right.png", Texture.class);
 
 		manager.load("res/sprites/UI/inventory/slot.png", Texture.class);
 		manager.load("res/sprites/UI/inventory/selector.png", Texture.class);
@@ -35,6 +35,8 @@ public class LoadScreen extends Screen {
 
 		manager.load("res/sprites/UI/bar/bar.png", Texture.class);
 		manager.load("res/sprites/UI/bar/bar_display.png", Texture.class);
+
+		manager.load("res/sprites/projectile/mage_ball.png", Texture.class);
 	}
 
 	@Override

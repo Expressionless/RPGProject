@@ -58,8 +58,7 @@ public class NumberUtils {
 	public static float lerp(float val, float target, float change) {
 
 		float result = ((val * (1.0f - change)) + (target * change));
-
-		if (Math.abs(val - target) < Constants.MIN_LERP_DIST)
+		if (Math.abs(val - target) < change)
 			return target;
 		else
 			return result;

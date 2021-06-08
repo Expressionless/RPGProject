@@ -64,7 +64,6 @@ public class Player extends Mob {
 
 		this.setStat("speed", PlayerConstants.PLAYER_SPEED);
 		this.setStat("maxHealth", 150);
-		this.setStat("health", 75);
 		
 		this.updateCollider();
 		game.getGameData().setPlayer(this);

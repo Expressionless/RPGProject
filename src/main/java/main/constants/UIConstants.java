@@ -21,4 +21,6 @@ public class UIConstants {
 	public static final int HEALTH_BAR_X = 0;//ApplicationConstants.CAMERA_WIDTH / 2 - BAR_SPRITE_WIDTH * HEALTH_BAR_WIDTH / 2;
 	// -(160)
 	public static final int HEALTH_BAR_Y = -ApplicationConstants.CAMERA_HEIGHT + ADJUSTED_BAR_SPRITE_HEIGHT;
+
+	public static final float BAR_PERCENT_CHANGE = 0.015f;
 }

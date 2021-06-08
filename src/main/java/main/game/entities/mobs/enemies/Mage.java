@@ -2,7 +2,6 @@ package main.game.entities.mobs.enemies;
 
 import helix.utils.math.Angle;
 import helix.utils.math.Point;
-import helix.utils.math.Vector2;
 import main.game.RpgGame;
 import main.game.entities.mobs.neutral.Player;
 import main.game.entities.mobs.state.MobState;
@@ -14,36 +13,80 @@ public class Mage extends BasicEnemy {
 
 	private boolean searching = false;
 	
-	private final int SEARCH_TIME = 3;
+	private final int SEARCH_TIME = 5;
 	
 	public Mage(RpgGame game, Point pos) {
 		super(game, pos);
 		this.addSprite(MAGE_UP, 4, 750);
 		this.addSprite(MAGE_DOWN, 4, 750);
 		this.setStat("speed", 0.25f);
-		this.setStat("sight", 128);
-		this.setStat("attack_range", 32);
+		this.setStat("sight", 96);
+		
+		this.setStat("attack", 20);
+		this.setStat("attack_range", 48);
+		this.setStat("attack_speed", 0.2f);
 		
 		this.addStates();
 	}
 
+	@Override
+	public void step(float delta) {
+		super.step(delta);
+		/*
+		 * System.out.println("Chase Timer 0: " + this.getAlarm(0).getTimer() + " " +
+		 * this.getAlarm(0).isActive() + " s:" + searching);
+		 * System.out.println("Attack Timer 1: " + this.getAlarm(1).getTimer() + " " +
+		 * this.getAlarm(1).isActive());
+		 */
+	}
+	
 	private void addStates() {
 		Player player = this.getGameData().getPlayer();
-		float distToPlayer = getPos().getDistTo(player.getPos());
 		
-		this.getStateMachine().addState(MobState.IDLE, () -> {
-			// Check if player is nearby
+		// Idle state
+		this.addState(MobState.IDLE, () -> {
+			float distToPlayer = getPos().getDistTo(player.getPos());
+			// Check if player is not nearby
+			// If so exit with IDLE
 			if(distToPlayer > this.getStat("sight"))
 				return MobState.IDLE;
-			
-			this.setTarget(player);
-			return MobState.CHASE;
+			else {
+				this.setTarget(player);
+				return MobState.CHASE;
+			}
 		});
 
-		this.getStateMachine().addState(MobState.CHASE, () -> {
+		this.addState(MobState.SEARCHING, () -> {
+			float distToPlayer = getPos().getDistTo(player.getPos());
+			if(searching) {
+				if(distToPlayer < this.getStat("sight")) {
+					this.setTarget(player);
+					this.getAlarm(0).cancel();
+					return MobState.CHASE;
+				}
+				return MobState.SEARCHING;
+			}
+			else {
+				this.setTarget(null);
+				return MobState.IDLE;
+			}
+		});
+		
+		this.addState(MobState.ATTACK, () -> {
+			System.out.println(this.getAlarm(1).isActive() + " " + this.getLastState());
+			if(this.getAlarm(1).isActive())
+				return MobState.ATTACK;
+			else
+				return this.getLastState();
+		});
+		
+		this.addState(MobState.CHASE, () -> {
+			float distToPlayer = getPos().getDistTo(player.getPos());
 			if (distToPlayer > this.getStat("sight")) {
+				// Return to IDLE if can't find the player
 				if(this.getTarget() == null)
 					return MobState.IDLE;
+				// Search for the player otherwise
 				if(!this.getAlarm(0).isActive() && !searching) {
 					if(!searching) {
 						this.setAlarm(0, () -> {
@@ -56,12 +99,30 @@ public class Mage extends BasicEnemy {
 				}
 				
 			} else {
-				if (this.getPos().getDistTo(this.getTarget().getPos()) <= this.getStat("attack_range")) {
-					this.setDirection(new Vector2(0, 0));
-				} else {
+				if(this.getTarget() == null)
+					return MobState.IDLE;
+				if(this.getPos().getDistTo(this.getTarget().getPos()) > this.getStat("attack_range"))
 					this.moveTo(this.getTarget().getPos(), this.getStat("speed"));
+				
+				else if(!this.getAlarm(1).isActive()) {
+					System.out.println("setting alarm");
+					this.setAlarm(1, () -> {
+						player.subStat("health", this.getStat("attack"));
+					}, 3);
+					return MobState.ATTACK;
 				}
-			}
+			}/*
+				 * else { if (this.getPos().getDistTo(this.getTarget().getPos()) <=
+				 * this.getStat("attack_range")) { this.setDirection(new Vector2(0, 0));
+				 * 
+				 * if (!this.getAlarm(1).isActive()) { this.setAlarm(1, () -> {
+				 * player.subStat("health", this.getStat("attack")); searching = false; }, 15);
+				 * System.out.println("Setting alarm: " + this.getAlarm(1));
+				 * 
+				 * searching = true; } else if(searching)
+				 * System.out.println(this.getAlarm(1).toString()); } else {
+				 * this.moveTo(this.getTarget().getPos(), this.getStat("speed")); } }
+				 */
 			return MobState.CHASE;
 		});
 	}
@@ -78,5 +139,8 @@ public class Mage extends BasicEnemy {
 		this.getSprite().flip(left);
 		
 		this.getSprite().start();
+		
+		if(this.getCurrentState() != MobState.CHASE)
+			this.getSprite().reset();
 	}
 }

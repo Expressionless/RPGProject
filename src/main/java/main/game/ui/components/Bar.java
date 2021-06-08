@@ -24,7 +24,7 @@ public abstract class Bar extends UIComponent {
 	private int barWidth;
 	private Color barColor;
 
-	private float targetVal, currentVal, maxVal;
+	private float targetVal = 0f, currentVal = 0f;
 	
 	/**
 	 * Returns a percentage of value and maxvalue. Cannot exceed 1
@@ -48,8 +48,11 @@ public abstract class Bar extends UIComponent {
 		this.renderBar(batch, new Color((float)(188f/255f), (float)(84f/255f), (float)(223f/255f), 1.0f));
 	}
 	
-	private float safeUpdate() {
-		return NumberUtils.clamp(updateValue(), 0, 1).floatValue();
+	private float getSmoothedValue() {
+		this.targetVal = updateValue();
+		if(this.currentVal != this.targetVal)
+			this.currentVal = NumberUtils.lerp(currentVal, targetVal, UIConstants.BAR_PERCENT_CHANGE);
+		return NumberUtils.clamp(this.currentVal, 0, 1).floatValue();
 	}
 	
 	private void renderBar(SpriteBatch batch, Color col) {
@@ -60,9 +63,9 @@ public abstract class Bar extends UIComponent {
 		
 		Point topLeft = new Point(x, y);
 		
-		float value = this.safeUpdate() * UIConstants.HEALTH_BAR_WIDTH * UIConstants.ADJUSTED_BAR_SPRITE_WIDTH;
+		float value = this.getSmoothedValue() * UIConstants.HEALTH_BAR_WIDTH * UIConstants.ADJUSTED_BAR_SPRITE_WIDTH;
+		
 		bar.setScale(value, UIConstants.BAR_SCALE.getY());
-		System.out.println(value);
 		bar.draw(batch, x, y + 2, barColor);
 		
 		//left_bar.draw(batch, topLeft.getX(), topLeft.getY(), col);

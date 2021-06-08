@@ -19,15 +19,20 @@ public class StateMachine {
 	}
 	
 	public void next() {
+		if(this.lastState != null && this.currentState != this.lastState) System.out.println(this.toString());
 		this.setState(this.events.get(currentState).call());
 	}
 	
 	private boolean setState(MobState state) {
-		if(state == null)
+		if(state == null || this.currentState == state)
 			return false;
 		
-		if(this.currentState != null)
-			this.lastState = this.currentState;
+		if(this.currentState != null) {
+			if(this.lastState != null && this.lastState != this.currentState)
+				this.lastState = this.currentState;
+			else if(this.lastState == null)
+				this.lastState = this.currentState;
+		}
 		this.currentState = state;
 		
 		//System.out.println("Set state to: " + this.currentState);
@@ -49,5 +54,21 @@ public class StateMachine {
 		this.events.put(state, event);
 		
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "StateMachine [current=" + this.currentState.name() + 
+				",last=" + this.lastState.name() + 
+				((this.defaultState != null) ? ",default=" + this.defaultState.name() : "")
+				+ "]";
+	}
+	
+	public MobState getCurrentState() {
+		return this.currentState;
+	}
+	
+	public MobState getLastState() {
+		return this.lastState;
 	}
 }
