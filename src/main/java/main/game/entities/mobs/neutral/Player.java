@@ -5,14 +5,18 @@ import static main.constants.PlayerConstants.LEFT;
 import static main.constants.PlayerConstants.RIGHT;
 import static main.constants.PlayerConstants.UP;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
 import helix.utils.math.Angle;
 import helix.utils.math.Point;
-import main.constants.*;
+import main.constants.ApplicationConstants;
+import main.constants.InventoryConstants;
+import main.constants.PlayerConstants;
 import main.game.RpgGame;
+import main.game.annotations.QueueAsset;
 import main.game.entities.Mob;
 import main.game.inventory.Inventory;
 import main.game.inventory.Slot;
@@ -21,9 +25,14 @@ import main.game.inventory.subtypes.GenericInventory;
 import main.game.inventory.subtypes.HotbarInventory;
 
 public class Player extends Mob {
-	public static final String PLAYER_RIGHT = "res/sprites/mob/player/right.png";
-	public static final String PLAYER_DOWN = "res/sprites/mob/player/down.png";
-	public static final String PLAYER_UP = "res/sprites/mob/player/up.png";
+	@QueueAsset(ref="res/sprites/mob/player/right.png", type=Texture.class)
+	public static String PLAYER_RIGHT;
+	
+	@QueueAsset(ref="res/sprites/mob/player/down.png", type=Texture.class)
+	public static String PLAYER_DOWN;
+	
+	@QueueAsset(ref="res/sprites/mob/player/up.png", type=Texture.class)
+	public static String PLAYER_UP;
 
 	// Inventories
 	private Inventory hotbar;

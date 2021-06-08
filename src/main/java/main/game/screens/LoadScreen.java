@@ -20,9 +20,9 @@ public class LoadScreen extends Screen {
 		manager.load("res/sprites/doodads/shrub.png", Texture.class);
 		manager.load("res/sprites/doodads/tree.png", Texture.class);
 		
-		manager.load("res/sprites/mob/player/down.png", Texture.class);
-		manager.load("res/sprites/mob/player/right.png", Texture.class);
-		manager.load("res/sprites/mob/player/up.png", Texture.class);
+		//manager.load("res/sprites/mob/player/down.png", Texture.class);
+		//manager.load("res/sprites/mob/player/right.png", Texture.class);
+		//manager.load("res/sprites/mob/player/up.png", Texture.class);
 
 		manager.load("res/sprites/mob/enemy/mage/tiny_mage_right.png", Texture.class);
 		manager.load("res/sprites/mob/enemy/mage/tiny_mage_up_right.png", Texture.class);
