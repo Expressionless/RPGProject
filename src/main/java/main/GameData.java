@@ -34,11 +34,11 @@ public final class GameData extends Data {
 	@Override
 	public void init() {
 		// Init Bar Sprite
-		Bar.BAR_SPRITE = new SpriteSheet(this, "res/sprites/UI/bar/bar_display.png", 8, 12);
-		Bar.bar = this.createSprite("res/sprites/UI/bar/bar.png");
+		Bar.BAR_SPRITE = new SpriteSheet(this, Bar.BAR_DISP_SPRITE_REF, 8, 12);
+		Bar.bar = this.createSprite(Bar.BAR_SPRITE_REF);
 		
 		// Init inventory data
-		Slot.SPRITE = this.createSprite("res/sprites/UI/inventory/slot.png");
+		Slot.SPRITE = this.createSprite(Slot.SPRITE_REF);
 		Slot.inventoryFont.getData().setScale(0.25f);
 		
 		// Init Item Data

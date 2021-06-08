@@ -3,6 +3,7 @@ package main.game.inventory;
 import java.util.logging.Logger;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -14,11 +15,15 @@ import helix.utils.io.BinaryWriter;
 import helix.utils.math.Point;
 import helix.utils.math.Rectangle;
 import main.constants.InventoryConstants;
+import main.game.annotations.QueueAsset;
 import main.game.inventory.util.InventoryCursor;
 import main.game.item.ItemInfo;
 
 public class Slot implements Serializable {
 	// Slot sprite
+	@QueueAsset(ref="res/sprites/UI/inventory/slot.png", type=Texture.class)
+	public static String SPRITE_REF;
+	
 	public static Sprite SPRITE;
 	
 	public static final BitmapFont inventoryFont = new BitmapFont();

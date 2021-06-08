@@ -1,6 +1,7 @@
 package main.game.ui.components;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
@@ -11,10 +12,17 @@ import helix.utils.math.Point;
 import main.GameData;
 import main.constants.ApplicationConstants;
 import main.constants.UIConstants;
+import main.game.annotations.QueueAsset;
 import main.game.ui.UI;
 import main.game.ui.UIComponent;
 
 public abstract class Bar extends UIComponent {
+	@QueueAsset(ref="res/sprites/UI/bar/bar_display.png", type=Texture.class)
+	public static String BAR_DISP_SPRITE_REF;
+	
+	@QueueAsset(ref="res/sprites/UI/bar/bar.png", type=Texture.class)
+	public static String BAR_SPRITE_REF;
+	
 	public static SpriteSheet BAR_SPRITE;
 	public static Sprite left_disp, center_disp, right_disp,
 						bar;

@@ -8,7 +8,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-import helix.Constants;
 import helix.utils.ClassUtils;
 import main.game.annotations.QueueAsset;
 
@@ -89,8 +88,7 @@ public abstract class BaseGame extends Game {
 		// Load loading screen stuff
 		this.getData().getManager().finishLoading();
 		this.getData().setCamera(camera);
-
-		this.queueAssets();
+		
 		this.loadTextures();
 		this.data.init();
 
@@ -123,15 +121,14 @@ public abstract class BaseGame extends Game {
 					old = texField.get(clazz);
 					texField.set(old, queueAnnotation.ref());
 				} catch (IllegalArgumentException | IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
 				this.getData().getManager().load(queueAnnotation.ref(), queueAnnotation.type());
-				System.out.println(this.getData().getManager().getQueuedAssets());
 			}
 		}
 
+		System.out.println("Queued " + this.getData().getManager().getQueuedAssets() + " assets to load");
 		// Load Resources
 		while (!this.getData().getManager().update()) {
 			// Check if progress got updated
@@ -142,17 +139,6 @@ public abstract class BaseGame extends Game {
 			}
 		}
 
-	}
-
-	/**
-	 * Queue all assets into the game. Assets should be queued in this method here
-	 * {@link helix.gfx.Screen#queueAssets(com.badlogic.gdx.assets.AssetManager)}
-	 * within the first {@link helix.gfx.Screen} of the BaseGame
-	 */
-	private void queueAssets() {
-		for (int i = 0; i < this.getData().screens.size(); i++) {
-			this.getData().screens.get(i).queueAssets(this.getData().getManager());
-		}
 	}
 
 	// Getters and Setters

@@ -1,8 +1,11 @@
 package main.constants;
 
+import main.game.annotations.QueueAsset;
+
 public class AssetConstants {
 	// Items resource path
-	public static final String ITEMS_DIRECTORY = "res/sprites/items.png";
+	@QueueAsset(ref="res/sprites/items.png")
+	public static String ITEMS_DIRECTORY;
 	
 	// Basic Collision (px)
 	public static final float ITEM_SUCK_DISTANCE = 12;

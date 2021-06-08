@@ -13,14 +13,6 @@ import helix.game.Data;
  *
  */
 public abstract class Screen extends ScreenAdapter {
-
-	/**
-	 * Queue all assets needed for the Scene here
-	 * @param manager - {@link AssetManager} to load through
-	 * 
-	 * @see {@link AssetManager#load}
-	 */
-	public abstract void queueAssets(AssetManager manager);
 	
 	/**
 	 * Basic Step event of the screen. Called before {@link Screen#draw}

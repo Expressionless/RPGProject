@@ -3,7 +3,6 @@ package main.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import helix.gfx.Screen;
@@ -229,11 +228,5 @@ public final class GameScreen extends Screen {
 
 	public GameData getGameData() {
 		return (GameData) getGame().getData();
-	}
-
-	// Unimplemented Overrides
-	@Override
-	public void queueAssets(AssetManager manager) {
-
 	}
 }

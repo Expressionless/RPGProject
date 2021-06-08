@@ -7,6 +7,7 @@ import helix.utils.math.Point;
 import main.constants.InventoryConstants;
 import main.game.Entity;
 import main.game.RpgGame;
+import main.game.annotations.QueueAsset;
 import main.game.inventory.Inventory;
 import main.game.inventory.Slot;
 import main.game.inventory.subtypes.HotbarInventory;
@@ -14,14 +15,16 @@ import main.game.item.ItemInfo;
 
 public class HotbarSelector extends Entity {
 
+	@QueueAsset(ref="res/sprites/UI/inventory/selector.png")
+	public static String SPRITE_REF;
+	
 	private HotbarInventory focusedInventory;
 	private int currentSlot = 5;
 	
 	public HotbarSelector(RpgGame game, Point pos, HotbarInventory inventory) {
 		super(game, pos);
 		this.focusedInventory = inventory;
-		this.addSprite("res/sprites/UI/inventory/selector.png");
-		this.setSprite("res/sprites/UI/inventory/selector.png");
+		this.addSprite(SPRITE_REF);
 	}
 
 	@Override

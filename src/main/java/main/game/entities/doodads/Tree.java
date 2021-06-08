@@ -10,7 +10,7 @@ import main.game.entities.Doodad;
 
 public class Tree extends Doodad {
 	@QueueAsset(type=Texture.class, ref="res/sprites/doodads/tree.png")
-	public static String TREE_REF = "res/sprites/doodads/tree.png";
+	public static String TREE_REF;;
 	
 	private float growtimer;
 	
