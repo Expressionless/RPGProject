@@ -111,21 +111,25 @@ public abstract class BaseGame extends Game {
 		Set<Class<?>> classes = ClassUtils.getClasses();
 
 		for (Class<?> clazz : classes) {
-			Field texField;
-			try {
-				texField = clazz.getDeclaredField(Constants.TEXTURE_FIELD_NAME);
-			} catch (NoSuchFieldException | SecurityException e) {
-				continue;
+			for (Field texField : clazz.getFields()) {
+				if (!texField.isAnnotationPresent(QueueAsset.class))
+					continue;
+
+				QueueAsset queueAnnotation = texField.getAnnotation(QueueAsset.class);
+				
+				// Attempt to set the texture field to the new value
+				Object old;
+				try {
+					old = texField.get(clazz);
+					texField.set(old, queueAnnotation.ref());
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				this.getData().getManager().load(queueAnnotation.ref(), queueAnnotation.type());
+				System.out.println(this.getData().getManager().getQueuedAssets());
 			}
-
-			if (!texField.isAnnotationPresent(QueueAsset.class))
-				continue;
-
-			QueueAsset queueAnnotation = texField.getAnnotation(QueueAsset.class);
-			ClassUtils.setStatic(clazz, Constants.TEXTURE_FIELD_NAME, queueAnnotation.ref());
-			
-			this.getData().getManager().load(queueAnnotation.ref(), queueAnnotation.type());
-			System.out.println(this.getData().getManager().getQueuedAssets());
 		}
 
 		// Load Resources
