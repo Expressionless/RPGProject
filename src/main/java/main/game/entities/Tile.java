@@ -1,4 +1,4 @@
-package main.game.entities.tiles;
+package main.game.entities;
 
 import helix.game.Data;
 import helix.game.objects.Entity;

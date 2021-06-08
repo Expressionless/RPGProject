@@ -98,6 +98,8 @@ public abstract class BaseGame extends Game {
 	 */
 	private void loadTextures() {
 		// Load Resources
+		
+		
 		while (!this.getData().getManager().update()) {
 			// Check if progress got updated
 			progress = this.getData().getManager().getProgress();

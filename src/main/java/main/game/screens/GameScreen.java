@@ -12,7 +12,7 @@ import main.GameData;
 import main.constants.PlayerConstants;
 import main.game.RpgGame;
 import main.game.entities.doodads.Tree;
-import main.game.entities.mobs.enemies.Mage;
+import main.game.entities.mobs.enemies.mage.Mage;
 import main.game.entities.mobs.neutral.Player;
 import main.game.inventory.Inventory;
 import main.game.inventory.Slot;

@@ -174,35 +174,14 @@ public abstract class Mob extends Entity implements Serializable {
 	
 	// Helper class
 	@SuppressWarnings("unused")
-	protected class MobStats {
-
-		private float speed = 0, maxSpeed = 1.5f;
-		private float vel, acc = 0;
-		private float defence, health, maxHealth;
-		private float sight, attack, attack_range, attack_speed;
-		
-		public void setStat(String stat, float val) {
-			try {
-				if(stat == "maxHealth")
-					MobStats.class.getDeclaredField("health").set(this, val);
-				MobStats.class.getDeclaredField(stat).set(this, val);
-			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-				e.printStackTrace();
-			}
-		}
-
-		public float getStat(String stat) {
-			try {
-				return MobStats.class.getDeclaredField(stat).getFloat(this);
-			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-				e.printStackTrace();
-			}
-
-			return 0;
-		}
+	protected class MobStats extends AttribHandler<Float> {
+		public float speed = 0, maxSpeed = 1.5f;
+		public float vel, acc = 0;
+		public float defence, health, maxHealth;
+		public float sight, attack, attack_range, attack_speed;
 		
 		public void subStat(String stat, float val) {
-			float newVal = this.getStat(stat) - val; 
+			float newVal = this.getStat(stat) - val;
 			this.setStat(stat, newVal);
 		}
 	}

@@ -265,7 +265,7 @@ public abstract class GameObject {
 		return alarm[index];
 	}
 	
-	public final void setAlarm(int index, Event action, int timer) {
-		this.getAlarm(index).setAlarm(action, timer);
+	public final void setAlarm(int index, int timer, Event action) {
+		this.getAlarm(index).setAlarm(timer, action);
 	}
 }

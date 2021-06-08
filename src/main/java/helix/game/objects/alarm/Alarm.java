@@ -81,7 +81,7 @@ public final class Alarm {
 	 * @param action - Callback method to trigger when timer reaches 0
 	 * @param timer - timer (seconds)
 	 */
-	public void setAlarm(Event action, int timer) {
+	public void setAlarm(int timer, Event action) {
 		this.action = action;
 		this.setTimer(timer);
 	}

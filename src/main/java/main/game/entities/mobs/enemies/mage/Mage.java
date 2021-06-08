@@ -1,4 +1,4 @@
-package main.game.entities.mobs.enemies;
+package main.game.entities.mobs.enemies.mage;
 
 import helix.utils.math.Angle;
 import helix.utils.math.Point;
@@ -8,8 +8,8 @@ import main.game.entities.mobs.state.MobState;
 import main.game.entities.mobs.template.BasicEnemy;
 
 public class Mage extends BasicEnemy {
-	private static final String MAGE_UP = "res/sprites/mob/enemy/tiny_mage_up_right.png";
-	private static final String MAGE_DOWN = "res/sprites/mob/enemy/tiny_mage_right.png";
+	private static final String MAGE_UP = "res/sprites/mob/enemy/mage/tiny_mage_up_right.png";
+	private static final String MAGE_DOWN = "res/sprites/mob/enemy/mage/tiny_mage_right.png";
 
 	private boolean searching = false;
 	
@@ -89,9 +89,9 @@ public class Mage extends BasicEnemy {
 				// Search for the player otherwise
 				if(!this.getAlarm(0).isActive() && !searching) {
 					if(!searching) {
-						this.setAlarm(0, () -> {
+						this.setAlarm(0, SEARCH_TIME, () -> {
 							this.setTarget(null);
-						}, SEARCH_TIME);
+						});
 						searching = true;
 					} else {
 						return MobState.IDLE;
@@ -106,9 +106,9 @@ public class Mage extends BasicEnemy {
 				
 				else if(!this.getAlarm(1).isActive()) {
 					System.out.println("setting alarm");
-					this.setAlarm(1, () -> {
+					this.setAlarm(1, 3, () -> {
 						player.subStat("health", this.getStat("attack"));
-					}, 3);
+					});
 					return MobState.ATTACK;
 				}
 			}/*

@@ -17,6 +17,7 @@ import main.game.inventory.Slot;
 import main.game.inventory.util.InventoryCursor;
 import main.game.item.Item;
 import main.game.item.ItemInfo;
+import main.game.ui.UI;
 import main.game.ui.components.Bar;
 
 public final class GameData extends Data {
@@ -28,6 +29,7 @@ public final class GameData extends Data {
 	// "Unique" Entities
 	private Player player;
 	private InventoryCursor cursor;
+	private UI ui;
 
 	@Override
 	public void init() {
