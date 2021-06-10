@@ -120,5 +120,9 @@ public final class GameData extends Data {
 	public RpgGame getGame() {
 		return (RpgGame)this.getBaseGame();
 	}
+	
+	public void setUI(UI ui) {
+		this.ui = ui;
+	}
 
 }

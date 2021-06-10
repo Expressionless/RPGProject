@@ -25,13 +25,13 @@ import main.game.inventory.subtypes.GenericInventory;
 import main.game.inventory.subtypes.HotbarInventory;
 
 public class Player extends Mob {
-	@QueueAsset(ref="res/sprites/mob/player/right.png", type=Texture.class)
+	@QueueAsset(ref = "res/sprites/mob/player/right.png", type = Texture.class)
 	public static String PLAYER_RIGHT;
-	
-	@QueueAsset(ref="res/sprites/mob/player/down.png", type=Texture.class)
+
+	@QueueAsset(ref = "res/sprites/mob/player/down.png", type = Texture.class)
 	public static String PLAYER_DOWN;
-	
-	@QueueAsset(ref="res/sprites/mob/player/up.png", type=Texture.class)
+
+	@QueueAsset(ref = "res/sprites/mob/player/up.png", type = Texture.class)
 	public static String PLAYER_UP;
 
 	// Inventories
@@ -45,8 +45,10 @@ public class Player extends Mob {
 	public Player(RpgGame game, Point pos) {
 		super(game, pos);
 		float x = 40 - ApplicationConstants.CAMERA_WIDTH / 4;
-		float y = 30 - ApplicationConstants.CAMERA_HEIGHT * .6f + Slot.SPRITE.getHeight() * (PlayerConstants.P_INV_HEIGHT + 1);
-		GenericInventory newInv = new GenericInventory(game, new Point(x, y), PlayerConstants.P_INV_WIDTH, PlayerConstants.P_INV_HEIGHT);
+		float y = 30 - ApplicationConstants.CAMERA_HEIGHT * .6f
+				+ Slot.SPRITE.getHeight() * (PlayerConstants.P_INV_HEIGHT + 1);
+		GenericInventory newInv = new GenericInventory(game, new Point(x, y), PlayerConstants.P_INV_WIDTH,
+				PlayerConstants.P_INV_HEIGHT);
 		this.setInventory(newInv);
 
 		this.addSprite(PLAYER_RIGHT, 4, anim_duration);
@@ -65,7 +67,7 @@ public class Player extends Mob {
 		Point equipPos = this.getHotbar().getPos().copy();
 		equipPos.setX(equipPos.getX() - Slot.SPRITE.getWidth() * 2.5f - InventoryConstants.INVENTORY_MARGIN);
 		equipPos.setY(equipPos.getY());
-		
+
 		this.equipped = new GenericInventory(game, equipPos, 2, 1);
 		this.equipped.clearAllowedTypes();
 		this.equipped.addAllowedTypes("WEAPON", "TOOL");
@@ -73,7 +75,7 @@ public class Player extends Mob {
 
 		this.setStat("speed", PlayerConstants.PLAYER_SPEED);
 		this.setStat("maxHealth", 150);
-		
+
 		this.updateCollider();
 		game.getGameData().setPlayer(this);
 	}
@@ -110,7 +112,7 @@ public class Player extends Mob {
 
 		this.getDirection().setX(xVal);
 		this.getDirection().setY(yVal);
-		
+
 		if (this.getDirection().length() != 0)
 			this.move(this.getStat("speed") * delta);
 	}
@@ -176,7 +178,7 @@ public class Player extends Mob {
 
 	// TODO: Implement Serialization of player object
 	/*
-	 * Save the position 
+	 * Save the position
 	 */
 	@Override
 	public boolean write(BinaryWriter writer, int pos) {

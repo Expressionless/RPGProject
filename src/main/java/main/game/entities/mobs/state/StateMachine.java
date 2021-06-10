@@ -19,7 +19,7 @@ public class StateMachine {
 	}
 	
 	public void next() {
-		if(this.lastState != null && this.currentState != this.lastState) System.out.println(this.toString());
+		//if(this.lastState != null && this.currentState != this.lastState) System.out.println(this.toString());
 		this.setState(this.events.get(currentState).call());
 	}
 	
@@ -35,7 +35,7 @@ public class StateMachine {
 		}
 		this.currentState = state;
 		
-		//System.out.println("Set state to: " + this.currentState);
+		System.out.println("Set state to: " + this.currentState + " from " + this.lastState);
 		return true;
 	}
 	

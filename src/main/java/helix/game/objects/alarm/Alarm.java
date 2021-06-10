@@ -48,7 +48,7 @@ public final class Alarm {
 	 */
 	public Alarm(Event action, int timer) {
 		this.action = action;
-		this.timer = timer;
+		this.setTimer(timer);
 	}
 	
 	/**
@@ -65,6 +65,11 @@ public final class Alarm {
 			}
 			ms = 0;
 		} else ms += 1000f * delta;
+	}
+
+	public void cancel() {
+		this.timer = -1;
+		this.action = null;
 	}
 	
 	/**
@@ -103,6 +108,10 @@ public final class Alarm {
 		return timer;
 	}
 	
+	public int getStartTime() {
+		return this.startTime;
+	}
+	
 	/** <b>strictly</b> when {@link Alarm#timer} == {@link Alarm#NO_ALARM}
 	 * @return - whether or not alarm is currently ticking down
 	 */
@@ -115,11 +124,6 @@ public final class Alarm {
 				".init_timer=" + this.startTime +
 				",event=" + this.action
 				+ "]";
-	}
-
-	public void cancel() {
-		this.timer = -1;
-		this.action = null;
 	}
 	
 }

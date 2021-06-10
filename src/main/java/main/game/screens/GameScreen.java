@@ -37,15 +37,21 @@ public final class GameScreen extends Screen {
 	public void show() {
 		this.world = new World(32, 32);
 		world.setGame(this.getRpgGame());
+		
 		this.ui = new UI(this.getRpgGame());
+		this.getGameData().setUI(this.ui);
+		
 
 		player = new Player(getRpgGame(), new Point(30, 30));
 		this.batch = new SpriteBatch();
 		ItemSpawner is = new ItemSpawner(this.getRpgGame());
 		is.spawnItem(50, 20, "grass", 5);
 		new Tree(getRpgGame(), new Point(100, 80));
-		
+
 		new Mage(getRpgGame(), new Point(-300, 40));
+		new Mage(getRpgGame(), new Point(-350, 40));
+		new Mage(getRpgGame(), new Point(-250, 40));
+		new Mage(getRpgGame(), new Point(-400, 40));
 	}
 
 	@Override

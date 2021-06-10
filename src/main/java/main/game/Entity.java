@@ -2,6 +2,7 @@ package main.game;
 
 import helix.utils.math.Point;
 import main.GameData;
+import main.game.entities.mobs.neutral.Player;
 
 public abstract class Entity extends helix.game.objects.Entity {
 
@@ -18,6 +19,10 @@ public abstract class Entity extends helix.game.objects.Entity {
 	
 	public GameData getGameData() {
 		return this.game.getGameData();
+	}
+	
+	public Player getPlayer() {
+		return this.getGameData().getPlayer();
 	}
 
 }

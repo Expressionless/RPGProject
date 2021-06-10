@@ -180,6 +180,15 @@ public abstract class Mob extends Entity implements Serializable {
 		public float defence, health, maxHealth;
 		public float sight, attack, attack_range, attack_speed;
 		
+		public float proj_speed, proj_range, cast_time;
+		
+		@Override
+		public void setStat(String stat, Float val) {
+			if(stat == "maxHealth")
+				super.setStat("health", val);
+			super.setStat(stat, val);
+		}
+		
 		public void subStat(String stat, float val) {
 			float newVal = this.getStat(stat) - val;
 			this.setStat(stat, newVal);

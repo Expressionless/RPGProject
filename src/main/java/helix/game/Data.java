@@ -1,7 +1,5 @@
 package helix.game;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.logging.Logger;
@@ -20,9 +18,10 @@ import helix.gfx.Screen;
 import helix.gfx.Sprite;
 import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
-import helix.utils.math.Point;
+
 /**
  * Basic Data class that stores all the objects, entities and screens
+ * 
  * @author bmeachem
  *
  * @see {@link GameObject}, {@link Entity}, {@link Screen}
@@ -38,11 +37,11 @@ public abstract class Data {
 	/**
 	 * list of all {@link GameObject}s in the application
 	 */
-	public final ArrayList<GameObject> objects;
+	public final ArrayList<GameObject> objects, objectBuffer;
 	/**
 	 * list of all {@link Entity}s in the application
 	 */
-	public final ArrayList<Entity> entities;
+	public final ArrayList<Entity> entities, entityBuffer;
 	/**
 	 * list of all {@link Screen}s in the application
 	 */
@@ -52,10 +51,10 @@ public abstract class Data {
 	 * Read binary data with this
 	 */
 	protected BinaryReader reader;
-	
+
 	/**
-	 * Write binary data with this
-	 * Must call {@link BinaryWriter#close} when done writing
+	 * Write binary data with this Must call {@link BinaryWriter#close} when done
+	 * writing
 	 */
 	protected BinaryWriter writer;
 
@@ -63,18 +62,18 @@ public abstract class Data {
 	 * An AssetManager to manage all assets
 	 */
 	private AssetManager manager;
-	
+
 	/**
 	 * Main Viewport in the application
 	 */
 	private Viewport viewport;
-	
+
 	/**
 	 * Main Camera in the application. Same instance as
 	 * {@link helix.game.BaseGame#getCamera()}
 	 */
 	private Camera camera;
-	
+
 	/**
 	 * Reference to the base instance
 	 */
@@ -82,12 +81,15 @@ public abstract class Data {
 
 	/**
 	 * Create a new Data instance.
+	 * 
 	 * @param game
 	 */
 	public Data(BaseGame game) {
 		manager = new AssetManager();
 		entities = new ArrayList<>();
+		entityBuffer = new ArrayList<>();
 		objects = new ArrayList<>();
+		objectBuffer = new ArrayList<>();
 		screens = new ArrayList<>();
 
 		this.game = game;
@@ -100,9 +102,10 @@ public abstract class Data {
 
 	/**
 	 * Create a {@link Sprite}
+	 * 
 	 * @param spriteName - Name of the sprite to add
 	 * @param frameCount - no. of frames
-	 * @param animTime - anim time (ms)
+	 * @param animTime   - anim time (ms)
 	 * @return - a new {@link Sprite}
 	 */
 	public final Sprite createSprite(String spriteName, int frameCount, float animTime) {
@@ -115,9 +118,10 @@ public abstract class Data {
 
 	/**
 	 * Create a {@link Sprite} with a single frame and no animation time
+	 * 
 	 * @param spriteName - Name of the sprite to add
 	 * @param frameCount - no. of frames
-	 * @param animTime - anim time (ms)
+	 * @param animTime   - anim time (ms)
 	 * @return - a new {@link Sprite}
 	 */
 	public final Sprite createSprite(String spriteName) {
@@ -125,8 +129,8 @@ public abstract class Data {
 	}
 
 	/**
-	 * Dispose of all things that need disposing here.
-	 * This gets run at the end of {@link Data#disposeCore}
+	 * Dispose of all things that need disposing here. This gets run at the end of
+	 * {@link Data#disposeCore}
 	 */
 	protected abstract void dispose();
 
@@ -146,14 +150,19 @@ public abstract class Data {
 	}
 
 	/**
-	 * Override this as necessary. Gets called at the end of {@link Data#update(float)}
+	 * Override this as necessary. Gets called at the end of
+	 * {@link Data#update(float)}
+	 * 
 	 * @param delta - Time since last frame (seconds)
 	 */
-	protected void step(float delta) {};
+	protected void step(float delta) {
+	};
+
 	/**
-	 * Main update loop. Dispose of all entities that need disposing and then
-	 * sort entities by {@link Entity#getDepth}
-	 * Finally, update all objects and then run {@link Data#step}
+	 * Main update loop. Dispose of all entities that need disposing and then sort
+	 * entities by {@link Entity#getDepth} Finally, update all objects and then run
+	 * {@link Data#step}
+	 * 
 	 * @param delta - Time since last frame (seconds)
 	 */
 	public final void update(float delta) {
@@ -170,38 +179,51 @@ public abstract class Data {
 
 		});
 
+		if (this.objectBuffer.size() > 0) {
+			this.objects.addAll(objectBuffer);
+			this.objectBuffer.clear();
+		}
+
 		for (GameObject object : objects) {
 			object.updateAlarms(delta);
 			object.update(delta);
 		}
-		
+
 		this.step(delta);
 	}
 
 	/**
-	 * Gets called at end of {@link Data#render}
-	 * Override as necessary to draw extra things through
-	 * any abstract implementation of this class
+	 * Gets called at end of {@link Data#render} Override as necessary to draw extra
+	 * things through any abstract implementation of this class
+	 * 
 	 * @param batch - {@link SpriteBatch} to draw with
 	 */
-	protected void draw(SpriteBatch batch) {};
-	
+	protected void draw(SpriteBatch batch) {
+	};
+
 	/**
-	 * Render every entity that needs rendering and then call
-	 * {@link Data#draw}
+	 * Render every entity that needs rendering and then call {@link Data#draw}
+	 * 
 	 * @param batch - {@link SpriteBatch} to draw with
 	 */
 	public final void render(SpriteBatch batch) {
+		if (this.entityBuffer.size() > 0) {
+			this.entities.addAll(this.entityBuffer);
+			this.entityBuffer.clear();
+		}
+		
 		for (Entity entity : entities) {
 			entity.render(batch);
 		}
+		
 		this.draw(batch);
 	}
 
 	/**
 	 * Begin Reading with the {@link Data#reader} and read in from a specified path
-	 * will return before reading if there is an instance of
-	 * {@link Data#writer} or {@link Data#reader} already.
+	 * will return before reading if there is an instance of {@link Data#writer} or
+	 * {@link Data#reader} already.
+	 * 
 	 * @param path - path to read in from, relative to the absolute directory
 	 */
 	public final void beginReading(String path) {
@@ -212,7 +234,7 @@ public abstract class Data {
 
 		reader = new BinaryReader(path);
 	}
-	
+
 	/**
 	 * Stop reading from the {@link Data#reader}
 	 */
@@ -223,8 +245,9 @@ public abstract class Data {
 	}
 
 	/**
-	 * Begin writing to a file at some path with the {@link Data#writer}
-	 * will return early if already reading or writing.
+	 * Begin writing to a file at some path with the {@link Data#writer} will return
+	 * early if already reading or writing.
+	 * 
 	 * @param path - path to write to
 	 */
 	public final void beginWriting(String path) {
@@ -237,8 +260,7 @@ public abstract class Data {
 	}
 
 	/**
-	 * Stop writing with the {@link Data#writer} and safely close
-	 * the stream
+	 * Stop writing with the {@link Data#writer} and safely close the stream
 	 */
 	public final void stopWriting() {
 		if (writer == null)
@@ -247,34 +269,18 @@ public abstract class Data {
 		writer.close();
 		writer = null;
 	}
-
-	/**
-	 * TODO: ENSURE THIS WORKS
-	 * Create a new Object of Type T, with specified args (Experimental)
-	 * @param objectClass - Some class that extends {@link GameObject}
-	 * @param args - args that match the constructor of the class specified
-	 * @return - a new object of type T if creation was successful
-	 */
-	public final <T extends GameObject> T createObject(Class<T> objectClass, Object... args) {
-		Constructor<T> constructor;
-		try {
-			constructor = objectClass.getDeclaredConstructor(new Class[] { Data.class, Point.class });
-		} catch (NoSuchMethodException | SecurityException e1) {
-			e1.printStackTrace();
-			return null;
-		}
-
-		try {
-			return constructor.newInstance(this, (Object[]) args);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			e.printStackTrace();
-			return null;
-		}
+	
+	public boolean addObject(GameObject object) {
+		if(object == null)
+			return false;
+		if(object instanceof Entity)
+			this.entityBuffer.add((Entity) object);
+		this.objectBuffer.add(object);
+		
+		return true;
 	}
 
-	// Getters and Setters
-	
+	// Getters and Setters	
 	public final boolean reading() {
 		return (reader != null);
 	}
@@ -306,12 +312,12 @@ public abstract class Data {
 	public final BaseGame getBaseGame() {
 		return game;
 	}
-	
+
 	public final BinaryReader getReader() {
 		return this.reader;
 	}
-	
-	public final BinaryWriter getWriter() { 
+
+	public final BinaryWriter getWriter() {
 		return this.writer;
 	}
 }

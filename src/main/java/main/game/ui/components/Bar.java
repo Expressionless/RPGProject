@@ -53,7 +53,11 @@ public abstract class Bar extends UIComponent {
 
 	@Override
 	public void render(SpriteBatch batch) {
-		this.renderBar(batch, new Color((float)(188f/255f), (float)(84f/255f), (float)(223f/255f), 1.0f));
+		// 188 84 223
+		final float red = 188f;
+		final float green = 84;
+		final float blue = 223;
+		this.renderBar(batch, new Color((float)(red/255f), (float)(green/255f), (float)(blue/255f), 1.0f));
 	}
 	
 	private float getSmoothedValue() {

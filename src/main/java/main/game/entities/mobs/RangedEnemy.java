@@ -6,11 +6,11 @@ import helix.utils.math.Point;
 import main.game.RpgGame;
 import main.game.annotations.Damage;
 import main.game.entities.Projectile;
-import main.game.entities.utils.AttackInfo;
+import main.game.entities.utils.RangedAttackInfo;
 import main.game.enums.DamageType;
 
 public abstract class RangedEnemy<T extends Projectile> extends Enemy {
-	private static final int SHOOT_ALARM = 1;
+	protected static final int SHOOT_ALARM = 1;
 
 	private final Class<T> projectileType;
 
@@ -20,36 +20,47 @@ public abstract class RangedEnemy<T extends Projectile> extends Enemy {
 		super(game, pos);
 		
 		this.projectileType = projectileClass;
-		
-		System.out.println("Damage Type: " + projectileType.getAnnotation(Damage.class).value());
 	}
 	
-	public boolean fireProjectile(float damage, Point destination) {
+	public boolean fireProjectile(float damage, float speed, Point destination) {
 		if(!can_shoot) {
-			this.setAlarm(SHOOT_ALARM, (int)(1f / this.getStat("attack_speed")), () -> {
-				can_shoot = true;
-			});
 			return false;
 		} else {
-			Projectile proj = createProjectile(damage, destination);
+			this.createProjectile(damage, speed, destination);
+			int time = (int)Math.ceil(1f / this.getStat("attack_speed"));
+			System.out.println(time);
+			this.setAlarm(SHOOT_ALARM, time, () -> {
+				can_shoot = true;
+			});
 			can_shoot = false;
 			return true;
 		}
 	}
 	
-	private Projectile createProjectile(float damage, Point destination) {
+	private Projectile createProjectile(float damage, float speed, Point destination) {
+		Projectile newProjectile = null;
 		
 		DamageType projectileDamageType = projectileType.getAnnotation(Damage.class).value();
-		System.out.println(projectileDamageType);
 		
-		AttackInfo attack = new AttackInfo(projectileDamageType, damage);
+		
+		RangedAttackInfo attack = new RangedAttackInfo(projectileDamageType, damage, speed);
 		try {
-			return projectileType.getDeclaredConstructor(RpgGame.class, AttackInfo.class, Point.class, Point.class).newInstance(this.getGame(), attack, this.getPos(), destination);
+			newProjectile = projectileType.getDeclaredConstructor(RpgGame.class, RangedAttackInfo.class, Point.class, Point.class).newInstance(this.getGame(), attack, this.getPos(), destination);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
 			System.err.println("Error creating projectile from: " + projectileType.getCanonicalName());
 			e.printStackTrace();
-			return null;
 		}
+		return newProjectile;
+	}
+	
+	// Getters and Setters
+	
+	public boolean canShoot() {
+		return can_shoot;
+	}
+	
+	public void setCanShoot(boolean shoot) {
+		this.can_shoot = shoot;
 	}
 }
