@@ -1,7 +1,6 @@
 package main.game.inventory.subtypes;
 
 import helix.utils.math.Point;
-import main.constants.Constants;
 import main.constants.InventoryConstants;
 import main.game.RpgGame;
 import main.game.inventory.Inventory;

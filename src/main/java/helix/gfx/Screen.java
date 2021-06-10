@@ -1,7 +1,6 @@
 package helix.gfx;
 
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 
 import helix.game.BaseGame;
 import helix.game.Data;

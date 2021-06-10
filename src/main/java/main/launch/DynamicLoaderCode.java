@@ -17,8 +17,6 @@ public class DynamicLoaderCode {
 		Set<Class<?>> classes = ClassUtils.getClasses(CLASS_PATH);
 		ArrayList<String> names = new ArrayList<>();
 		
-		for(Class<?> clazz : classes) {}
-			//System.out.println(clazz.toString());
 		
 		names.sort(new Comparator<String>() {
 			public int compare(String s1, String s2) {

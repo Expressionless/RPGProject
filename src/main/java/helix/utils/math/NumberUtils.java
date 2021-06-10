@@ -1,7 +1,5 @@
 package helix.utils.math;
 
-import helix.Constants;
-
 /**
  * Some helpful utilities to use when working with numbers
  * 

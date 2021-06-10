@@ -40,6 +40,9 @@ public abstract class RangedEnemy<T extends Projectile> extends Enemy {
 	private Projectile createProjectile(float damage, float speed, Point destination) {
 		Projectile newProjectile = null;
 		
+		// TODO: Potentially make projectiles based on range instead of destination
+		// destination = destination.toVector2().getUnitVector().multiply(range);
+		
 		DamageType projectileDamageType = projectileType.getAnnotation(Damage.class).value();
 		
 		
