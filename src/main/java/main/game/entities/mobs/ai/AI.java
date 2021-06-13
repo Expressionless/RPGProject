@@ -4,14 +4,17 @@ import main.game.entities.Mob;
 import main.game.entities.mobs.ai.state.MobState;
 import main.game.entities.mobs.ai.state.StateEvent;
 import main.game.entities.mobs.ai.state.StateMachine;
+import main.game.entities.mobs.neutral.Player;
 
 public abstract class AI {
 
 	public final StateMachine stateMachine;
 	
 	public final Mob mob;
+	public abstract boolean isMoving();
 	
 	protected abstract void initStates();
+	protected Player player;
 	
 	/**
 	 * Attach an AI to a mob
@@ -27,6 +30,7 @@ public abstract class AI {
 	}
 	
 	public void addState(MobState state, StateEvent event) {
+		System.out.println("initializing state: " + state.name());
 		this.stateMachine.addState(state, event);
 	}
 	
@@ -51,4 +55,8 @@ public abstract class AI {
 		this.stateMachine.next();
 	}
 	
+	// Getters and Setters
+	public MobState getCurrentState() {
+		return this.stateMachine.getCurrentState();
+	}	
 }

@@ -15,6 +15,7 @@ public abstract class AttribHandler<T> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public T getStat(String stat) {
 		try {
 			return (T) this.getClass().getDeclaredField(stat).get(this);
@@ -23,5 +24,5 @@ public abstract class AttribHandler<T> {
 		}
 
 		return null;
-	}	
+	}
 }

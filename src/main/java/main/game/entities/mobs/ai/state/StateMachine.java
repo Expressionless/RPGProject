@@ -20,7 +20,8 @@ public class StateMachine {
 	
 	public void next() {
 		//if(this.lastState != null && this.currentState != this.lastState) System.out.println(this.toString());
-		this.setState(this.events.get(currentState).call());
+		if(this.currentState != null)
+			this.setState(this.events.get(currentState).call());
 	}
 	
 	private boolean setState(MobState state) {

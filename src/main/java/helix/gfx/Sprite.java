@@ -175,6 +175,10 @@ public class Sprite {
 		return flipped;
 	}
 
+	public boolean isPlaying() {
+		return this.animation.isRunning();
+	}
+
 	public float getWidth() {
 		return bounds.width;
 	}

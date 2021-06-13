@@ -142,6 +142,10 @@ public class Animation {
 		return new Animation(new TextureRegion(baseTex.getTexture()), this.name, this.frameCount, this.animTime);
 	}
 	
+	public boolean isRunning() {
+		return this.playing;
+	}
+	
 	@Override
 	public String toString() {
 		return "Animation [name=" + name
