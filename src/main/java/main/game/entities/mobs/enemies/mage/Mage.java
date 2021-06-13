@@ -37,7 +37,86 @@ public class Mage extends RangedEnemy<MageProjectile> {
 		
 		this.setAI(new RangedAttackAI(this));
 	}
-	
+
+	private void addStates() {
+		Player player = this.getGameData().getPlayer();
+
+		this.addState(MobState.ATTACK, () -> {
+			if(this.getAlarm(2).isActive())
+				return MobState.ATTACK;
+			else {
+				if(this.getLastState() != null)
+					return this.getLastState();
+				else return MobState.IDLE;
+			}
+		});
+		
+		// Idle state
+		this.addState(MobState.IDLE, () -> {
+			if(this.getTarget() != null)
+				this.setTarget(null);
+			float distToPlayer = getPos().getDistTo(player.getPos());
+			// Check if player is not nearby
+			// If so exit with IDLE
+			if (distToPlayer > this.getStat("sight"))
+				return MobState.IDLE;
+			else {
+				this.setTarget(player);
+				return MobState.CHASE;
+			}
+		});
+
+		this.addState(MobState.SEARCHING, () -> {
+			float distToPlayer = getPos().getDistTo(player.getPos());
+			if (searching) {
+				if (distToPlayer < this.getStat("sight")) {
+					this.setTarget(player);
+					this.getAlarm(SEARCH_ALARM).cancel();
+					return MobState.CHASE;
+				}
+				return MobState.SEARCHING;
+			} else {
+				this.setTarget(null);
+				return MobState.IDLE;
+			}
+		});
+
+		this.addState(MobState.CHASE, () -> {
+			float distToPlayer = getPos().getDistTo(player.getPos());
+			if (distToPlayer > this.getStat("sight")) {
+				// Return to IDLE if can't find the player
+				if (this.getTarget() == null)
+					return MobState.IDLE;
+				// Search for the player otherwise
+				if (!this.getAlarm(SEARCH_ALARM).isActive() && !searching) {
+					if (!searching) {
+						this.setAlarm(SEARCH_ALARM, SEARCH_TIME, () -> {
+							this.setTarget(null);
+						});
+						searching = true;
+					} else {
+						return MobState.IDLE;
+					}
+				}
+
+			} else {
+				if (this.getTarget() == null)
+					return MobState.IDLE;
+				
+				if (this.getPos().getDistTo(this.getTarget().getPos()) > this.getStat("attack_range") && !this.getAlarm(2).isActive())
+					this.moveTo(this.getTarget().getPos(), this.getStat("speed"));
+
+				else if (this.canShoot()) {
+					this.setAlarm(2, (int)this.getStat("cast_time"), () -> {
+						this.fireProjectile(this.getStat("attack"), this.getStat("proj_speed"), player.getPos());
+					});
+					return MobState.ATTACK;
+				}
+			}
+			return MobState.CHASE;
+		});
+	}
+
 	protected void updateSprite() {
 		double angle = this.getDirection().getAngle();
 		boolean left = (angle >= Angle.TOP.angle && angle < Angle.BOTTOM.angle);
