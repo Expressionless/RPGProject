@@ -1,4 +1,4 @@
-package main.game.entities.mobs.state;
+package main.game.entities.mobs.ai.state;
 
 import java.util.HashMap;
 
@@ -33,13 +33,14 @@ public class StateMachine {
 			else if(this.lastState == null)
 				this.lastState = this.currentState;
 		}
+		
 		this.currentState = state;
 		
 		System.out.println("Set state to: " + this.currentState + " from " + this.lastState);
 		return true;
 	}
 	
-	private boolean setToLast() {
+	public boolean setToLast() {
 		return this.setState(this.lastState);
 	}
 	
@@ -54,6 +55,26 @@ public class StateMachine {
 		this.events.put(state, event);
 		
 		return true;
+	}
+	
+	public void overwriteState(MobState state, StateEvent event) {
+		if(this.stateExists(state))
+			this.removeState(state);
+		this.addState(state, event);
+	}
+	
+	public boolean removeState(MobState state) {
+		if(!this.stateExists(state))
+			return false;
+		
+		this.events.remove(state);
+		return true;
+	}
+
+	// Getters and Setters
+	
+	public boolean stateExists(MobState state) {
+		return this.events.containsKey(state);
 	}
 	
 	@Override

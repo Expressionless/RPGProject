@@ -1,0 +1,54 @@
+package main.game.entities.mobs.ai;
+
+import main.game.entities.Mob;
+import main.game.entities.mobs.ai.state.MobState;
+import main.game.entities.mobs.ai.state.StateEvent;
+import main.game.entities.mobs.ai.state.StateMachine;
+
+public abstract class AI {
+
+	public final StateMachine stateMachine;
+	
+	public final Mob mob;
+	
+	protected abstract void initStates();
+	
+	/**
+	 * Attach an AI to a mob
+	 * @param attachedMob - mob to attach
+	 * 
+	 * @see {@link Mob}
+	 */
+	public AI(Mob attachedMob) {
+		this.mob = attachedMob;
+		this.stateMachine = new StateMachine();
+		
+		this.initStates();
+	}
+	
+	public void addState(MobState state, StateEvent event) {
+		this.stateMachine.addState(state, event);
+	}
+	
+	public void overwriteState(MobState state, StateEvent event) {
+		this.stateMachine.overwriteState(state, event);
+	}
+	
+	public boolean removeState(MobState state) {
+		return this.removeState(state);
+	}
+	
+	/**
+	 * Update variables for the AI here
+	 */
+	protected abstract void step();
+	/**
+	 * Updates AI Variables, and then enters the next state
+	 * in it's state machine
+	 */
+	public void update() {
+		this.step();
+		this.stateMachine.next();
+	}
+	
+}

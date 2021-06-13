@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import helix.utils.ClassUtils;
 import main.game.annotations.QueueAsset;
+import main.game.entities.mobs.enemies.mage.Mage;
 
 /**
  * Basic implementation of {@link com.badlogic.gdx.Game}
@@ -118,7 +119,7 @@ public abstract class BaseGame extends Game {
 				// Attempt to set the texture field to the new value
 				Object old;
 				try {
-					old = texField.get(clazz);
+					old = texField.get(clazz); // clazz = Mage.class
 					texField.set(old, queueAnnotation.ref());
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					e.printStackTrace();

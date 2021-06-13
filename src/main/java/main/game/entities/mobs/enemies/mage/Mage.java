@@ -1,7 +1,5 @@
 package main.game.entities.mobs.enemies.mage;
 
-import com.badlogic.gdx.graphics.Texture;
-
 import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
 import helix.utils.math.Angle;
@@ -9,8 +7,8 @@ import helix.utils.math.Point;
 import main.game.RpgGame;
 import main.game.annotations.QueueAsset;
 import main.game.entities.mobs.RangedEnemy;
+import main.game.entities.mobs.ai.state.MobState;
 import main.game.entities.mobs.neutral.Player;
-import main.game.entities.mobs.state.MobState;
 import main.game.entities.projectiles.MageProjectile;
 
 public class Mage extends RangedEnemy<MageProjectile> {
@@ -18,9 +16,10 @@ public class Mage extends RangedEnemy<MageProjectile> {
 	private static final int SEARCH_ALARM = 0;
 	private static final int ATTACK_ALARM = 1;
 	
-	@QueueAsset(ref = "res/sprites/mob/enemy/mage/tiny_mage_up_right.png", type = Texture.class)
+	@QueueAsset(ref = "res/sprites/mob/enemy/mage/tiny_mage_up_right.png")
 	public static String MAGE_UP;
-	@QueueAsset(ref = "res/sprites/mob/enemy/mage/tiny_mage_right.png", type = Texture.class)
+	
+	@QueueAsset(ref = "res/sprites/mob/enemy/mage/tiny_mage_right.png")
 	public static String MAGE_DOWN;
 
 	private boolean searching = false;
@@ -54,6 +53,16 @@ public class Mage extends RangedEnemy<MageProjectile> {
 	private void addStates() {
 		Player player = this.getGameData().getPlayer();
 
+		this.addState(MobState.ATTACK, () -> {
+			if(this.getAlarm(2).isActive())
+				return MobState.ATTACK;
+			else {
+				if(this.getLastState() != null)
+					return this.getLastState();
+				else return MobState.IDLE;
+			}
+		});
+		
 		// Idle state
 		this.addState(MobState.IDLE, () -> {
 			if(this.getTarget() != null)
@@ -84,15 +93,6 @@ public class Mage extends RangedEnemy<MageProjectile> {
 			}
 		});
 
-		/*
-		 * this.addState(MobState.ATTACK, () -> { if(this.getTarget() == null) return
-		 * this.getLastState();
-		 * 
-		 * //System.out.println(this.getAlarm(ATTACK_ALARM).isActive() + " " +
-		 * this.getLastState()); if (this.getAlarm(ATTACK_ALARM).isActive()) return
-		 * MobState.ATTACK; else return this.getLastState(); });
-		 */
-
 		this.addState(MobState.CHASE, () -> {
 			float distToPlayer = getPos().getDistTo(player.getPos());
 			if (distToPlayer > this.getStat("sight")) {
@@ -119,9 +119,10 @@ public class Mage extends RangedEnemy<MageProjectile> {
 					this.moveTo(this.getTarget().getPos(), this.getStat("speed"));
 
 				else if (this.canShoot()) {
-					this.setAlarm(2, (int)this.getStat("cast_time"), () -> {});
-					this.fireProjectile(this.getStat("attack"), this.getStat("proj_speed"), player.getPos());
-					//return MobState.ATTACK;
+					this.setAlarm(2, (int)this.getStat("cast_time"), () -> {
+						this.fireProjectile(this.getStat("attack"), this.getStat("proj_speed"), player.getPos());
+					});
+					return MobState.ATTACK;
 				}
 			}
 			return MobState.CHASE;
