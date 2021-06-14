@@ -178,6 +178,14 @@ public abstract class Entity extends GameObject {
 	// Getters and Setters
 
 	/**
+	 * Overrideable method to determine if the entity is drawn or not
+	 * @return
+	 */
+	public boolean isVisible() {
+		return true;
+	}
+	
+	/**
 	 * Set time in milliseconds
 	 * 
 	 * @param time (time in millis)

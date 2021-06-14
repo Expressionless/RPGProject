@@ -71,6 +71,24 @@ public class SpriteSheet {
 	public Sprite getSubSprite(int x, int y) {
 		return sprites[y][x];
 	}
+
+	/**
+	 * Get the subsprite x & y from a single integer
+	 * Returns sub sprite x & y based on left to right counting, example:
+	 * getImageCoords(7) of a 4x4 spritesheet will return (1, 3)
+	 * @param val - value to convert
+	 * @return - sub sprite image coordinates
+	 * 
+	 * @see {@link SpriteSheet#getSubSprite}
+	 */
+	public int[] getImageCoords(int val) {
+		int x = val % this.getHeight();
+		int y = (int) Math.floor(val / this.getWidth());
+
+		return new int[] { x, y };
+	}
+	
+	// Getters and Setters
 	
 	public int getWidth() {
 		return width;

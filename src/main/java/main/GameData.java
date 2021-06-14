@@ -19,12 +19,15 @@ import main.game.item.Item;
 import main.game.item.ItemInfo;
 import main.game.ui.UI;
 import main.game.ui.components.Bar;
+import main.game.world.Tile;
+import main.game.world.World;
 
 public final class GameData extends Data {
 	
 	public static final ArrayList<ItemInfo> ITEM_TYPES = new ArrayList<>();
 	public final ArrayList<Mob> mobs;
 	public final ArrayList<Item> items;
+	public final ArrayList<World> worlds;
 	
 	// "Unique" Entities
 	private Player player;
@@ -44,6 +47,8 @@ public final class GameData extends Data {
 		// Init Item Data
 		Item.ITEM_SHEET = new SpriteSheet(this, AssetConstants.ITEMS_DIRECTORY, 8, 8);
 		
+		// Init tile sprites
+		Tile.TILE_SHEET = new SpriteSheet(this, Tile.TILE_SHEET_REF, 8, 8);
 		
 		Bar.left_disp = Bar.BAR_SPRITE.getSubSprite(0, 0);
 		Bar.center_disp = Bar.BAR_SPRITE.getSubSprite(1, 0);
@@ -53,7 +58,6 @@ public final class GameData extends Data {
 		Bar.center_disp.setScale(UIConstants.BAR_SCALE);
 		Bar.right_disp.setScale(UIConstants.BAR_SCALE);
 		
-		
 		cursor = new InventoryCursor(this.getGame());
 	}
 	
@@ -61,6 +65,7 @@ public final class GameData extends Data {
 		super(game);
 		mobs = new ArrayList<>();
 		items = new ArrayList<>();
+		worlds = new ArrayList<>();
 	}
 
 	@Override

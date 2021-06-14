@@ -40,15 +40,7 @@ public final class GameScreen extends Screen {
 		
 		this.ui = new UI(this.getRpgGame());
 		this.getGameData().setUI(this.ui);
-		
-
-		player = new Player(getRpgGame(), new Point(30, 30));
 		this.batch = new SpriteBatch();
-		ItemSpawner is = new ItemSpawner(this.getRpgGame());
-		is.spawnItem(50, 20, "grass", 5);
-		new Tree(getRpgGame(), new Point(100, 80));
-
-		new Mage(getRpgGame(), new Point(140, 40));
 	}
 
 	@Override

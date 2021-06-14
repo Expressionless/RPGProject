@@ -1,6 +1,7 @@
 package helix.game;
 
 import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.gdx.Game;
@@ -10,7 +11,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import helix.utils.ClassUtils;
 import main.game.annotations.QueueAsset;
-import main.game.entities.mobs.enemies.mage.Mage;
 
 /**
  * Basic implementation of {@link com.badlogic.gdx.Game}
@@ -109,12 +109,16 @@ public abstract class BaseGame extends Game {
 		// Queue Resources
 		Set<Class<?>> classes = ClassUtils.getClasses();
 
+		Set<String> queuedAssets = new HashSet<String>();
+		
 		for (Class<?> clazz : classes) {
 			for (Field texField : clazz.getFields()) {
 				if (!texField.isAnnotationPresent(QueueAsset.class))
 					continue;
 
 				QueueAsset queueAnnotation = texField.getAnnotation(QueueAsset.class);
+				if(queuedAssets.contains(queueAnnotation.ref()))
+					continue;
 				
 				// Attempt to set the texture field to the new value
 				Object old;
@@ -125,6 +129,7 @@ public abstract class BaseGame extends Game {
 					e.printStackTrace();
 				}
 				
+				queuedAssets.add(queueAnnotation.ref());
 				this.getData().getManager().load(queueAnnotation.ref(), queueAnnotation.type());
 			}
 		}

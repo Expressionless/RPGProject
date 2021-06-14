@@ -7,7 +7,6 @@ import helix.gfx.Sprite;
 import helix.utils.io.BinaryReader;
 import helix.utils.io.BinaryWriter;
 import main.GameData;
-import main.constants.Constants;
 import main.constants.InventoryConstants;
 import main.constants.SerializationConstants;
 
@@ -60,7 +59,7 @@ public final class ItemInfo implements Serializable {
 	}
 	
 	private void attachSprite() {
-		int index[] = Item.IDtoImageIndex(ID);
+		int index[] = Item.ITEM_SHEET.getImageCoords(ID);
 		this.sprite = Item.ITEM_SHEET.getSubSprite(index[0], index[1]);
 		this.sprite.setName(name);
 	}

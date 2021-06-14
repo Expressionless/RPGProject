@@ -42,19 +42,9 @@ public class Item extends Doodad {
 		this(game, pos, ItemInfo.idOf(itemName), 1);
 	}
 
-	public static int[] IDtoImageIndex(int ID) {
-		int items_width = ITEM_SHEET.getWidth(); // 16
-		int items_height = ITEM_SHEET.getHeight(); // 16
-
-		int x = ID % items_height; // x = 2
-		int y = (int) Math.floor(ID / items_width); // y = 0
-
-		return new int[] { x, y };
-	}
-
 	private void attachItemSprite() {
 		if (this.getSprite() == null) {
-			int[] index = IDtoImageIndex(this.getID());
+			int[] index = ITEM_SHEET.getImageCoords(this.getID());
 			Sprite s = ITEM_SHEET.getSubSprite(index[0], index[1]).copy();
 			s.setName(this.item.name);
 			this.setSprite(s);

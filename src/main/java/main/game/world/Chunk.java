@@ -15,17 +15,28 @@ import main.game.RpgGame;
 
 public final class Chunk implements Serializable {
 
+	private World world;
+	
 	private Rectangle bounds;
+	
+	private Tile[][] tiles;
 	private ArrayList<Entity> entities;
-
-	public Chunk(RpgGame game, Point pos) {
-		this(game, pos.getX(), pos.getY());
+	
+	private final RpgGame game;
+	
+	public Chunk(World world, Point pos) {
+		this(world, pos.getX(), pos.getY());
 	}
 
-	public Chunk(RpgGame game, float x, float y) {
-		this.bounds = new Rectangle(x, y, WorldConstants.CHUNK_WIDTH * WorldConstants.TILE_WIDTH,
-				WorldConstants.CHUNK_HEIGHT * WorldConstants.TILE_HEIGHT);
+	public Chunk(World world, float x, float y) {
+		tiles = new Tile[WorldConstants.CHUNK_HEIGHT][WorldConstants.CHUNK_WIDTH];
+		
+		this.bounds = new Rectangle(x, y, tiles[0].length * WorldConstants.TILE_WIDTH,
+				tiles.length * WorldConstants.TILE_HEIGHT);
 		this.entities = new ArrayList<>();
+		
+		this.game = world.getGame();
+		this.world = world;
 	}
 
 	public void step(float delta) {
@@ -37,7 +48,12 @@ public final class Chunk implements Serializable {
 
 	}
 	
+	public Point getGameCoordinates(Point pos) {
+		
+	}
+	
 	// Getters and Setters
+	
 	public Rectangle getBounds() {
 		return bounds;
 	}
@@ -46,6 +62,10 @@ public final class Chunk implements Serializable {
 		if(entities.size() >= WorldConstants.MAX_ENTITIES_PER_CHUNK)
 			return;
 		entities.add(entity);
+	}
+	
+	public RpgGame getGame() {
+		return game;
 	}
 	
 	// Serialization

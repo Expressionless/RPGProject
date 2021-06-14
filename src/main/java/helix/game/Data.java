@@ -213,7 +213,8 @@ public abstract class Data {
 		}
 		
 		for (Entity entity : entities) {
-			entity.render(batch);
+			if(entity.isVisible())
+				entity.render(batch);
 		}
 		
 		this.draw(batch);
