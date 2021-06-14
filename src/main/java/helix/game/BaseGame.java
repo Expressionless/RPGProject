@@ -9,7 +9,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-import helix.utils.ClassUtils;
+import helix.utils.reflection.ClassUtils;
 import main.game.annotations.QueueAsset;
 
 /**

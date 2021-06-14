@@ -10,8 +10,6 @@ import helix.utils.math.Point;
 import main.GameData;
 import main.constants.PlayerConstants;
 import main.game.RpgGame;
-import main.game.entities.doodads.Tree;
-import main.game.entities.mobs.enemies.mage.Mage;
 import main.game.entities.mobs.neutral.Player;
 import main.game.inventory.Inventory;
 import main.game.inventory.Slot;
@@ -23,7 +21,7 @@ import main.game.world.World;
 
 public final class GameScreen extends Screen {
 
-	private World world;
+	private World homeWorld;
 	private UI ui;
 
 	private Player player;
@@ -35,12 +33,17 @@ public final class GameScreen extends Screen {
 
 	@Override
 	public void show() {
-		this.world = new World(32, 32);
-		world.setGame(this.getRpgGame());
+		this.batch = new SpriteBatch();
 		
+		// Create a new UI
 		this.ui = new UI(this.getRpgGame());
 		this.getGameData().setUI(this.ui);
-		this.batch = new SpriteBatch();
+		
+		// Create Origin World
+		final int tileWidth = 32,
+				tileHeight = 32;
+		this.homeWorld = new World(new Point(0, 0), tileWidth, tileHeight);
+		homeWorld.setGame(this.getRpgGame());
 	}
 
 	@Override

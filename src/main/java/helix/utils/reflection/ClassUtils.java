@@ -1,13 +1,47 @@
-package helix.utils;
+package helix.utils.reflection;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ClassUtils {
+public class ClassUtils<T extends Object> {
 	public static final String CLASS_PATH = new File("").getAbsolutePath() + "/src/main/java/main";
 
+	@SuppressWarnings("unchecked")
+	public static <T extends Object> Constructor<T> getSpecificConstructor(Class<T> clazz, Object... args) {
+		Constructor<?>[] constructors = clazz.getConstructors();
+		
+		for(Constructor<?> constructor : constructors) {
+			Class<?>[] variableTypes = constructor.getParameterTypes();
+			
+			if(variableTypes.length != args.length)
+				continue;
+			
+			if(!isMatchingConstructor(constructor, args))
+				continue;
+			
+			return (Constructor<T>) constructor;
+		}
+		
+		return null;
+	}
+	
+	private static boolean isMatchingConstructor(Constructor<?> constructor, Object... args) {
+		Class<?> types[] = constructor.getParameterTypes();
+		
+		for(int i = 0; i < types.length; i++) {
+			// TODO: Review for bug testing
+			if(!types[i].equals(args.getClass())) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	
 	public static Set<Class<?>> getClasses() {
 		return getClasses(CLASS_PATH);
 	}

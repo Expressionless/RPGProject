@@ -30,6 +30,10 @@ public final class GameData extends Data {
 	public final ArrayList<World> worlds;
 	
 	// "Unique" Entities
+	/**
+	 * Current and Home Worlds of the current Save
+	 */
+	private World currentWorld, lastWorld, homeWorld;
 	private Player player;
 	private InventoryCursor cursor;
 	private UI ui;
@@ -130,4 +134,16 @@ public final class GameData extends Data {
 		this.ui = ui;
 	}
 
+	public void addWorld(World world) {
+		this.worlds.add(world);
+	}
+	
+	public void setWorld(World world) {
+		if(this.currentWorld != null) {
+			this.lastWorld = this.currentWorld;
+		}
+		
+		this.currentWorld = world;
+	}
+	
 }

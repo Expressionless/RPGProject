@@ -13,11 +13,14 @@ public final class World implements Serializable {
 	
 	private RpgGame game;
 	
+	/**
+	 * World origin in game coordinates
+	 */
 	private Point worldOrigin;
 	
-	public World(int width, int height) {
+	public World(Point worldOrigin, int width, int height) {
 		chunks = new Chunk[height][width];
-		
+		this.worldOrigin = worldOrigin;
 		initChunks();
 	}
 	
@@ -26,6 +29,8 @@ public final class World implements Serializable {
 		int xPos = WorldConstants.CHUNK_WIDTH, yPos = WorldConstants.CHUNK_HEIGHT;
 		
 		for(y = 0; y < chunks.length; y++) {
+			xPos += WorldConstants.CHUNK_WIDTH_PX;
+			yPos += WorldConstants.CHUNK_HEIGHT_PX;
 			for(x = 0; x < chunks[y].length; x++) {
 				chunks[y][x] = new Chunk(this, xPos, yPos);
 			}

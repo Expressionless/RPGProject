@@ -28,6 +28,8 @@ public abstract class Entity extends GameObject {
 	 * background)
 	 */
 	private float depth;
+	
+	private boolean visible;
 
 	/**
 	 * All sprites that the entity uses
@@ -177,12 +179,12 @@ public abstract class Entity extends GameObject {
 
 	// Getters and Setters
 
-	/**
-	 * Overrideable method to determine if the entity is drawn or not
-	 * @return
-	 */
 	public boolean isVisible() {
-		return true;
+		return visible;
+	}
+	
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 	
 	/**
