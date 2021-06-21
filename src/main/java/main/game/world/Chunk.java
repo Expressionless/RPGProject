@@ -46,12 +46,11 @@ public final class Chunk implements Serializable {
 	}
 
 	public void spawnMob(Class<Mob> clazz, Object... args) {
-		@SuppressWarnings("unchecked")
-		Constructor<Mob>[] constructors = (Constructor<Mob>[]) clazz.getDeclaredConstructors();
 		Constructor<Mob> constructor = ClassUtils.getSpecificConstructor(clazz, args);
 		
 		try {
 			Mob newMob = constructor.newInstance(args);
+			System.out.println("created a new: " + newMob);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			if(e instanceof IllegalArgumentException) {
