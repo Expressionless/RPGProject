@@ -6,15 +6,12 @@ import helix.utils.io.BinaryWriter;
 import helix.utils.math.Point;
 import main.constants.WorldConstants;
 import main.game.RpgGame;
-import main.game.entities.mobs.neutral.Player;
 
 public final class World implements Serializable {
 
 	private Chunk[][] chunks;
 	
 	private RpgGame game;
-	
-	private Player player;
 	
 	/**
 	 * World origin in game coordinates
@@ -36,12 +33,6 @@ public final class World implements Serializable {
 			yPos += WorldConstants.CHUNK_HEIGHT_PX;
 			for(x = 0; x < chunks[y].length; x++) {
 				chunks[y][x] = new Chunk(this, xPos, yPos);
-				
-				
-				if(this.game.getGameData().getCurrentWorld() != this)
-					continue;
-					
-				chunks[y][x].setVisible(false);
 			}
 		}
 	}

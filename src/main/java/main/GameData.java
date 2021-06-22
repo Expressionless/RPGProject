@@ -134,10 +134,6 @@ public final class GameData extends Data {
 		this.ui = ui;
 	}
 
-	public World getCurrentWorld() {
-		return currentWorld;
-	}
-
 	public void addWorld(World world) {
 		this.worlds.add(world);
 	}
